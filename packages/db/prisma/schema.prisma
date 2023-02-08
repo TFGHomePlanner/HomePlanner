@@ -56,6 +56,12 @@ model User {
     sessions      Session[]
 }
 
+model Group {
+    id String @id @default(cuid())
+    name String
+    codeGroup String @unique
+}
+
 model VerificationToken {
     identifier String
     token      String   @unique
