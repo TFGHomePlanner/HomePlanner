@@ -27,7 +27,7 @@ const PostCard: React.FC<{
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={onDelete}>
-        <Text className="font-bold uppercase text-pink-400">Delete</Text>
+        <Text className="font-bold uppercase text-pastelPink">Delete</Text>
       </TouchableOpacity>
     </View>
   );
@@ -64,7 +64,7 @@ const CreatePost: React.FC = () => {
         placeholder="Content"
       />
       <TouchableOpacity
-        className="rounded bg-[#cc66ff] p-2"
+        className="rounded p-2"
         onPress={() => {
           mutate({
             title,
@@ -72,7 +72,7 @@ const CreatePost: React.FC = () => {
           });
         }}
       >
-        <Text className="font-semibold text-white">Publish post</Text>
+        <Text className="font-semibold text-pastelPink">Publish post</Text>
       </TouchableOpacity>
     </View>
   );
@@ -87,26 +87,26 @@ export const HomeScreen = () => {
   });
 
   return (
-    <SafeAreaView className="bg-[#2e026d] bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+    <SafeAreaView className="bg-lightBg">
       <View className="h-full w-full p-4">
         <Text className="mx-auto pb-2 text-5xl font-bold text-white">
-          joni <Text className="text-[#cc66ff]">T3</Text> Turbo
+          Home <Text className="text-darkGreen">Planner</Text>
         </Text>
 
         <Button
           onPress={() => void postQuery.refetch()}
-          title="Refresh posts"
-          color={"#cc66ff"}
+          title="holaaaa"
+          color={"#E2C2B9"}
         />
 
         <View className="py-2">
           {showPost ? (
             <Text className="text-white">
-              <Text className="font-semibold">Selected post: </Text>
+              <Text className="font-semibold text-dark">Selected post: </Text>
               {showPost}
             </Text>
           ) : (
-            <Text className="font-semibold italic text-white">
+            <Text className="font-semibold italic text-pastelPink">
               Press on a post
             </Text>
           )}
