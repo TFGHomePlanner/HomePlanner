@@ -124,7 +124,6 @@ export const HomeScreen = () => {
             />
           )}
         />
-
         <CreatePost />
       </View>
     </SafeAreaView>
