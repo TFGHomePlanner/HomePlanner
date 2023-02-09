@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
-export function StartScreen({ navigation }) {
+export function StartScreen({ navigation }: { navigation: any }) {
   //   const [email, setEmail] = useState("");
   //   const [password, setPassword] = useState("");
   const buttonStyle = "mt-6 py-2 rounded-full items-center border-[1px]";
