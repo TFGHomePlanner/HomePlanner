@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
-export const StartScreen: React.FC = () => {
+export function StartScreen({ navigation }) {
   //   const [email, setEmail] = useState("");
   //   const [password, setPassword] = useState("");
   const buttonStyle = "mt-6 py-2 rounded-full items-center border-[1px]";
@@ -13,7 +13,10 @@ export const StartScreen: React.FC = () => {
         Organiza tu hogar
       </Text>
       <View className="w-56">
-        <TouchableOpacity className={`${buttonStyle} border-lightBg`}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Login")}
+          className={`${buttonStyle} border-lightBg`}
+        >
           <Text className="text-lg text-lightBg">Inicia sesión</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -24,4 +27,4 @@ export const StartScreen: React.FC = () => {
       </View>
     </View>
   );
-};
+}

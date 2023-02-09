@@ -10,7 +10,7 @@ export const Login: React.FC = () => {
   return (
     <View className="flex-1 bg-darkBg justify-center items-center">
       <Image
-        className="w-80 -mt-10 h-80"
+        className="w-56 -mt-10 h-56"
         source={require("../../assets/logo-simple.png")}
       />
       <Text className="font-semibold text-2xl mb-8 -mt-10 text-lightBg">
