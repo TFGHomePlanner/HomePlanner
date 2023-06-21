@@ -1,21 +1,19 @@
 {
   "name": "create-t3-turbo",
   "private": true,
+  "main": "apps/expo/index.ts",
+  "types": "packages/db/index.ts",
   "engines": {
     "node": ">=18.0.0"
   },
   "packageManager": "pnpm@7.26.3",
   "scripts": {
-    "build": "turbo build",
-    "clean": "rm -rf node_modules",
-    "clean:workspaces": "turbo clean",
-    "db:generate": "turbo db:generate",
-    "db:push": "turbo db:push db:generate",
-    "dev": "turbo dev --parallel",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "lint": "turbo lint",
-    "FIXME:lint": "turbo lint && manypkg check",
-    "type-check": "turbo type-check"
+    "clean": "rm -rf .turbo node_modules",
+    "dev": "expo start --android",
+    "dev:android": "expo start --android",
+    "dev:ios": "expo start --ios",
+    "with-env": "dotenv -e ../../.env --",
+    "lint": "eslint"
   },
   "dependencies": {
     "@manypkg/cli": "^0.20.0",
@@ -39,6 +37,6 @@
           "next": "*"
         }
       }
-  }
+    }
   }
 }
