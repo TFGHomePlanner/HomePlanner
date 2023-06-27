@@ -5,7 +5,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import React from "react";
-import { Text } from "../components/Themed";
+import { Text } from "./components/Themed";
 
 export {
 	// Catch any errors thrown by the Layout component.

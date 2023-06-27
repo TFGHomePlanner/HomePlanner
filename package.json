@@ -13,8 +13,8 @@
     "lint": "eslint .",
     "db:generate": "prisma generate",
     "db:push": "npm prisma db push --skip-generate ",
-    "prisma:studio": "npm prisma studio --port 5556",
-    "prisma:seed": " prisma db push --force-reset && prisma db seed"
+    "prisma:studio": "prisma studio --port 5556",
+    "prisma:seed": "prisma db push --force-reset && prisma db seed"
   },
   "jest": {
     "preset": "jest-expo"
@@ -23,6 +23,8 @@
     "@expo/vector-icons": "^13.0.0",
     "@prisma/client": "^4.16.1",
     "@react-navigation/native": "^6.0.2",
+    "@trpc/client": "^10.32.0",
+    "@trpc/server": "^10.32.0",
     "expo": "~48.0.18",
     "expo-font": "~11.1.1",
     "expo-linking": "~4.0.1",
