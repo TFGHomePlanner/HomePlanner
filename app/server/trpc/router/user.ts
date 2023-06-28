@@ -12,7 +12,7 @@ export const userRouter = router({
 		.mutation(async ({ input, ctx }) => {
 			const { username, email, password } = input;
 
-			const exists = await prisma.user.findFirst({
+			const exists = await ctx.prisma.user.findFirst({
 				where: { email: email },
 			});
 
@@ -25,7 +25,7 @@ export const userRouter = router({
 
 			const hashedPassword = password;
 
-			const result = await prisma.user.create({
+			const result = await ctx.prisma.user.create({
 				data: {
 					name: username,
 					email,
