@@ -35,7 +35,6 @@
     "expo-system-ui": "~2.2.1",
     "expo-web-browser": "~12.1.1",
     "nativewind": "^2.0.11",
-    "next-auth": "^4.22.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.71.8",
