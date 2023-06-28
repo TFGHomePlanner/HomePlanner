@@ -1,7 +1,7 @@
 import { userRouter } from "./user";
 import { router } from "../trpc";
 
-const appRouter = router({
+export const appRouter = router({
 	user: userRouter,
 });
 
