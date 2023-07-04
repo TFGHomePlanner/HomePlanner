@@ -3,3 +3,4 @@ node_modules
 assets
 seed.ts
 .eslintrc.js
+babel.config.js
