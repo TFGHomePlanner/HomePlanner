@@ -5,11 +5,10 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { SplashScreen, useRouter } from "expo-router";
+import { SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import React from "react";
-import { Text } from "./components/Themed";
 import LoginScreen from "./screens/login";
 
 export {
@@ -44,7 +43,6 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  const router = useRouter();
   return (
     <>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
