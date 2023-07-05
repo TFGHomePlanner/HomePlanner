@@ -1,6 +1,5 @@
 import { publicProcedure, router } from "../trpc";
 import { signUpSchema } from "../../../common/validation/auth";
-import { prisma } from "../../../common/prisma";
 import * as trpc from "@trpc/server";
 
 export const userRouter = router({
