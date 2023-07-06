@@ -55,9 +55,11 @@ model Group {
     Name          String
     CodeGroup     String @unique
     Messages      Message[]
+    Lists         List[]
     Admin         User @relation("UserAdmin", fields: [AdminId], references: [id])
     AdminId       String 
     Users         User[] @relation("Users") 
+
 
     @@index([AdminId])
 }
@@ -77,6 +79,29 @@ model Message {
   
 }
 
+model List {
+  Id           String     @id @default(cuid())
+  Name         String
+  Description  String
+  IsClosed     Boolean
+  Group        Group      @relation(fields: [GroupId], references: [id])
+  GroupId      String
+  items        Product[]
+
+  @@index([GroupId])
+}
+
+model Product {
+  id    String @id @default(cuid())
+  name  String
+  price Float
+  isPurchased  Boolean    @default(false)
+  ListName List @relation(fields: [ListId], references: [Id])
+  ListId String
+
+  @@index([ListId])
+}
+
 model VerificationToken {
     identifier String
     token      String   @unique
@@ -84,5 +109,4 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
-
 
