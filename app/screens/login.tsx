@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
-
+import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
+import { AppRouter } from "../server/trpc/router/_app";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputStyle =
     "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
-
+  const trpc = createTRPCProxyClient<AppRouter>({
+    links: [
+      httpBatchLink({
+        url: "http://localhost:3000",
+      }),
+    ],  
+  });
+    
   const navigation = useNavigation();
 
   const handleLogin = () => {

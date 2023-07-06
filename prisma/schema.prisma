@@ -39,19 +39,42 @@ model Session {
 
 model User {
     id            String    @id @default(cuid())
-    isAdmin       Boolean   @default(false)
     name          String
     email         String?   @unique
     emailVerified DateTime?
     passwordHash  String? 
     accounts      Account[]
     sessions      Session[]
+    AdminGroup   Group[] @relation("UserAdmin")
+    Groups Group[] @relation("Users")
+    Message Message[]
 }
 
 model Group {
     id            String @id @default(cuid())
-    name          String
-    codeGroup     String @unique
+    Name          String
+    CodeGroup     String @unique
+    Messages      Message[]
+    Admin         User @relation("UserAdmin", fields: [AdminId], references: [id])
+    AdminId       String 
+    Users         User[] @relation("Users") 
+
+    @@index([AdminId])
+}
+
+model Message {
+    Id String @id @default(cuid())
+    Text  String
+    Day DateTime
+    UserId String
+    Group Group @relation(fields: [GroupId], references: [id])
+    GroupId String
+    User User @relation(fields: [UserId], references: [id])
+
+
+    @@index([UserId])
+    @@index([GroupId])
+  
 }
 
 model VerificationToken {
@@ -61,3 +84,5 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+
