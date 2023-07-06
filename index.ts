@@ -1,1 +1,2 @@
-import "expo-router/entry";
+import { App } from "./app/_App";
+export default App;

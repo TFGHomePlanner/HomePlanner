@@ -3,7 +3,8 @@ import { useState } from "react";
 import React from "react";
 import { trpc } from "./server/utils/trpc";
 import { httpBatchLink } from "@trpc/client";
-import RootLayout from "./layout";
+import RootLayoutNav from "./layout";
+import { registerRootComponent } from "expo";
 
 export function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -20,8 +21,10 @@ export function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <RootLayout />
+        <RootLayoutNav />
       </QueryClientProvider>
     </trpc.Provider>
   );
 }
+
+registerRootComponent(App);

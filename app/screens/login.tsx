@@ -1,14 +1,12 @@
+import { Link } from "expo-router";
 import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputStyle =
     "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
-
-  const navigation = useNavigation();
 
   const handleLogin = () => {
     // Lógica de inicio de sesión
@@ -38,13 +36,17 @@ const LoginScreen = () => {
           placeholder="contraseña"
         />
         <Text className="my-2 text-xs">¿Has olvidado tu contraseña?</Text>
-        <TouchableOpacity
+        <Link
+          href="/modal"
+          asChild
           className={
             "border-darkGreen bg-darkGreen mt-6 items-center rounded-full border-[1px] py-1"
           }
         >
-          <Text className="text-lg">Inicia sesión</Text>
-        </TouchableOpacity>
+          <Pressable>
+            <Text>Iniciar sesión</Text>
+          </Pressable>
+        </Link>
         <Text className="text-lightBg mt-2 self-center text-sm">
           ¿Todavía no tienes cuenta? <Text className="">Únete</Text>
         </Text>
