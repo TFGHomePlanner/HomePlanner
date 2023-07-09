@@ -6,13 +6,13 @@ import { Text, View } from "../../../components/Themed";
 export default function TabTasksScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
+      <Text style={styles.title}>Tareas</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <EditScreenInfo path="app/screens/tabs/index.tsx" />
+      <EditScreenInfo path="app/screens/tabs/tasks/index.tsx" />
     </View>
   );
 }
