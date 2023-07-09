@@ -27,7 +27,7 @@ export function App() {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator screenOptions={{}}>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Tabs" component={AppLayout} />
             <Stack.Screen name="Modal" component={ModalScreen} />

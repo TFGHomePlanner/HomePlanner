@@ -10,7 +10,11 @@ const Tab = createBottomTabNavigator();
 
 export default function AppLayout() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Tab.Screen name="Inicio" component={TabHomeScreen} />
       <Tab.Screen name="Tareas" component={TabTasksScreen} />
       <Tab.Screen name="Calendario" component={TabCalendarScreen} />
