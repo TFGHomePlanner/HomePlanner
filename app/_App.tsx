@@ -3,7 +3,7 @@ import { useState } from "react";
 import React from "react";
 import { trpc } from "./server/utils/trpc";
 import { httpBatchLink } from "@trpc/client";
-import RootLayoutNav from "./layout";
+import LoginScreen from "./screens/login";
 import { registerRootComponent } from "expo";
 
 export function App() {
@@ -12,7 +12,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "exp://192.168.1.12:19000/trpc"
+          url: "exp://192.168.1.12:19000/trpc",
         }),
       ],
     })
@@ -21,7 +21,7 @@ export function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <RootLayoutNav />
+        <LoginScreen />
       </QueryClientProvider>
     </trpc.Provider>
   );
