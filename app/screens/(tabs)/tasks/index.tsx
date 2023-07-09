@@ -3,7 +3,7 @@ import React from "react";
 import EditScreenInfo from "../../../components/EditScreenInfo";
 import { Text, View } from "../../../components/Themed";
 
-export default function TabOneScreen() {
+export default function TabTasksScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
