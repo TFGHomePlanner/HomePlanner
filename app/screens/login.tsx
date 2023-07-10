@@ -1,13 +1,26 @@
 import { Link } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
+import {trpc} from "../server/utils/trpc";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputStyle =
     "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
-
+  const data = trpc.user.login.useMutation({
+    onSuccess() {
+      setEmail("si");
+      console.log("si");
+    },
+    onError(){
+      console.log("no");
+      setEmail("no");
+    }
+  });
+  const handleLogin = () => {
+    data.mutate();
+  };
   return (
     <View className="bg-darkBg flex-1 items-center justify-center">
       <Text className="text-lightBg -mt-10 mb-8 text-2xl font-semibold">
@@ -28,6 +41,9 @@ const LoginScreen = () => {
           onChangeText={setPassword}
           placeholder="contraseña"
         />
+        <Pressable onPress={handleLogin}>
+          <Text>Iniciar sesión 2</Text>
+        </Pressable>
         <Text className="my-2 text-xs">¿Has olvidado tu contraseña?</Text>
         <Link to={{ screen: "Tabs" }}>
           <Text>Iniciar sesión</Text>

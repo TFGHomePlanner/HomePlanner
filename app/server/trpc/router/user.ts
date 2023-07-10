@@ -5,8 +5,8 @@ import * as trpc from "@trpc/server";
 export const userRouter = router({
   
   login: publicProcedure
-    .input(loginSchema)
-    .mutation(async ({ ctx }) => {
+    .mutation(async ({ ctx}) => {
+      console.log("si");
       return await ctx.prisma.user.findFirst({
       });
     }),
