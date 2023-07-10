@@ -1,14 +1,30 @@
 import { publicProcedure, router } from "../trpc";
-import { loginSchema, signUpSchema } from "../../../common/validation/auth";
+import { signUpSchema } from "../../../common/validation/auth";
 import * as trpc from "@trpc/server";
+import z from "zod";
+import { prisma } from "../../../common/prisma";
 
 export const userRouter = router({
-  
   login: publicProcedure
-    .mutation(async ({ ctx}) => {
-      console.log("si");
-      return await ctx.prisma.user.findFirst({
-      });
+    .input(
+      z.object({
+        email: z.string(),
+        password: z.string(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { email, password } = opts.input;
+      const user = await prisma.user.findUnique({ where: { email } });
+
+      if (!user) {
+        return {
+          success: false,
+        };
+      }
+
+      return {
+        success: password == user?.passwordHash && email == user?.email,
+      };
     }),
 
   createNew: publicProcedure

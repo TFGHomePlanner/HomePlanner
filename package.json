@@ -1,7 +1,7 @@
 {
   "name": "homeplanner",
   "version": "1.0.0",
-  "main": "app/_app.tsx",
+  "main": "app/_App.tsx",
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   },
