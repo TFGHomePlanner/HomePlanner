@@ -20,6 +20,15 @@ async function main() {
       passwordHash: hashedPassword,
     },
   });
+
+  
+  const a = await prisma.user.create({
+    data: {
+      name: "a",
+      email: "a",
+      passwordHash: hashedPassword,
+    },
+  });
 }
 
 main()
