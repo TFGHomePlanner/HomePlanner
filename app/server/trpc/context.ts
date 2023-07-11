@@ -1,7 +1,12 @@
 import * as trpc from "@trpc/server";
-import * as trpcNext from "@trpc/server/adapters/next";
 import { prisma } from "../../common/prisma";
-export async function createContext(ctx: trpcNext.CreateNextContextOptions) {
+import * as trpcExpress from "@trpc/server/adapters/express";
+import express from "express";
+import { appRouter } from "./router/_app";
+
+export async function createContext(
+  ctx: trpcExpress.CreateExpressContextOptions
+) {
   const { req, res } = ctx;
   return {
     req,
@@ -9,5 +14,15 @@ export async function createContext(ctx: trpcNext.CreateNextContextOptions) {
     prisma,
   };
 }
+
+const app = express();
+app.use(
+  "/trpc",
+  trpcExpress.createExpressMiddleware({
+    router: appRouter,
+    createContext,
+  })
+);
+app.listen(4000);
 
 export type Context = trpc.inferAsyncReturnType<typeof createContext>;
