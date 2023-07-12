@@ -10,12 +10,14 @@ const LoginScreen = () => {
     "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
   const { mutate } = trpc.user.login.useMutation({
     onSuccess: (output) => {
-      if (output) {
-        console.log(email + " " + password + " " + "login success");
+      if (output.success) {
+        console.log(email + " " + password + " " + "correctos");
+      } else {
+        console.log(output.message + " o" + password + " " + "incorrectos");
       }
     },
-    onError(output) {
-      console.log(output + " " + password + " " + "login error");
+    onError: (error) => {
+      console.log("Error during login:", error);
     },
   });
   const handleLogin = () => {

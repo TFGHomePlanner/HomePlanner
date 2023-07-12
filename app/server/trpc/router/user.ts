@@ -15,18 +15,30 @@ export const userRouter = router({
     .mutation(async (opts) => {
       const { email, password } = opts.input;
       const user = await prisma.user.findUnique({ where: { email } });
-
       if (!user) {
         return {
           success: false,
+          message: "User not found",
         };
       }
 
-      return {
-        success: password == user?.passwordHash && email == user?.email,
-      };
+      else if (password === user.passwordHash && email === user.email) {
+        return {
+          success: true,
+          message: "Login successful",
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+          },
+        };
+      } else {
+        return {
+          success: false,
+          message: "Invalid credentials",
+        };
+      }
     }),
-
   createNew: publicProcedure
     .input(signUpSchema)
     .mutation(async ({ input, ctx }) => {
