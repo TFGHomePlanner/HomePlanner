@@ -6,7 +6,9 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "scripts": {
+    "start:frontend": "expo start",
     "start": "expo start",
+    "start:backend": "ts-node-dev server.ts",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -60,6 +62,7 @@
     "@types/react": "~18.0.14",
     "@typescript-eslint/eslint-plugin": "^5.60.0",
     "@typescript-eslint/parser": "^5.60.0",
+    "concurrently": "^8.2.0",
     "eslint": "^8.43.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
