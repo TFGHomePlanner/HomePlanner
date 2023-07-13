@@ -6,7 +6,6 @@ module.exports = function (api) {
 		plugins: [
 			"nativewind/babel",
 			require.resolve("expo-router/babel"),
-			"@babel/plugin-transform-react-jsx",
 		],
 	};
 };
