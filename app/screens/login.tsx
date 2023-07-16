@@ -1,9 +1,11 @@
 import { Link } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Text, TextInput, View } from "react-native";
 import { trpc } from "../server/utils/trpc";
+import { set } from "zod";
 
 const LoginScreen = () => {
+  const [session, setSession] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputStyle =
@@ -11,9 +13,11 @@ const LoginScreen = () => {
   const { mutate } = trpc.user.login.useMutation({
     onSuccess: (output) => {
       if (output.success) {
-        console.log(email + " " + password + " " + "correctos");
+        console.log(output.message);
+        setSession(true);
       } else {
-        console.log(output.message + " o" + password + " " + "incorrectos");
+        console.log(output.message);
+        setSession(false);
       }
     },
     onError: (error) => {
@@ -44,13 +48,14 @@ const LoginScreen = () => {
           onChangeText={setPassword}
           placeholder="contraseña"
         />
-        <Pressable onPress={handleLogin}>
-          <Text>Iniciar sesión 2</Text>
-        </Pressable>
         <Text className="my-2 text-xs">¿Has olvidado tu contraseña?</Text>
-        <Link to={{ screen: "Tabs" }}>
-          <Text className="text-lg ">Iniciar sesión</Text>
-        </Link>
+        <Text onPress={handleLogin}>Iniciar sesión</Text>
+        {session ? (
+          <Link to={{ screen: "Tabs" }}>Iniciar sesión</Link>
+        ) : (
+          <Text>Iniciar sesión</Text>
+        )}
+
         <Text className="text-lightBg mt-2 text-sm">
           ¿Todavía no tienes cuenta?{" "}
           <Text className="text-[#F1889F] underline">Únete</Text>
