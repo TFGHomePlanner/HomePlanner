@@ -1,10 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-
 datasource db {
   provider = "mysql"
-  url      = "mysql://HomePlannerDB:HomePlanner_RDS@homeplannerdb.cwnyeyokykn2.eu-north-1.rds.amazonaws.com:3306/homeplannerdb"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -12,102 +8,113 @@ generator client {
 }
 
 model Account {
-    id                String  @id @default(cuid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? // @db.Text
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? // @db.Text
+  access_token      String? // @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? // @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String
-    email         String?   @unique
-    emailVerified DateTime?
-    passwordHash  String? 
-    accounts      Account[]
-    sessions      Session[]
-    AdminGroup   Group[] @relation("UserAdmin")
-    Groups Group[] @relation("Users")
-    Message Message[]
-    imageprofile  String?
+  id            String    @id @default(cuid())
+  name          String
+  email         String?   @unique
+  emailVerified DateTime?
+  passwordHash  String?
+  accounts      Account[]
+  sessions      Session[]
+  AdminGroup    Group[]   @relation("UserAdmin")
+  Groups        Group[]   @relation("Users")
+  Message       Message[]
+  imageprofile  String?
+  Task          Task[]
 }
 
 model Group {
-    id            String @id @default(cuid())
-    Name          String
-    CodeGroup     String @unique
-    Messages      Message[]
-    Lists         List[]
-    Admin         User @relation("UserAdmin", fields: [AdminId], references: [id])
-    AdminId       String 
-    Users         User[] @relation("Users") 
+  id        String    @id @default(cuid())
+  Name      String
+  CodeGroup String    @unique
+  Messages  Message[]
+  Lists     List[]
+  Admin     User      @relation("UserAdmin", fields: [AdminId], references: [id])
+  AdminId   String
+  Users     User[]    @relation("Users")
 
-
-    @@index([AdminId])
+  @@index([AdminId])
 }
 
 model Message {
-    Id String @id @default(cuid())
-    Text  String
-    Day DateTime
-    UserId String
-    Group Group @relation(fields: [GroupId], references: [id])
-    GroupId String
-    User User @relation(fields: [UserId], references: [id])
+  Id      String   @id @default(cuid())
+  Text    String
+  Day     DateTime
+  UserId  String
+  Group   Group    @relation(fields: [GroupId], references: [id])
+  GroupId String
+  User    User     @relation(fields: [UserId], references: [id])
 
-
-    @@index([UserId])
-    @@index([GroupId])
-  
+  @@index([UserId])
+  @@index([GroupId])
 }
 
 model List {
-  Id           String     @id @default(cuid())
-  Name         String
-  Description  String
-  IsClosed     Boolean
-  Group        Group      @relation(fields: [GroupId], references: [id])
-  GroupId      String
-  items        Product[]
+  Id          String    @id @default(cuid())
+  Name        String
+  Description String
+  IsClosed    Boolean
+  Group       Group     @relation(fields: [GroupId], references: [id])
+  GroupId     String
+  items       Product[]
 
   @@index([GroupId])
 }
 
 model Product {
-  id    String @id @default(cuid())
-  name  String
-  price Float
-  isPurchased  Boolean    @default(false)
-  ListName List @relation(fields: [ListId], references: [Id])
-  ListId String
+  id          String  @id @default(cuid())
+  name        String
+  price       Float
+  isPurchased Boolean @default(false)
+  ListName    List    @relation(fields: [ListId], references: [Id])
+  ListId      String
 
   @@index([ListId])
 }
 
-model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+model Task {
+  Id           String   @id @default(cuid())
+  Name         String
+  Description  String
+  GroupName    String
+  GroupId      String
+  UserId       String
+  UserInCharge User     @relation(fields: [UserId], references: [id])
+  Date         DateTime
+  IsPeriodic   Boolean
 
-    @@unique([identifier, token])
+  @@index([GroupId])
 }
 
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
