@@ -7,11 +7,7 @@ export default function TabHomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inicio</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+      <View style={styles.separator} lightColor="#eee" darkColor="#F8F3ED" />
       <EditScreenInfo path="app/screens/tabs/home.tsx" />
     </View>
   );
@@ -22,6 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#F8F3ED",
   },
   title: {
     fontSize: 20,

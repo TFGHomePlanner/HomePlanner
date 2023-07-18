@@ -9,6 +9,7 @@ import LoginScreen from "./screens/login";
 import ModalScreen from "./modal";
 import AppLayout from "./screens/(tabs)/_layout";
 import RegisterScreen from "./screens/register";
+import CreateTaskScreen from "./screens/(tabs)/tasks/create";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,10 +29,12 @@ export function App() {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{}}>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            {/*gestureEnabled: false*/}
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
             <Stack.Screen name="Tabs" component={AppLayout} />
+            <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
             <Stack.Screen name="Modal" component={ModalScreen} />
           </Stack.Navigator>
         </NavigationContainer>

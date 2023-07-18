@@ -9,7 +9,6 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const inputStyle =
     "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
-
   const { mutate } = trpc.user.login.useMutation({
     onSuccess: (output) => {
       if (output.success) {
@@ -49,7 +48,8 @@ const LoginScreen = () => {
         <Text onPress={handleLogin}>Iniciar sesión</Text>
         <Text className="text-lightBg mt-2 text-sm">
           ¿Todavía no tienes cuenta?{" "}
-          <Link to={{ screen: "Register" }}>
+          <Link to={{ screen: "Tabs" }}>
+            {/*PRUEBAS: cambiar Tabs por Register*/}
             <Text className="text-[#F1889F] underline">Únete</Text>
           </Link>
         </Text>
