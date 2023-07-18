@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./screens/login";
 import ModalScreen from "./modal";
 import AppLayout from "./screens/(tabs)/_layout";
+import RegisterScreen from "./screens/register";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ export function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{}}>
             <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
             <Stack.Screen name="Tabs" component={AppLayout} />
             <Stack.Screen name="Modal" component={ModalScreen} />
           </Stack.Navigator>
