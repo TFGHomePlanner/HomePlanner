@@ -53,7 +53,6 @@ model Group {
   Name      String
   CodeGroup String    @unique
   Messages  Message[]
-  Lists     List[]
   Admin     User      @relation("UserAdmin", fields: [AdminId], references: [id])
   AdminId   String
   Users     User[]    @relation("Users")
@@ -79,7 +78,7 @@ model List {
   Name        String
   Description String
   IsClosed    Boolean
-  Group       Group     @relation(fields: [GroupId], references: [id])
+  //Group       Group     @relation(fields: [GroupId], references: [id])
   GroupId     String
   items       Product[]
 
