@@ -1,24 +1,21 @@
-import { Link } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Text, TextInput, View } from "react-native";
+import { Link } from "@react-navigation/native";
 import { trpc } from "../server/utils/trpc";
-import { set } from "zod";
+import { router } from "expo-router";
 
 const LoginScreen = () => {
-  const [session, setSession] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputStyle =
     "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
+
   const { mutate } = trpc.user.login.useMutation({
     onSuccess: (output) => {
       if (output.success) {
         console.log(output.message);
-        setSession(true);
-      } else {
-        console.log(output.message);
-        setSession(false);
-      }
+        router.push("Register");
+      } else console.log(output.message);
     },
     onError: (error) => {
       console.log("Error during login:", error);
@@ -33,7 +30,7 @@ const LoginScreen = () => {
       <Text className="text-lightBg -mt-10 mb-8 text-2xl font-semibold">
         ¡Bienvenid@ de nuevo!
       </Text>
-      <View className="w-60">
+      <View className="w-72">
         <TextInput
           className={`${inputStyle}`}
           placeholderTextColor="#95999C"
@@ -50,15 +47,11 @@ const LoginScreen = () => {
         />
         <Text className="my-2 text-xs">¿Has olvidado tu contraseña?</Text>
         <Text onPress={handleLogin}>Iniciar sesión</Text>
-        {session ? (
-          <Link to={{ screen: "Tabs" }}>Iniciar sesión</Link>
-        ) : (
-          <Text>Iniciar sesión</Text>
-        )}
-
         <Text className="text-lightBg mt-2 text-sm">
           ¿Todavía no tienes cuenta?{" "}
-          <Text className="text-[#F1889F] underline">Únete</Text>
+          <Link to={{ screen: "Register" }}>
+            <Text className="text-[#F1889F] underline">Únete</Text>
+          </Link>
         </Text>
       </View>
     </View>
