@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { Text, TextInput, View} from "react-native";
 import { Link } from "@react-navigation/native";
 import { trpc } from "../server/utils/trpc";
 import { router } from "expo-router";
