@@ -34,18 +34,19 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String
-  email         String?   @unique
+  email         String?     @unique
   emailVerified DateTime?
   passwordHash  String?
   accounts      Account[]
   sessions      Session[]
-  AdminGroup    Group[]   @relation("UserAdmin")
-  Groups        Group[]   @relation("Users")
+  AdminGroup    Group[]     @relation("UserAdmin")
+  Groups        Group[]     @relation("Users")
   Message       Message[]
   imageprofile  String?
   Task          Task[]
+  GroupTask     GroupTask[]
 }
 
 model Group {
@@ -97,17 +98,34 @@ model Product {
 }
 
 model Task {
-  Id           String   @id @default(cuid())
-  Name         String
-  Description  String
-  GroupName    String
-  GroupId      String
-  UserId       String
-  UserInCharge User     @relation(fields: [UserId], references: [id])
-  Date         DateTime
-  IsPeriodic   Boolean
+  id           String      @id @default(cuid())
+  name         String
+  description  String?
+  groupName    String?
+  groupId      String?
+  userId       String?
+  userInCharge User?       @relation(fields: [userId], references: [id])
+  isPeriodic   Boolean
+  GroupTask    GroupTask[]
+}
 
-  @@index([GroupId])
+model TaskGroup {
+  id        String      @id @default(cuid())
+  name      String
+  GroupTask GroupTask[]
+}
+
+model GroupTask {
+  groupId   String
+  taskGroup TaskGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupName String
+  taskId    String
+  task      Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  User      User?     @relation(fields: [userId], references: [id])
+  userId    String?
+
+  @@id([groupId, taskId])
+  @@index([groupId])
 }
 
 model VerificationToken {
