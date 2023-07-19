@@ -2,12 +2,19 @@ import React from "react";
 import { Text, View, TextInput, Pressable} from "react-native";
 import { trpc } from "../../../server/utils/trpc";
 import Message from "../../../components/Message";
+
+const utils = trpc.useContext();
 const namegroup = "miniconsejo";
 
-/**const { data: groupmessages } = trpc.chat.getAllMessages.useQuery ({
+const { data: groupmessages } = trpc.chat.getAllMessages.useQuery ({
   groupId : "clk8kh4rx0003ucqko2cm5q85"
 });
-**/
+
+const mutation = trpc.chat.createmessage.useMutation({
+  onSuccess() {
+    utils.chat.getAllMessages.invalidate();
+  },
+});
  
 
 export default function TabPaymentsScreen() {
