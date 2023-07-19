@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 
-
 const prisma = new PrismaClient();
 const datetoday = new Date();
 async function main() {
@@ -22,7 +21,6 @@ async function main() {
     },
   });
 
-  
   const a = await prisma.user.create({
     data: {
       name: "a",
@@ -36,44 +34,53 @@ async function main() {
       CodeGroup: "lasminissonmonas",
       Name: "Grupo de minis",
       Admin: { connect: { id: marta.id } },
-      Messages : {
+      Messages: {
         createMany: {
           data: [
             {
-            Day : datetoday,
-            UserId: marta.id,
-            Text: "Holi caracoli",
+              Day: datetoday,
+              UserId: marta.id,
+              Text: "Holi caracoli",
             },
             {
-            Day : datetoday,
-            UserId: a.id,
-            Text: "Hola Buenas tardes",
+              Day: datetoday,
+              UserId: a.id,
+              Text: "Hola Buenas tardes",
             },
             {
-            Day : datetoday,
-            UserId: a.id,
-            Text: "SOy un macarron",
+              Day: datetoday,
+              UserId: a.id,
+              Text: "SOy un macarron",
             },
             {
-            Day : datetoday,
-            UserId: marta.id,
-            Text: "Que pesado",
+              Day: datetoday,
+              UserId: marta.id,
+              Text: "Que pesado",
             },
             {
-            Day : datetoday,
-            UserId: juan.id,
-            Text: "Hola Buenas Tardes",
-          }
-          ]
-        }
+              Day: datetoday,
+              UserId: juan.id,
+              Text: "Hola Buenas Tardes",
+            },
+          ],
+        },
       },
-      Users : {
+      Users: {
         connect: [{ id: a.id }, { id: juan.id }],
-      }
-      
-    }
-  })
-} 
+      },
+    },
+  });
+
+  const tarea1 = await prisma.task.create({
+    data: {
+      name: "Limpiar baño",
+      description: "Limpieza a fondo.",
+      userInCharge: { connect: { id: marta.id } },
+      isPeriodic: false,
+    },
+  });
+}
+
 main()
   .then(async () => {
     await prisma.$disconnect();
