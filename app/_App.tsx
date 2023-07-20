@@ -10,6 +10,7 @@ import ModalScreen from "./modal";
 import AppLayout from "./screens/(tabs)/_layout";
 import RegisterScreen from "./screens/register";
 import CreateTaskScreen from "./screens/(tabs)/tasks/create";
+import ChatScreen from "./screens/chat";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,7 @@ export function App() {
             {/*gestureEnabled: false*/}
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen name="Chat" component={ChatScreen} />
             <Stack.Screen name="Tabs" component={AppLayout} />
             <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
             <Stack.Screen name="Modal" component={ModalScreen} />

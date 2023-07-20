@@ -15,8 +15,8 @@ function Message({
     imageProfile: string;
   }) {
   return (
-    <View className="bg-white flex-col">
-      <Text>
+    <View className="bg-pink flex-col">
+      <Text className="bg-red">
         {text}
       </Text>
     </View>

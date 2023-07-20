@@ -1,24 +1,20 @@
 import { publicProcedure, router } from "../trpc";
 import z from "zod";
 import { messageSchema } from "../../../common/validation/message";
-import { connect } from "http2";
-import { group } from "console";
+
 
 
 export const chatrouter = router({
   getAllMessages: publicProcedure
-    .input(
-      z.object({
-        groupId: z.string(),
-      })
-    )
+    .input(z.object({ GroupId: z.string() }))
     .output(z.array(messageSchema))
-    .query(async ({ ctx, input }) => {
-      const messages = ctx.prisma.message.findMany({
+    .query(async ({ input, ctx }) => {
+      const messages = await ctx.prisma.message.findMany({
         select: {
           Text: true,
           Day: true,
           UserId: true,
+          Id : true,
           User: {
             select: {
               name: true,
@@ -26,13 +22,13 @@ export const chatrouter = router({
             },
           },
         },
-        where: {
-          GroupId: input.groupId
-        }
       });
+      console.log(messages);
       const messageParse = z.array(messageSchema).parse(messages);
+      console.log("si");
       return messageParse;
     }),
+  
   createmessage: publicProcedure
     .input(
       z.object({
