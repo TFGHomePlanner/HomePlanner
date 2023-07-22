@@ -24,7 +24,7 @@ const ChatScreen = () => {
       <View className="w-full bg-[#f1889f]">
         <Text className=" font-semibold text-center text-[18px] text-white p-4 pt-8">Chat {namegroup}</Text>
       </View>
-      <View className=" w-full bg-orange-400">
+      <View className=" w-full bg-[#F8F3ED] ">
         {groupmessages?.map((c) => {
           return (
             <Message
