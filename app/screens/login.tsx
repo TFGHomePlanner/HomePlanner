@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import { Text, TextInput, View} from "react-native";
-import { Link, useNavigation } from "@react-navigation/native";
+import { Link} from "@react-navigation/native";
 import { trpc } from "../server/utils/trpc";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AppStackParamList } from "../_App";
 
+// Define el tipo de props para el componente LoginScreen
+type LoginScreenProps = {
+  navigation: NativeStackNavigationProp<AppStackParamList, "Login">;
+};
 
-
-
-const LoginScreen = () => {
+const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigation = useNavigation();
   const inputStyle =
     "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
   const { mutate } = trpc.user.login.useMutation({
     onSuccess: (output) => {
       if (output.success) {
-        // navigation.navigate("Tabs");
+        navigation.navigate("Tabs");
       } else console.log(output.message);
     },
     onError: (error) => {

@@ -12,7 +12,24 @@ import RegisterScreen from "./screens/register";
 import CreateTaskScreen from "./screens/(tabs)/tasks/create";
 import ChatScreen from "./screens/chat";
 
-const Stack = createNativeStackNavigator();
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+// Define los tipos de las rutas de la aplicación
+export type AppStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  Tabs: undefined;
+  Chat: undefined;
+  CreateTask: undefined;
+  Modal: undefined
+};
+
+// Define el tipo de props para el componente App
+type AppProps = {
+  navigation: NativeStackNavigationProp<AppStackParamList>;
+};
+
+const Stack = createNativeStackNavigator<AppStackParamList>();
 
 export function App() {
   const [queryClient] = useState(() => new QueryClient());
