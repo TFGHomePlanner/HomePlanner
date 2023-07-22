@@ -23,9 +23,7 @@ export const chatrouter = router({
           },
         },
       });
-      console.log(messages);
       const messageParse = z.array(messageSchema).parse(messages);
-      console.log("si");
       return messageParse;
     }),
   
