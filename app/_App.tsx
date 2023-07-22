@@ -14,8 +14,6 @@ import ChatScreen from "./screens/chat";
 import { ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
   Login: undefined;
@@ -24,11 +22,6 @@ export type AppStackParamList = {
   Chat: undefined;
   CreateTask: undefined;
   Modal: undefined;
-};
-
-// Define el tipo de props para el componente App
-type AppProps = {
-  navigation: NativeStackNavigationProp<AppStackParamList>;
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
