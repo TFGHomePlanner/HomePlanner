@@ -11,6 +11,8 @@ import AppLayout from "./screens/(tabs)/_layout";
 import RegisterScreen from "./screens/register";
 import CreateTaskScreen from "./screens/(tabs)/tasks/create";
 import ChatScreen from "./screens/chat";
+import { ApplicationProvider } from "@ui-kitten/components";
+import * as eva from "@eva-design/eva";
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
@@ -21,7 +23,7 @@ export type AppStackParamList = {
   Tabs: undefined;
   Chat: undefined;
   CreateTask: undefined;
-  Modal: undefined
+  Modal: undefined;
 };
 
 // Define el tipo de props para el componente App
@@ -46,17 +48,19 @@ export function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {/*gestureEnabled: false*/}
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
-            <Stack.Screen name="Chat" component={ChatScreen} />
-            <Stack.Screen name="Tabs" component={AppLayout} />
-            <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
-            <Stack.Screen name="Modal" component={ModalScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <ApplicationProvider {...eva} theme={eva.light}>
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              {/*gestureEnabled: false*/}
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
+              <Stack.Screen name="Chat" component={ChatScreen} />
+              <Stack.Screen name="Tabs" component={AppLayout} />
+              <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
+              <Stack.Screen name="Modal" component={ModalScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </ApplicationProvider>
       </QueryClientProvider>
     </trpc.Provider>
   );
