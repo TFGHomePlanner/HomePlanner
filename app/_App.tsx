@@ -13,7 +13,7 @@ import CreateTaskScreen from "./screens/(tabs)/tasks/create";
 import ChatScreen from "./screens/chat";
 import { ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
-import { ProviderUser } from "./context/userContext";
+import UserProvider from "./context/userContext";
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
   Login: undefined;
@@ -42,7 +42,7 @@ export function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <ProviderUser value={User}>
+        <UserProvider>
           <ApplicationProvider {...eva} theme={eva.light}>
             <NavigationContainer>
               <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -56,7 +56,7 @@ export function App() {
               </Stack.Navigator>
             </NavigationContainer>
           </ApplicationProvider>
-        </ProviderUser>
+        </UserProvider>
       </QueryClientProvider>
     </trpc.Provider>
   );

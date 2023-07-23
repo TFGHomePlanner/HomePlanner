@@ -4,7 +4,8 @@ import { Link} from "@react-navigation/native";
 import { trpc } from "../server/utils/trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../_App";
-import UserContext from "../context/userContext";
+import { UserContext } from "../context/userContext";
+import { IUser, UserContextType } from "../context/types";
 
 // Define el tipo de props para el componente LoginScreen
 type LoginScreenProps = {
@@ -12,7 +13,7 @@ type LoginScreenProps = {
 };
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
-  const User = useContext(UserContext);
+  const {User, updateUser } = React.useContext(UserContext) as UserContextType;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputStyle =
@@ -20,6 +21,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const { mutate } = trpc.user.login.useMutation({
     onSuccess: (output) => {
       if (output.success) {
+        const NewUser: IUser = {
+          id: output.user.id,
+          groupId : "",
+        };
+        updateUser(NewUser);
+        console.log(NewUser);
         navigation.navigate("Tabs");
       } else console.log(output.message);
     },

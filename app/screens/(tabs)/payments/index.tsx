@@ -1,7 +1,6 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Text, View} from "react-native";
 import { Link } from "@react-navigation/native";
-
 
 
 export default function TabPaymentsScreen() {

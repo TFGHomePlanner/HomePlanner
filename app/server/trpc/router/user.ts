@@ -19,6 +19,11 @@ export const userRouter = router({
         return {
           success: false,
           message: "User not found",
+          user: {
+            id: "",
+            name: "",
+            email: "",
+          },
         };
       }
 
@@ -36,6 +41,11 @@ export const userRouter = router({
         return {
           success: false,
           message: "Invalid credentials",
+          user: {
+            id: "",
+            name: "",
+            email: "",
+          },
         };
       }
     }),
