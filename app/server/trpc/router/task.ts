@@ -13,7 +13,7 @@ export const taskRouter = router({
             message: "La descripción no puede tener más de 600 caracteres.",
           })
           .nullable(),
-        frequency: z.nativeEnum(Frequency)
+        frequency: z.nativeEnum(Frequency),
       })
     )
     .mutation(async ({ ctx, input: { name, description, frequency } }) => {
