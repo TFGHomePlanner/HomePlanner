@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Text, TextInput, View} from "react-native";
 import { Link} from "@react-navigation/native";
 import { trpc } from "../server/utils/trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../_App";
+import UserContext from "../context/userContext";
 
 // Define el tipo de props para el componente LoginScreen
 type LoginScreenProps = {
@@ -11,6 +12,7 @@ type LoginScreenProps = {
 };
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
+  const User = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputStyle =

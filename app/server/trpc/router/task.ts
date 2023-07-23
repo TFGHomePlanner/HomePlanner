@@ -1,5 +1,5 @@
 import { publicProcedure, router } from "../trpc";
-import { TaskFrequency } from "@prisma/client";
+import { Frequency } from "@prisma/client";
 import { z } from "zod";
 
 export const taskRouter = router({
@@ -13,7 +13,7 @@ export const taskRouter = router({
             message: "La descripción no puede tener más de 600 caracteres.",
           })
           .nullable(),
-        frequency: z.nativeEnum(TaskFrequency),
+        frequency: z.nativeEnum(Frequency)
       })
     )
     .mutation(async ({ ctx, input: { name, description, frequency } }) => {
