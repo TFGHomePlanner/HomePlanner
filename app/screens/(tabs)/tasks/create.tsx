@@ -5,31 +5,36 @@ import { trpc } from "../../../trpc";
 import { Select, SelectItem, IndexPath } from "@ui-kitten/components";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../../_App";
+import { Frequency } from "@prisma/client";
 
 type CreateTaskScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateTask">;
 };
 
-const data = [
-  { value: "Nunca" },
-  { value: "Cada día" },
-  { value: "Cada semana" },
-  { value: "Cada mes" },
-];
-
 const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
-  const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(
-    new IndexPath(0)
-  );
-
   const inputStyle =
     "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
+  const frequencyTranslations: Record<Frequency, string> = {
+    never: "Nunca",
+    oncePerDay: "Cada día",
+    oncePerWeek: "Cada semana",
+    oncePerMonth: "Cada mes",
+  };
+
+  const data = Object.entries(frequencyTranslations).map(([value, label]) => ({
+    value,
+    label,
+  }));
+  const [selectedIndex, setSelectedIndex] = useState<IndexPath>(
+    new IndexPath(0)
+  );
+  const selectedFrequency = data[selectedIndex.row].value as Frequency;
   const mutation = trpc.task.create.useMutation();
   const createTask = () => {
-    mutation.mutateAsync({ name, description, frequency: "Nunca" });
+    mutation.mutateAsync({ name, description, frequency: selectedFrequency });
   };
 
   return (
@@ -64,11 +69,13 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
         </View>
         <Select
           selectedIndex={selectedIndex}
-          onSelect={(index) => setSelectedIndex(index)}
+          onSelect={(index) =>
+            setSelectedIndex(Array.isArray(index) ? index[0] : index)
+          }
           placeholder="Repetir tarea"
         >
           {data.map((f) => (
-            <SelectItem key={f.value} title={f.value} />
+            <SelectItem key={f.value} title={f.label} />
           ))}
         </Select>
       </View>
