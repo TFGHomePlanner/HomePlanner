@@ -1,4 +1,5 @@
 import { publicProcedure, router } from "../trpc";
+import { TaskFrequency } from "@prisma/client";
 import { z } from "zod";
 
 export const taskRouter = router({
@@ -9,18 +10,18 @@ export const taskRouter = router({
         description: z
           .string()
           .max(600, {
-            message: "La descripción no puede tener más de 600 caracteres",
+            message: "La descripción no puede tener más de 600 caracteres.",
           })
           .nullable(),
-        isPeriodic: z.boolean(),
+        frequency: z.nativeEnum(TaskFrequency),
       })
     )
-    .mutation(async ({ ctx, input: { name, description, isPeriodic } }) => {
+    .mutation(async ({ ctx, input: { name, description, frequency } }) => {
       return await ctx.prisma.task.create({
         data: {
           name,
           description,
-          isPeriodic,
+          frequency,
         },
       });
     }),

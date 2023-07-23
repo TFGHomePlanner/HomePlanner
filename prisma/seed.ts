@@ -76,7 +76,7 @@ async function main() {
       name: "Limpiar baño",
       description: "Limpieza a fondo.",
       userInCharge: { connect: { id: marta.id } },
-      isPeriodic: false,
+      frequency: "never",
     },
   });
 }

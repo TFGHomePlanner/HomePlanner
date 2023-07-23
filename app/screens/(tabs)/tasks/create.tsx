@@ -3,57 +3,78 @@ import { Pressable, Text, TextInput, View } from "react-native";
 import { Header } from "../../../components/Header";
 import { trpc } from "../../../trpc";
 import { Select, SelectItem, IndexPath } from "@ui-kitten/components";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AppStackParamList } from "../../../_App";
 
-export default function CreateTaskScreen() {
-  const [selectedIndex, setSelectedIndex] = React.useState<
-    IndexPath | IndexPath[]
-  >(new IndexPath(0));
+type CreateTaskScreenProps = {
+  navigation: NativeStackNavigationProp<AppStackParamList, "CreateTask">;
+};
+
+const data = [
+  { value: "Nunca" },
+  { value: "Cada día" },
+  { value: "Cada semana" },
+  { value: "Cada mes" },
+];
+
+const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
+  const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(
+    new IndexPath(0)
+  );
 
   const inputStyle =
     "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [isPeriodic, setIsPeriodic] = useState(false);
+  const [frequency, setFrequency] = useState("Nunca");
 
   const mutation = trpc.task.create.useMutation();
   const createTask = () => {
-    mutation.mutateAsync({ name, description, isPeriodic });
+    mutation.mutateAsync({ name, description, frequency });
   };
 
   return (
-    <View>
+    <View className="bg-[#F8F3ED]">
       <Header />
-      <Text>Crear tarea</Text>
-      <TextInput
-        className={`${inputStyle}`}
-        placeholderTextColor="#95999C"
-        value={name}
-        onChangeText={setName}
-        placeholder="Título"
-      />
-      <TextInput
-        className={`${inputStyle}`}
-        placeholderTextColor="#95999C"
-        value={description}
-        onChangeText={setDescription}
-        placeholder="Descripción"
-      />
-      <Select
-        selectedIndex={selectedIndex}
-        onSelect={(index) => setSelectedIndex(index)}
-        placeholder="Repetir tarea"
-      >
-        <SelectItem title="Nunca" />
-        <SelectItem title="Cada día" />
-        <SelectItem title="Cada semana" />
-        <SelectItem title="Cada mes" />
-      </Select>
-      <Pressable
-        className="h-10 w-full justify-center rounded-md bg-[#212529] pl-8"
-        onPress={createTask}
-      >
-        <Text className="text-base text-[#F8F3ED]">Crear tarea</Text>
-      </Pressable>
+      <View className="p-8">
+        <View className="flex flex-row justify-between">
+          <Pressable className="" onPress={navigation.goBack}>
+            <Text className="text-[#7B61FF]">Cancelar</Text>
+          </Pressable>
+          <Text className="self-center">Nueva tarea</Text>
+          <Pressable className="self-end" onPress={createTask}>
+            <Text className="font-semibold text-[#7B61FF]">Añadir</Text>
+          </Pressable>
+        </View>
+
+        <View className="my-6">
+          <TextInput
+            className={`${inputStyle}`}
+            placeholderTextColor="#95999C"
+            value={name}
+            onChangeText={setName}
+            placeholder="Título"
+          />
+          <TextInput
+            className={`${inputStyle}`}
+            placeholderTextColor="#95999C"
+            value={description}
+            onChangeText={setDescription}
+            placeholder="Descripción"
+          />
+        </View>
+        <Select
+          selectedIndex={selectedIndex}
+          onSelect={(index) => setSelectedIndex(index)}
+          placeholder="Repetir tarea"
+        >
+          {data.map((f) => (
+            <SelectItem key={f.value} title={f.value} />
+          ))}
+        </Select>
+      </View>
     </View>
   );
-}
+};
+
+export default CreateTaskScreen;

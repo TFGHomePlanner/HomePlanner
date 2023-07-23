@@ -105,14 +105,14 @@ model Task {
   groupId      String?
   userId       String?
   userInCharge User?       @relation(fields: [userId], references: [id])
-  isPeriodic   Boolean
-  GroupTask    GroupTask[]
+  frequency    Frequency
+  groupTask    GroupTask[]
 }
 
 model TaskGroup {
   id        String      @id @default(cuid())
   name      String
-  GroupTask GroupTask[]
+  groupTask GroupTask[]
 }
 
 model GroupTask {
@@ -121,7 +121,7 @@ model GroupTask {
   groupName String
   taskId    String
   task      Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  User      User?     @relation(fields: [userId], references: [id])
+  user      User?     @relation(fields: [userId], references: [id])
   userId    String?
 
   @@id([groupId, taskId])
@@ -134,4 +134,11 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum Frequency {
+  never
+  oncePerDay
+  oncePerWeek
+  oncePerMonth
 }
