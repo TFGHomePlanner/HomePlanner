@@ -26,11 +26,10 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
     "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [frequency, setFrequency] = useState("Nunca");
 
   const mutation = trpc.task.create.useMutation();
   const createTask = () => {
-    mutation.mutateAsync({ name, description, frequency });
+    mutation.mutateAsync({ name, description, frequency: "Nunca" });
   };
 
   return (
