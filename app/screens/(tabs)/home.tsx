@@ -1,14 +1,11 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import EditScreenInfo from "../../components/EditScreenInfo";
-import { Text, View } from "react-native";
 
 export default function TabHomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inicio</Text>
       <View style={styles.separator} />
-      <EditScreenInfo path="app/screens/tabs/home.tsx" />
     </View>
   );
 }
