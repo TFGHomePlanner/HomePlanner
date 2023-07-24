@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Text, View, TextInput, ScrollView, Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { trpc } from "../server/utils/trpc";
 import Message from "../components/Message";
 import { UserContext } from "../context/userContext";
 import { UserContextType } from "../context/types";
 import { format } from "date-fns";
 import Icon from "react-native-vector-icons/FontAwesome";
+
 const ChatScreen = () => {
   
+  const navigation  = useNavigation();
   const inputStyle ="mb-2 text-lg border-b-[1px] border-lightBg p-2 pl-8 text-lightBg";
   const utils = trpc.useContext();
   const namegroup = "miniconsejo";
@@ -34,11 +37,20 @@ const ChatScreen = () => {
     });
     setmessage("");
   }
+
+  function goBack() {
+    navigation.goBack(); 
+  }
   return (
     <View className="h-full  flex flex-col">
       {/* Cabecera */}
-      <View className="w-full bg-[#f1889f]">
-        <Text className=" font-semibold text-center text-[18px] text-white p-4 pt-8">Chat {namegroup}</Text>
+      <View className="w-full bg-[#f1889f] flex flex-row items-center">
+        {/* Icono para navegar hacia atrás */}
+        <Pressable onPress={goBack} className="px-2 pt-5">
+          <Icon name="chevron-left" size={24} color="white" />
+        </Pressable>
+        {/* Texto de la cabecera */}
+        <Text className="font-semibold text-center text-[18px] text-white p-4 pt-8 flex-1">Chat {namegroup}</Text>
       </View>
       <ScrollView className="bg-[#F8F3ED] px-4"
         contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }} // Añade esta línea
