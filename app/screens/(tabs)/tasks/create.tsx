@@ -74,8 +74,8 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
           }
           placeholder="Repetir tarea"
         >
-          {data.map((f) => (
-            <SelectItem key={f.value} title={f.label} />
+          {data.map((f, index) => (
+            <SelectItem key={index} title={f.label} />
           ))}
         </Select>
       </View>
