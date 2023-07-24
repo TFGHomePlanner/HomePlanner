@@ -32,12 +32,13 @@ function Message({
         />
       </View>
       <View
-        className={`p-4 rounded-xl ${
-          isMyMessage ? "bg-green-400 text-white ml-2" : "bg-blue-300 text-white mr-2"
-        }`}
+        className={`p-3 rounded-xl w-auto ${
+          isMyMessage ? "bg-slate-200 ml-7" : "bg-blue-300 text-white mr-7"}`}
       >
-        <Text className="text-left text-base overflow-hidden">{text}</Text>
-        <Text className={`text-xs italic ${isMyMessage ? "text-right" : "text-left"}`}>{DayFormat + " " + Name}</Text>
+        <Text className="text-black text-left text-base overflow-hidden flex-shrink-0 flex-grow-0">
+          {text}
+        </Text>
+        <Text className={`text-xs italic text-black ${isMyMessage ? "text-right" : "text-left"}`}>{DayFormat + " " + Name}</Text>
       </View>
       
     </View>
