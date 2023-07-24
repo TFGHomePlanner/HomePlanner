@@ -1,8 +1,12 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { Link } from "@react-navigation/native";
+import { trpc } from "../../../trpc";
+import TaskCard from "../../../components/tasks/TaskCard";
 
 export default function TabTasksScreen() {
+  const { data: allTasks } = trpc.task.getAllTasks.useQuery();
+
   return (
     <View className="h-full bg-[#F8F3ED] p-8">
       <View className="mb-6 gap-y-3">
@@ -24,6 +28,13 @@ export default function TabTasksScreen() {
         </Pressable>
       </View>
       <Text className="text-lg">Otras tareas</Text>
+      <View>
+        {allTasks ? (
+          allTasks.map((task) => <TaskCard key={task.id} />)
+        ) : (
+          <Text>No hay tareas</Text>
+        )}
+      </View>
     </View>
   );
 }

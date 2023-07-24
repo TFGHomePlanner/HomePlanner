@@ -3,6 +3,22 @@ import { Frequency } from "@prisma/client";
 import { z } from "zod";
 
 export const taskRouter = router({
+  getAllTasks: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.task.findMany({
+      select: {
+        id: true,
+        _count: true,
+        name: true,
+        description: true,
+        userInCharge: true,
+        userId: true,
+        frequency: true,
+        groupTask: true,
+        groupId: true,
+        groupName: true,
+      },
+    });
+  }),
   create: publicProcedure
     .input(
       z.object({
