@@ -7,6 +7,7 @@ import { AppStackParamList } from "../_App";
 import { UserContext } from "../context/userContext";
 import { IUser, UserContextType } from "../context/types";
 
+
 // Define el tipo de props para el componente LoginScreen
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "Login">;
@@ -23,7 +24,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       if (output.success) {
         const NewUser: IUser = {
           id: output.user.id,
-          groupId : "clkflhwh000033q3so7rjovma",
+          groupId : "clkh11m3h0003uc70hzd1tvsf",
         };
         updateUser(NewUser);
         console.log(NewUser);

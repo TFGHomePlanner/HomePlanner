@@ -31,7 +31,7 @@ export const chatrouter = router({
     .input(
       z.object({
         Text: z.string().min(1, "No puede ser un mensaje vacío"),
-        Day: z.date(),
+        Day: z.string(),
         UserId: z.string(),
         GroupId: z.string(),
       })
