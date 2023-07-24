@@ -14,6 +14,7 @@ import ChatScreen from "./screens/chat";
 import { ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import UserProvider from "./context/userContext";
+
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
   Login: undefined;
@@ -27,7 +28,6 @@ export type AppStackParamList = {
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
 export function App() {
-  const User = { id: "123", GroupId: "456" };
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
