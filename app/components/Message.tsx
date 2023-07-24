@@ -36,7 +36,7 @@ function Message({
           isMyMessage ? "bg-green-400 text-white ml-2" : "bg-blue-300 text-white mr-2"
         }`}
       >
-        <Text className={`text-base ${isMyMessage ? "pr-10" : "pr-10"}`}>{text}</Text>
+        <Text className="text-left text-base overflow-hidden">{text}</Text>
         <Text className={`text-xs italic ${isMyMessage ? "text-right" : "text-left"}`}>{DayFormat + " " + Name}</Text>
       </View>
       

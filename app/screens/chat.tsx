@@ -40,7 +40,7 @@ const ChatScreen = () => {
       <View className="w-full bg-[#f1889f]">
         <Text className=" font-semibold text-center text-[18px] text-white p-4 pt-8">Chat {namegroup}</Text>
       </View>
-      <ScrollView className="bg-[#F8F3ED]"
+      <ScrollView className="bg-[#F8F3ED] px-4"
         contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }} // Añade esta línea
         keyboardShouldPersistTaps="handled" // Permite el manejo de taps en el teclado
       >
