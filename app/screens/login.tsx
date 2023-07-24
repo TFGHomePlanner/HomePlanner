@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState} from "react";
 import { Text, TextInput, View} from "react-native";
 import { Link} from "@react-navigation/native";
 import { trpc } from "../server/utils/trpc";
@@ -13,7 +13,7 @@ type LoginScreenProps = {
 };
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
-  const {User, updateUser } = React.useContext(UserContext) as UserContextType;
+  const { updateUser } = React.useContext(UserContext) as UserContextType;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputStyle =
@@ -23,7 +23,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       if (output.success) {
         const NewUser: IUser = {
           id: output.user.id,
-          groupId : "",
+          groupId : "clkflhwh000033q3so7rjovma",
         };
         updateUser(NewUser);
         console.log(NewUser);

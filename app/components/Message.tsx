@@ -7,14 +7,16 @@ function Message({
   userId,
   Name,
   imageProfile,
+  isMyMessage,
 }: {
     text: string;
     day: string;
     userId: string;
     Name: string;
     imageProfile: string;
+    isMyMessage: boolean
   }) {
-  if (userId == "clk9yp8jj0000ucr4697vt5nq")
+  if (isMyMessage)
   {
     return (
       <View className="flex w-full mt-2 space-x-3 max-w-xs">
