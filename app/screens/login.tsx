@@ -1,12 +1,11 @@
-import React, { useState} from "react";
-import { Text, TextInput, View} from "react-native";
-import { Link} from "@react-navigation/native";
+import React, { useState } from "react";
+import { Text, TextInput, View } from "react-native";
+import { Link } from "@react-navigation/native";
 import { trpc } from "../server/utils/trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../_App";
 import { UserContext } from "../context/userContext";
 import { IUser, UserContextType } from "../context/types";
-
 
 // Define el tipo de props para el componente LoginScreen
 type LoginScreenProps = {
@@ -24,7 +23,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       if (output.success) {
         const NewUser: IUser = {
           id: output.user.id,
-          groupId : "clkh11m3h0003uc70hzd1tvsf",
+          groupId: "clkh11m3h0003uc70hzd1tvsf",
         };
         updateUser(NewUser);
         console.log(NewUser);

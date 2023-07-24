@@ -14,6 +14,7 @@ type CreateTaskScreenProps = {
 const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
   const inputStyle =
     "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -28,13 +29,23 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
     value,
     label,
   }));
+
   const [selectedIndex, setSelectedIndex] = useState<IndexPath>(
     new IndexPath(0)
   );
+
   const selectedFrequency = data[selectedIndex.row].value as Frequency;
   const mutation = trpc.task.create.useMutation();
   const createTask = () => {
     mutation.mutateAsync({ name, description, frequency: selectedFrequency });
+    console.log(
+      "Task created: " +
+        name +
+        ", " +
+        description +
+        ", " +
+        selectedFrequency.valueOf()
+    );
   };
 
   return (
