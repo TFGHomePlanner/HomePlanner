@@ -6,11 +6,11 @@ export const listSchema = z.object({
   Description: z.string().nullable(),
   IsClosed: z.boolean(),
   Id: z.string(),
-  items: z.object ({
+  items: z.array(z.object ({
     name: z.string().min(1, "el nombre no puede ser vacio"),
     isPurchased : z.boolean(),
     id: z.string(),
-  })
+  })),
 });
 
 export const listsSchemaCreate = listSchema.extend({

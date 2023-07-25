@@ -23,7 +23,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       if (output.success) {
         const NewUser: IUser = {
           id: output.user.id,
-          groupId: "clkh11m3h0003uc70hzd1tvsf",
+          groupId: "clkikj9r90003uchwblr4xlht",
         };
         updateUser(NewUser);
         console.log(NewUser);

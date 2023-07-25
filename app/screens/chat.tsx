@@ -17,7 +17,7 @@ const ChatScreen = () => {
   const [message, setmessage] = useState("");
   const {User} = React.useContext(UserContext) as UserContextType;
   const {data: groupmessages} = trpc.chat.getAllMessages.useQuery ({
-    GroupId : "clk9yp8jj0000ucr4697vt5nq"
+    GroupId : User.groupId,
   });
   const mutation = trpc.chat.createmessage.useMutation({
     onSuccess() {

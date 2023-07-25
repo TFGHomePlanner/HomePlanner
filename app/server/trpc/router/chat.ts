@@ -22,6 +22,9 @@ export const chatrouter = router({
             },
           },
         },
+        where: {
+          GroupId: input.GroupId,
+        }
       });
       const messageParse = z.array(messageSchema).parse(messages);
       return messageParse;

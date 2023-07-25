@@ -2,8 +2,18 @@
 import React from "react";
 import AddIcon from "react-native-vector-icons/FontAwesome5";
 import { Text, View, ScrollView } from "react-native";
-
+import { trpc } from "../../../server/utils/trpc";
 export default function TabListsScreen() {
+
+  const {data: activelist} = trpc.list.getAllLists.useQuery ({
+    GroupId: "clkikj9r90003uchwblr4xlht",
+    IsClosed: false,
+  });
+  const {data: closedlist} = trpc.list.getAllLists.useQuery ({
+    GroupId: "clkikj9r90003uchwblr4xlht",
+    IsClosed: true,
+  });
+
   return (
     <View className="bg-[#f8f3ed] m-4">
       <View className="bg-[#F1889f] p-3 rounded-xl flex flex-row items-center justify-start w-full">
