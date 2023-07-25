@@ -5,8 +5,14 @@ export const TaskSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string().optional().nullable(),
+  userInCharge: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+    })
+    .optional()
+    .nullable(),
   groupId: z.string().optional().nullable(),
-  userId: z.string().optional().nullable(),
   frequency: z.nativeEnum(Frequency),
 });
 

@@ -9,8 +9,12 @@ export const taskRouter = router({
         _count: true,
         name: true,
         description: true,
-        userInCharge: true,
-        userId: true,
+        userInCharge: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         frequency: true,
         groupTask: true,
         taskGroupId: true,
