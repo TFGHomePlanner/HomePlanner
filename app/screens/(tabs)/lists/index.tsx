@@ -1,11 +1,11 @@
-import { StyleSheet } from "react-native";
+
 import React from "react";
 import AddIcon from "react-native-vector-icons/FontAwesome5";
 import { Text, View, ScrollView } from "react-native";
 
 export default function TabListsScreen() {
   return (
-    <View style={styles.container} className="bg-[#f8f3ed] m-4">
+    <View className="bg-[#f8f3ed] m-4">
       <View className="bg-[#F1889f] p-3 rounded-xl flex flex-row items-center justify-start w-full">
         <AddIcon name="plus" size={20} color="white" className="mr-2" />
         <Text className="text-lg font-bold ml-2 text-white pl-4">Nueva lista</Text>
@@ -26,19 +26,3 @@ export default function TabListsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});

@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "expo start",
-    "start:backend": "ts-node-dev server.ts",
+    "back": "ts-node-dev server.ts",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",

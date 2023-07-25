@@ -5,7 +5,7 @@ import TabTasksScreen from "./tasks";
 import TabHomeScreen from "./home";
 import TabListsScreen from "./lists";
 import TabPaymentsScreen from "./payments";
-import { View } from "../../components/Themed";
+import { View } from "react-native";
 import { Header } from "../../components/Header";
 import Icon from "react-native-vector-icons/Octicons";
 

@@ -57,6 +57,7 @@ model Group {
   Admin     User      @relation("UserAdmin", fields: [AdminId], references: [id])
   AdminId   String
   Users     User[]    @relation("Users")
+  Lists     List[]
 
   @@index([AdminId])
 }
@@ -79,7 +80,7 @@ model List {
   Name        String
   Description String
   IsClosed    Boolean
-  //Group       Group     @relation(fields: [GroupId], references: [id])
+  Group       Group     @relation(fields: [GroupId], references: [id])
   GroupId     String
   items       Product[]
 
@@ -98,15 +99,15 @@ model Product {
 }
 
 model Task {
-  id           String      @id @default(cuid())
-  name         String
-  description  String?
-  groupName    String?
-  groupId      String?
-  userId       String?
-  userInCharge User?       @relation(fields: [userId], references: [id])
-  frequency    Frequency
-  groupTask    GroupTask[]
+  id            String      @id @default(cuid())
+  name          String
+  description   String?
+  groupTask     GroupTask[]
+  taskGroupName String?
+  taskGroupId   String?
+  userId        String?
+  userInCharge  User?       @relation(fields: [userId], references: [id])
+  frequency     Frequency
 }
 
 model TaskGroup {
