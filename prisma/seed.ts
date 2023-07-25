@@ -25,7 +25,7 @@ async function main() {
     data: {
       name: "a",
       email: "a",
-      passwordHash: hashedPassword,
+      passwordHash: "a",
     },
   });
 
@@ -77,6 +77,15 @@ async function main() {
       description: "Limpieza a fondo.",
       userInCharge: { connect: { id: marta.id } },
       frequency: "never",
+    },
+  });
+
+  const tarea2 = await prisma.task.create({
+    data: {
+      name: "Fregar platos",
+      description: "",
+      userInCharge: { connect: { id: a.id } },
+      frequency: "oncePerDay",
     },
   });
 }
