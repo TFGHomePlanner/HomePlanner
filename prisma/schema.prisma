@@ -90,7 +90,6 @@ model List {
 model Product {
   id          String  @id @default(cuid())
   name        String
-  price       Float
   isPurchased Boolean @default(false)
   ListName    List    @relation(fields: [ListId], references: [Id])
   ListId      String

@@ -25,7 +25,7 @@ async function main() {
     data: {
       name: "a",
       email: "a",
-      passwordHash: "a",
+      passwordHash: hashedPassword,
     },
   });
 
@@ -70,7 +70,6 @@ async function main() {
       },
     },
   });
-
   const tarea1 = await prisma.task.create({
     data: {
       name: "Limpiar baño",
@@ -78,17 +77,158 @@ async function main() {
       userInCharge: { connect: { id: marta.id } },
       frequency: "never",
     },
-  });
-
-  const tarea2 = await prisma.task.create({
+  });  
+  const lista1 = await prisma.list.create({
     data: {
-      name: "Fregar platos",
-      description: "",
-      userInCharge: { connect: { id: a.id } },
-      frequency: "oncePerDay",
-    },
-  });
+      Name: "Lista de la compra1",
+      Description: "Lista de la compra",
+      GroupId: minigrupo.id,
+      IsClosed: false,
+      items : {
+        createMany: {
+          data: [
+            {
+              name: "Leche",
+              isPurchased: false,  
+            },
+            {
+              name: "Pan",
+              isPurchased: false,
+            },
+            {
+              name: "Huevos",
+              isPurchased: false,
+            }
+        ]
+  
+      }
+    }
+  },
+});
+const lista2 = await prisma.list.create({
+  data: {
+    Name: "Lista de la compra2",
+    Description: "Lista de la compra",
+    GroupId: minigrupo.id,
+    IsClosed: false,
+    items : {
+      createMany: {
+        data: [
+          {
+            name: "Leche",
+            isPurchased: false,  
+          },
+          {
+            name: "Pan",
+            isPurchased: false,
+          },
+          {
+            name: "Huevos",
+            isPurchased: false,
+          }
+      ]
+
+    }
+  }
+},
+});
+const lista3 = await prisma.list.create({
+  data: {
+    Name: "Lista de la compra cerrada",
+    Description: "Lista de la compra",
+    GroupId: minigrupo.id,
+    IsClosed: false,
+    items : {
+      createMany: {
+        data: [
+          {
+            name: "Leche",
+            isPurchased: false,  
+          },
+          {
+            name: "Pan",
+            isPurchased: false,
+          },
+          {
+            name: "Huevos",
+            isPurchased: false,
+          }
+      ]
+
+    }
+  }
+},
+});
+const lista4 = await prisma.list.create({
+  data: {
+    Name: "Lista de la compra cerrada2",
+    Description: "Lista de la compra",
+    GroupId: minigrupo.id,
+    IsClosed: false,
+    items : {
+      createMany: {
+        data: [
+          {
+            name: "Leche",
+            isPurchased: false,  
+          },
+          {
+            name: "Pan",
+            isPurchased: false,
+          },
+          {
+            name: "Huevos",
+            isPurchased: false,
+          },
+          {
+            name: "Maccarones",
+            isPurchased: false,
+          },
+          {
+            name: "Sal",
+            isPurchased: false,
+          },
+          {
+            name: "Pizza",
+            isPurchased: false,
+          }
+      ]
+
+    }
+  }
+},
+});
+const lista5 = await prisma.list.create({
+  data: {
+    Name: "Lista de la cerrda3",
+    Description: "Lista de la compra",
+    GroupId: minigrupo.id,
+    IsClosed: false,
+    items : {
+      createMany: {
+        data: [
+          {
+            name: "Leche",
+            isPurchased: false,  
+          },
+          {
+            name: "Pan",
+            isPurchased: false,
+          },
+          {
+            name: "Huevos",
+            isPurchased: false,
+          }
+      ]
+
+    }
+  }
+},
+});
 }
+
+
+
 
 main()
   .then(async () => {
