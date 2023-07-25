@@ -30,7 +30,7 @@ export default function TabTasksScreen() {
       <Text className="text-lg">Otras tareas</Text>
       <View>
         {allTasks ? (
-          allTasks.map((task) => <TaskCard key={task.id} />)
+          allTasks.map((task) => <TaskCard key={task.id} task={task} />)
         ) : (
           <Text>No hay tareas</Text>
         )}
