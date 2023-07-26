@@ -25,6 +25,7 @@ export const listrouter = router({
         },
         where: {
           groupId: input.groupId,
+          isClosed: input.isClosed,
         }
       });
       const messageParse = z.array(listSchema).parse(lists);

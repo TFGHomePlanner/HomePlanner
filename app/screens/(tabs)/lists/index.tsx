@@ -13,7 +13,6 @@ export default function TabListsScreen() {
     groupId: User.groupId,
     isClosed: false,
   });
-  console.log (activelist);
   const {data: closedlist} = trpc.list.getAllLists.useQuery ({
     groupId: User.groupId,
     isClosed: true,
