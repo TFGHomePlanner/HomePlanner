@@ -14,6 +14,7 @@ import ChatScreen from "./screens/chat";
 import { ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import UserProvider from "./context/userContext";
+import MyTasksScreen from "./components/tasks/MyTasks";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -23,6 +24,7 @@ export type AppStackParamList = {
   TabTasks: undefined;
   Chat: undefined;
   CreateTask: undefined;
+  MyTasks: undefined;
   Modal: undefined;
 };
 
@@ -53,6 +55,7 @@ export function App() {
                 <Stack.Screen name="Chat" component={ChatScreen} />
                 <Stack.Screen name="Tabs" component={AppLayout} />
                 <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
+                <Stack.Screen name="MyTasks" component={MyTasksScreen} />
                 <Stack.Screen name="Modal" component={ModalScreen} />
               </Stack.Navigator>
             </NavigationContainer>
