@@ -51,12 +51,12 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
   return (
     <View className="bg-[#F8F3ED]">
       <Header />
-      <View className="p-8">
+      <View className="px-6">
         <View className="flex flex-row justify-between">
-          <Pressable className="" onPress={navigation.goBack}>
+          <Pressable onPress={navigation.goBack}>
             <Text className="text-[#7B61FF]">Cancelar</Text>
           </Pressable>
-          <Text className="self-center">Nueva tarea</Text>
+          <Text className="mr-4 self-center">Nueva tarea</Text>
           <Pressable className="self-end" onPress={createTask}>
             <Text className="font-semibold text-[#7B61FF]">Añadir</Text>
           </Pressable>

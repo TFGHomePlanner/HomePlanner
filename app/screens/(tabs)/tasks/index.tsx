@@ -17,7 +17,7 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <View className="h-full bg-[#F8F3ED] p-8">
+    <View className="h-full bg-[#F8F3ED] px-6">
       <View className="mb-6 gap-y-3">
         <Pressable
           onPress={goToCreateTask}
