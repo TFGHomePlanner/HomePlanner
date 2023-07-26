@@ -41,59 +41,59 @@ model User {
   passwordHash  String?
   accounts      Account[]
   sessions      Session[]
-  AdminGroup    Group[]    @relation("UserAdmin")
-  Groups        Group[]    @relation("Users")
-  Message       Message[]
+  adminGroup    Group[]    @relation("UserAdmin")
+  groups        Group[]    @relation("Users")
+  message       Message[]
   imageprofile  String?
   userTask      UserTask[]
 }
 
 model Group {
   id        String    @id @default(cuid())
-  Name      String
-  CodeGroup String    @unique
-  Messages  Message[]
-  Admin     User      @relation("UserAdmin", fields: [AdminId], references: [id])
-  AdminId   String
-  Users     User[]    @relation("Users")
-  Lists     List[]
+  name      String
+  codeGroup String    @unique
+  messages  Message[]
+  admin     User      @relation("UserAdmin", fields: [adminId], references: [id])
+  adminId   String
+  users     User[]    @relation("Users")
+  lists     List[]    
 
-  @@index([AdminId])
+  @@index([adminId])
 }
 
 model Message {
-  Id      String   @id @default(cuid())
-  Text    String
-  Day     DateTime
-  UserId  String
-  Group   Group    @relation(fields: [GroupId], references: [id])
-  GroupId String
-  User    User     @relation(fields: [UserId], references: [id])
+  id      String   @id @default(cuid())
+  text    String
+  day     DateTime
+  userId  String
+  group   Group    @relation(fields: [groupId], references: [id])
+  groupId String
+  user    User     @relation(fields: [userId], references: [id])
 
-  @@index([UserId])
-  @@index([GroupId])
+  @@index([userId])
+  @@index([groupId])
 }
 
 model List {
-  Id          String    @id @default(cuid())
-  Name        String
-  Description String
-  IsClosed    Boolean
-  Group       Group     @relation(fields: [GroupId], references: [id])
-  GroupId     String
+  id          String    @id @default(cuid())
+  name        String
+  description String
+  isClosed    Boolean
+  group       Group     @relation(fields: [groupId], references: [id])
+  groupId     String
   items       Product[]
 
-  @@index([GroupId])
+  @@index([groupId])
 }
 
 model Product {
   id          String  @id @default(cuid())
   name        String
   isPurchased Boolean @default(false)
-  ListName    List    @relation(fields: [ListId], references: [Id])
-  ListId      String
+  listName    List    @relation(fields: [listId], references: [id])
+  listId      String
 
-  @@index([ListId])
+  @@index([listId])
 }
 
 model Task {

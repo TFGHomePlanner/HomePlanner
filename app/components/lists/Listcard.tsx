@@ -9,7 +9,7 @@ function ListCard({list,}: {list : IList}) {
 
       <View className="flex items-center justify-end w-full flex-row">
         <Icon name="store" size={20} color="black" /> 
-        <Text className="ml-2 text-lg font-bold text-[#F1889f]">{list.Name}</Text>
+        <Text className="ml-2 text-lg font-bold text-[#F1889f]">{list.name}</Text>
         <Icon name="chevron-right" size={20} color="black" />
       </View>
 

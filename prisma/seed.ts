@@ -31,41 +31,41 @@ async function main() {
 
   const minigrupo = await prisma.group.create({
     data: {
-      CodeGroup: "lasminissonmonas",
-      Name: "Grupo de minis",
-      Admin: { connect: { id: marta.id } },
-      Messages: {
+      codeGroup: "lasminissonmonas",
+      name: "Grupo de minis",
+      admin: { connect: { id: marta.id } },
+      messages: {
         createMany: {
           data: [
             {
-              Day: datetoday,
-              UserId: marta.id,
-              Text: "Holi caracoli",
+              day: datetoday,
+              userId: marta.id,
+              text: "Holi caracoli",
             },
             {
-              Day: datetoday,
-              UserId: a.id,
-              Text: "Hola Buenas tardes",
+              day: datetoday,
+              userId: a.id,
+              text: "Hola Buenas tardes",
             },
             {
-              Day: datetoday,
-              UserId: a.id,
-              Text: "SOy un macarron",
+              day: datetoday,
+              userId: a.id,
+              text: "SOy un macarron",
             },
             {
-              Day: datetoday,
-              UserId: marta.id,
-              Text: "Que pesado",
+              day: datetoday,
+              userId: marta.id,
+              text: "Que pesado",
             },
             {
-              Day: datetoday,
-              UserId: juan.id,
-              Text: "Hola Buenas Tardes",
+              day: datetoday,
+              userId: juan.id,
+              text: "Hola Buenas Tardes",
             },
           ],
         },
       },
-      Users: {
+      users: {
         connect: [{ id: a.id }, { id: juan.id }],
       },
     },
@@ -95,10 +95,10 @@ async function main() {
 
   const lista1 = await prisma.list.create({
     data: {
-      Name: "Lista de la compra1",
-      Description: "Lista de la compra",
-      GroupId: minigrupo.id,
-      IsClosed: false,
+      name: "Lista de la compra1",
+      description: "Lista de la compra",
+      groupId: minigrupo.id,
+      isClosed: false,
       items: {
         createMany: {
           data: [
@@ -121,10 +121,10 @@ async function main() {
   });
   const lista2 = await prisma.list.create({
     data: {
-      Name: "Lista de la compra2",
-      Description: "Lista de la compra",
-      GroupId: minigrupo.id,
-      IsClosed: false,
+      name: "Lista de la compra2",
+      description: "Lista de la compra",
+      groupId: minigrupo.id,
+      isClosed: false,
       items: {
         createMany: {
           data: [
@@ -147,10 +147,10 @@ async function main() {
   });
   const lista3 = await prisma.list.create({
     data: {
-      Name: "Lista de la compra cerrada",
-      Description: "Lista de la compra",
-      GroupId: minigrupo.id,
-      IsClosed: false,
+      name: "Lista de la compra cerrada",
+      description: "Lista de la compra",
+      groupId: minigrupo.id,
+      isClosed: true,
       items: {
         createMany: {
           data: [
@@ -173,10 +173,10 @@ async function main() {
   });
   const lista4 = await prisma.list.create({
     data: {
-      Name: "Lista de la compra cerrada2",
-      Description: "Lista de la compra",
-      GroupId: minigrupo.id,
-      IsClosed: false,
+      name: "Lista de la compra cerrada2",
+      description: "Lista de la compra",
+      groupId: minigrupo.id,
+      isClosed: true,
       items: {
         createMany: {
           data: [
@@ -211,10 +211,10 @@ async function main() {
   });
   const lista5 = await prisma.list.create({
     data: {
-      Name: "Lista de la cerrda3",
-      Description: "Lista de la compra",
-      GroupId: minigrupo.id,
-      IsClosed: false,
+      name: "Lista de la cerrda3",
+      description: "Lista de la compra",
+      groupId: minigrupo.id,
+      isClosed: true,
       items: {
         createMany: {
           data: [

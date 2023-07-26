@@ -4,13 +4,13 @@ import { format } from "date-fns";
 function Message({
   text,
   day,
-  Name,
+  name,
   imageProfile,
   isMyMessage,
 }: {
     text: string;
     day: string;
-    Name: string;
+    name: string;
     imageProfile: string;
     isMyMessage: boolean
   }) {
@@ -38,7 +38,7 @@ function Message({
         <Text className="text-black text-left text-base overflow-hidden flex-shrink-0 flex-grow-0">
           {text}
         </Text>
-        <Text className={`text-xs italic text-black ${isMyMessage ? "text-right" : "text-left"}`}>{DayFormat + " " + Name}</Text>
+        <Text className={`text-xs italic text-black ${isMyMessage ? "text-right" : "text-left"}`}>{DayFormat + " " + name}</Text>
       </View>
       
     </View>

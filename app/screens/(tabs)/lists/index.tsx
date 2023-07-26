@@ -10,13 +10,13 @@ import ListCard from "../../../components/lists/Listcard";
 export default function TabListsScreen() {
   const {User} = React.useContext (UserContext) as UserContextType;
   const {data: activelist} = trpc.list.getAllLists.useQuery ({
-    GroupId: User.groupId,
-    IsClosed: false,
+    groupId: User.groupId,
+    isClosed: false,
   });
   console.log (activelist);
   const {data: closedlist} = trpc.list.getAllLists.useQuery ({
-    GroupId: User.groupId,
-    IsClosed: true,
+    groupId: User.groupId,
+    isClosed: true,
   });
 
   return (
@@ -32,7 +32,7 @@ export default function TabListsScreen() {
         {activelist?.map((list) => {
           return (
             <ListCard
-              key={list.Id}
+              key={list.id}
               list={list}
             />
           );
@@ -41,7 +41,7 @@ export default function TabListsScreen() {
         {closedlist?.map((list) => {
           return (
             <ListCard
-              key={list.Id}
+              key={list.id}
               list={list}
             />
           );
