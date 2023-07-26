@@ -45,7 +45,6 @@ export default function TabListsScreen() {
             />
           );
         })}
-        <View className="bg-[#F1889F] p-3 rounded-lg mb-4" />
       </ScrollView>
     </View>
   );

@@ -7,9 +7,11 @@ function ListCard({list,}: {list : IList}) {
   return (
     <View className="flex flex-col mb-4 items-start rounded-lg  shadow-md shadow-black bg-[#fbf9f7] p-4">
 
-      <View className="flex items-center justify-end w-full flex-row">
-        <Icon name="store" size={20} color="black" /> 
-        <Text className="ml-2 text-lg font-bold text-[#F1889f]">{list.name}</Text>
+      <View className="flex justify-between w-full flex-row">
+        <View className = "flex flex-row">
+          <Icon name="store" size={20} color="black" /> 
+          <Text className="ml-2 -mt-1 text-lg font-bold text-[#F1889f]">{list.name}</Text>
+        </View>
         <Icon name="chevron-right" size={20} color="black" />
       </View>
 
