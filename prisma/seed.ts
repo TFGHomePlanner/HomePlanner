@@ -25,7 +25,7 @@ async function main() {
     data: {
       name: "a",
       email: "a",
-      passwordHash: hashedPassword,
+      passwordHash: "a",
     },
   });
 
@@ -70,26 +70,41 @@ async function main() {
       },
     },
   });
+
   const tarea1 = await prisma.task.create({
     data: {
       name: "Limpiar baño",
       description: "Limpieza a fondo.",
-      userInCharge: { connect: { id: marta.id } },
       frequency: "never",
     },
-  });  
+  });
+
+  const tarea2 = await prisma.task.create({
+    data: {
+      name: "Fregar platos",
+      frequency: "oncePerDay",
+    },
+  });
+
+  const tareaAsignada1 = await prisma.userTask.create({
+    data: {
+      Task: { connect: { id: tarea1.id } },
+      User: { connect: { id: marta.id } },
+    },
+  });
+
   const lista1 = await prisma.list.create({
     data: {
       Name: "Lista de la compra1",
       Description: "Lista de la compra",
       GroupId: minigrupo.id,
       IsClosed: false,
-      items : {
+      items: {
         createMany: {
           data: [
             {
               name: "Leche",
-              isPurchased: false,  
+              isPurchased: false,
             },
             {
               name: "Pan",
@@ -98,137 +113,129 @@ async function main() {
             {
               name: "Huevos",
               isPurchased: false,
-            }
-        ]
-  
-      }
-    }
-  },
-});
-const lista2 = await prisma.list.create({
-  data: {
-    Name: "Lista de la compra2",
-    Description: "Lista de la compra",
-    GroupId: minigrupo.id,
-    IsClosed: false,
-    items : {
-      createMany: {
-        data: [
-          {
-            name: "Leche",
-            isPurchased: false,  
-          },
-          {
-            name: "Pan",
-            isPurchased: false,
-          },
-          {
-            name: "Huevos",
-            isPurchased: false,
-          }
-      ]
-
-    }
-  }
-},
-});
-const lista3 = await prisma.list.create({
-  data: {
-    Name: "Lista de la compra cerrada",
-    Description: "Lista de la compra",
-    GroupId: minigrupo.id,
-    IsClosed: false,
-    items : {
-      createMany: {
-        data: [
-          {
-            name: "Leche",
-            isPurchased: false,  
-          },
-          {
-            name: "Pan",
-            isPurchased: false,
-          },
-          {
-            name: "Huevos",
-            isPurchased: false,
-          }
-      ]
-
-    }
-  }
-},
-});
-const lista4 = await prisma.list.create({
-  data: {
-    Name: "Lista de la compra cerrada2",
-    Description: "Lista de la compra",
-    GroupId: minigrupo.id,
-    IsClosed: false,
-    items : {
-      createMany: {
-        data: [
-          {
-            name: "Leche",
-            isPurchased: false,  
-          },
-          {
-            name: "Pan",
-            isPurchased: false,
-          },
-          {
-            name: "Huevos",
-            isPurchased: false,
-          },
-          {
-            name: "Maccarones",
-            isPurchased: false,
-          },
-          {
-            name: "Sal",
-            isPurchased: false,
-          },
-          {
-            name: "Pizza",
-            isPurchased: false,
-          }
-      ]
-
-    }
-  }
-},
-});
-const lista5 = await prisma.list.create({
-  data: {
-    Name: "Lista de la cerrda3",
-    Description: "Lista de la compra",
-    GroupId: minigrupo.id,
-    IsClosed: false,
-    items : {
-      createMany: {
-        data: [
-          {
-            name: "Leche",
-            isPurchased: false,  
-          },
-          {
-            name: "Pan",
-            isPurchased: false,
-          },
-          {
-            name: "Huevos",
-            isPurchased: false,
-          }
-      ]
-
-    }
-  }
-},
-});
+            },
+          ],
+        },
+      },
+    },
+  });
+  const lista2 = await prisma.list.create({
+    data: {
+      Name: "Lista de la compra2",
+      Description: "Lista de la compra",
+      GroupId: minigrupo.id,
+      IsClosed: false,
+      items: {
+        createMany: {
+          data: [
+            {
+              name: "Leche",
+              isPurchased: false,
+            },
+            {
+              name: "Pan",
+              isPurchased: false,
+            },
+            {
+              name: "Huevos",
+              isPurchased: false,
+            },
+          ],
+        },
+      },
+    },
+  });
+  const lista3 = await prisma.list.create({
+    data: {
+      Name: "Lista de la compra cerrada",
+      Description: "Lista de la compra",
+      GroupId: minigrupo.id,
+      IsClosed: false,
+      items: {
+        createMany: {
+          data: [
+            {
+              name: "Leche",
+              isPurchased: false,
+            },
+            {
+              name: "Pan",
+              isPurchased: false,
+            },
+            {
+              name: "Huevos",
+              isPurchased: false,
+            },
+          ],
+        },
+      },
+    },
+  });
+  const lista4 = await prisma.list.create({
+    data: {
+      Name: "Lista de la compra cerrada2",
+      Description: "Lista de la compra",
+      GroupId: minigrupo.id,
+      IsClosed: false,
+      items: {
+        createMany: {
+          data: [
+            {
+              name: "Leche",
+              isPurchased: false,
+            },
+            {
+              name: "Pan",
+              isPurchased: false,
+            },
+            {
+              name: "Huevos",
+              isPurchased: false,
+            },
+            {
+              name: "Maccarones",
+              isPurchased: false,
+            },
+            {
+              name: "Sal",
+              isPurchased: false,
+            },
+            {
+              name: "Pizza",
+              isPurchased: false,
+            },
+          ],
+        },
+      },
+    },
+  });
+  const lista5 = await prisma.list.create({
+    data: {
+      Name: "Lista de la cerrda3",
+      Description: "Lista de la compra",
+      GroupId: minigrupo.id,
+      IsClosed: false,
+      items: {
+        createMany: {
+          data: [
+            {
+              name: "Leche",
+              isPurchased: false,
+            },
+            {
+              name: "Pan",
+              isPurchased: false,
+            },
+            {
+              name: "Huevos",
+              isPurchased: false,
+            },
+          ],
+        },
+      },
+    },
+  });
 }
-
-
-
 
 main()
   .then(async () => {

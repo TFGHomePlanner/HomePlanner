@@ -34,19 +34,18 @@ model Session {
 }
 
 model User {
-  id            String      @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String
-  email         String?     @unique
+  email         String?    @unique
   emailVerified DateTime?
   passwordHash  String?
   accounts      Account[]
   sessions      Session[]
-  AdminGroup    Group[]     @relation("UserAdmin")
-  Groups        Group[]     @relation("Users")
+  AdminGroup    Group[]    @relation("UserAdmin")
+  Groups        Group[]    @relation("Users")
   Message       Message[]
   imageprofile  String?
-  Task          Task[]
-  GroupTask     GroupTask[]
+  userTask      UserTask[]
 }
 
 model Group {
@@ -98,15 +97,25 @@ model Product {
 }
 
 model Task {
-  id            String      @id @default(cuid())
-  name          String
-  description   String?
-  groupTask     GroupTask[]
-  taskGroupName String?
-  taskGroupId   String?
-  userId        String?
-  userInCharge  User?       @relation(fields: [userId], references: [id])
-  frequency     Frequency
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  frequency   Frequency
+  isDone      Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  groupTask   GroupTask[]
+  userTask    UserTask[]
+}
+
+model UserTask {
+  taskId String
+  Task   Task   @relation(fields: [taskId], references: [id])
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@id([taskId, userId])
+  @@index([taskId])
+  @@index([userId])
 }
 
 model TaskGroup {
@@ -118,11 +127,8 @@ model TaskGroup {
 model GroupTask {
   groupId   String
   taskGroup TaskGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupName String
   taskId    String
   task      Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  user      User?     @relation(fields: [userId], references: [id])
-  userId    String?
 
   @@id([groupId, taskId])
   @@index([groupId])
