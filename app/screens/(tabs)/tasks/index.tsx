@@ -16,6 +16,10 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
     navigation.navigate("CreateTask");
   }
 
+  function goToMyTasks() {
+    navigation.navigate("MyTasks");
+  }
+
   return (
     <View className="h-full bg-[#F8F3ED] px-6">
       <View className="mb-6 gap-y-3">
@@ -25,7 +29,10 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
         >
           <Text className="text-base text-[#F8F3ED]">Nueva tarea</Text>
         </Pressable>
-        <Pressable className="h-10 w-full justify-center rounded-xl bg-[#212529] pl-4">
+        <Pressable
+          onPress={goToMyTasks}
+          className="h-10 w-full justify-center rounded-xl bg-[#212529] pl-4"
+        >
           <Text className="text-base text-[#F8F3ED]">Mis tareas</Text>
         </Pressable>
       </View>

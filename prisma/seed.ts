@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const datetoday = new Date();
+
 async function main() {
   const hashedPassword = "homeplanner2023";
 
@@ -86,10 +87,32 @@ async function main() {
     },
   });
 
+  const tarea3 = await prisma.task.create({
+    data: {
+      id: "1",
+      name: "Limpiar cristales",
+      frequency: "oncePerWeek",
+    },
+  });
+
   const tareaAsignada1 = await prisma.userTask.create({
     data: {
       Task: { connect: { id: tarea1.id } },
       User: { connect: { id: marta.id } },
+    },
+  });
+
+  const tareaAsignada2 = await prisma.userTask.create({
+    data: {
+      Task: { connect: { id: tarea1.id } },
+      User: { connect: { id: a.id } },
+    },
+  });
+
+  const tareaAsignada3 = await prisma.userTask.create({
+    data: {
+      Task: { connect: { id: tarea3.id } },
+      User: { connect: { id: a.id } },
     },
   });
 

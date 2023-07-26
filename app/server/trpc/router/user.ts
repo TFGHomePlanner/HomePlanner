@@ -87,6 +87,7 @@ export const userRouter = router({
         select: {
           Task: {
             select: {
+              id: true,
               name: true,
               description: true,
               frequency: true,
