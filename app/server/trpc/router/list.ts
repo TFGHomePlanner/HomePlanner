@@ -23,6 +23,9 @@ export const listrouter = router({
             },
           },
         },
+        where: {
+          GroupId: input.GroupId,
+        }
       });
       const messageParse = z.array(listSchema).parse(lists);
       return messageParse;

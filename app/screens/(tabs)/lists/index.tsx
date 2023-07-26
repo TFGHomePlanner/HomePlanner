@@ -3,33 +3,49 @@ import React from "react";
 import AddIcon from "react-native-vector-icons/FontAwesome5";
 import { Text, View, ScrollView } from "react-native";
 import { trpc } from "../../../server/utils/trpc";
-export default function TabListsScreen() {
+import { UserContext } from "../../../context/userContext";
+import { UserContextType } from "../../../context/types";
+import ListCard from "../../../components/lists/Listcard";
 
+export default function TabListsScreen() {
+  const {User} = React.useContext (UserContext) as UserContextType;
   const {data: activelist} = trpc.list.getAllLists.useQuery ({
-    GroupId: "clkikj9r90003uchwblr4xlht",
+    GroupId: User.groupId,
     IsClosed: false,
   });
+  console.log (activelist);
   const {data: closedlist} = trpc.list.getAllLists.useQuery ({
-    GroupId: "clkikj9r90003uchwblr4xlht",
+    GroupId: User.groupId,
     IsClosed: true,
   });
 
   return (
-    <View className="bg-[#f8f3ed] m-4">
+    <View className="bg-[#F8F3ED] p-4 w-full h-full">
       <View className="bg-[#F1889f] p-3 rounded-xl flex flex-row items-center justify-start w-full">
         <AddIcon name="plus" size={20} color="white" className="mr-2" />
         <Text className="text-lg font-bold ml-2 text-white pl-4">Nueva lista</Text>
       </View>
       {/* ScrollView */}
-      <ScrollView className="p-4">
+      <ScrollView className="p-1">
         
         <Text className="text-lg font-bold mb-2">Listas</Text>
-        {/* Rectángulo debajo de Listas */}
-        <View className="bg-[#F1889F] p-3 rounded-lg mb-4" />
-
-        {/* Listas cerradas */}
+        {activelist?.map((list) => {
+          return (
+            <ListCard
+              key={list.Id}
+              list={list}
+            />
+          );
+        })}
         <Text className="text-lg font-bold mb-2">Listas cerradas</Text>
-        {/* Rectángulo debajo de Listas cerradas */}
+        {closedlist?.map((list) => {
+          return (
+            <ListCard
+              key={list.Id}
+              list={list}
+            />
+          );
+        })}
         <View className="bg-[#F1889F] p-3 rounded-lg mb-4" />
       </ScrollView>
     </View>
