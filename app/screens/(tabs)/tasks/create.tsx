@@ -12,8 +12,7 @@ type CreateTaskScreenProps = {
 };
 
 const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
-  const inputStyle =
-    "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
+  const inputStyle = "mb-2 text-lg border-b-[1px] border-light p-2 text-light";
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -49,16 +48,16 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <View className="bg-[#F8F3ED]">
+    <View className="bg-light">
       <Header />
       <View className="px-6">
         <View className="flex flex-row justify-between">
           <Pressable onPress={navigation.goBack}>
-            <Text className="text-[#7B61FF]">Cancelar</Text>
+            <Text className="text-purple">Cancelar</Text>
           </Pressable>
           <Text className="mr-4 self-center">Nueva tarea</Text>
           <Pressable className="self-end" onPress={createTask}>
-            <Text className="font-semibold text-[#7B61FF]">Añadir</Text>
+            <Text className="font-semibold text-purple">Añadir</Text>
           </Pressable>
         </View>
 

@@ -19,7 +19,7 @@ const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
     userId: User.id,
   });
   return (
-    <View className="h-full bg-[#F8F3ED]">
+    <View className="h-full bg-light">
       <Header />
       <View className="px-6">
         <Pressable onPress={navigation.goBack}>

@@ -17,7 +17,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputStyle =
-    "mb-2 text-lg border-b-[1px] border-lightBg p-2 text-lightBg";
+    "mb-3 text-lg border-[1px] rounded-xl border-dark p-2 text-dark";
   const { mutate } = trpc.user.login.useMutation({
     onSuccess: (output) => {
       if (output.success) {
@@ -39,8 +39,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <View className="bg-darkBg flex-1 items-center justify-center">
-      <Text className="text-lightBg -mt-10 mb-8 text-2xl font-semibold">
+    <View className="flex-1 items-center justify-center bg-light">
+      <Text className="-mt-10 mb-8 text-2xl font-semibold text-dark">
         ¡Bienvenid@ de nuevo!
       </Text>
       <View className="w-72">
@@ -60,11 +60,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         />
         <Text className="my-2 text-xs">¿Has olvidado tu contraseña?</Text>
         <Text onPress={handleLogin}>Iniciar sesión</Text>
-        <Text className="text-lightBg mt-2 text-sm">
+        <Text className="mt-2 text-sm text-dark">
           ¿Todavía no tienes cuenta?{" "}
           <Link to={{ screen: "Tabs" }}>
             {/*PRUEBAS: cambiar Tabs por Register*/}
-            <Text className="text-[#F1889F] underline">Únete</Text>
+            <Text className="text-pink underline">Únete</Text>
           </Link>
         </Text>
       </View>
