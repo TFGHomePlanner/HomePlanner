@@ -15,6 +15,7 @@ import { ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import UserProvider from "./context/userContext";
 import MyTasksScreen from "./components/tasks/MyTasks";
+import CreatelistScreen from "./screens/lists/createList";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -26,6 +27,7 @@ export type AppStackParamList = {
   CreateTask: undefined;
   MyTasks: undefined;
   Modal: undefined;
+  CreateList: undefined;
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -36,7 +38,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.40:4000/trpc",
+          url: "http://192.168.1.41:4000/trpc",
         }),
       ],
     })
@@ -57,6 +59,7 @@ export function App() {
                 <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
                 <Stack.Screen name="MyTasks" component={MyTasksScreen} />
                 <Stack.Screen name="Modal" component={ModalScreen} />
+                <Stack.Screen name="CreateList" component={CreatelistScreen} />
               </Stack.Navigator>
             </NavigationContainer>
           </ApplicationProvider>
