@@ -12,8 +12,10 @@ module.exports = {
 			dark: "#212529",
 			pink: "#F1889F",
 			purple: "#7B61FF",
-			lightGray: "#95999C",
-			darkGray: "#2125292c"
+			blue: "#1E88E5",
+			lightGray: "#E5E5E5",
+			darkGray: "#2125292c",
+			placeholderGray: "#929193"
 		}
 	},
 	plugins: [],

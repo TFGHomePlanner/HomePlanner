@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { Link } from "@react-navigation/native";
 import { trpc } from "../server/utils/trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -17,13 +24,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputStyle =
-    "mb-3 text-lg border-[1px] rounded-xl border-dark p-2 text-dark";
+    "mb-3 border-[1px] rounded-xl border-darkGray bg-lightGray p-2 text-dark";
   const { mutate } = trpc.user.login.useMutation({
     onSuccess: (output) => {
       if (output.success) {
         const NewUser: IUser = {
           id: output.user.id,
-          groupId: "clkikj9r90003uchwblr4xlht",
+          groupId: "clklmvf2o0003uc8gqua2dtp4",
         };
         updateUser(NewUser);
         console.log(NewUser);
@@ -39,36 +46,48 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <View className="flex-1 items-center justify-center bg-light">
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 items-center justify-center bg-light"
+    >
       <Text className="-mt-10 mb-8 text-2xl font-semibold text-dark">
-        ¡Bienvenid@ de nuevo!
+        homeplanner
       </Text>
       <View className="w-72">
         <TextInput
           className={`${inputStyle}`}
-          placeholderTextColor="#95999C"
+          placeholderTextColor="#929193"
           value={email}
           onChangeText={setEmail}
           placeholder="email"
         />
         <TextInput
           className={`${inputStyle}`}
-          placeholderTextColor="#95999C"
+          placeholderTextColor="#929193"
           value={password}
           onChangeText={setPassword}
           placeholder="contraseña"
         />
-        <Text className="my-2 text-xs">¿Has olvidado tu contraseña?</Text>
-        <Text onPress={handleLogin}>Iniciar sesión</Text>
-        <Text className="mt-2 text-sm text-dark">
+        <Text className="mb-2 self-end text-xs font-semibold text-blue">
+          ¿Has olvidado tu contraseña?
+        </Text>
+        <Pressable
+          onPress={handleLogin}
+          className="my-4 w-full rounded-lg bg-blue p-2"
+        >
+          <Text className="text-center font-medium text-light">
+            Iniciar sesión
+          </Text>
+        </Pressable>
+        <Text className="mt-2 text-sm text-placeholderGray">
           ¿Todavía no tienes cuenta?{" "}
           <Link to={{ screen: "Tabs" }}>
             {/*PRUEBAS: cambiar Tabs por Register*/}
-            <Text className="text-pink underline">Únete</Text>
+            <Text className="font-semibold text-blue">Únete</Text>
           </Link>
         </Text>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
