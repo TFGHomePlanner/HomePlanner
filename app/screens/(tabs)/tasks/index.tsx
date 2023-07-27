@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { trpc } from "../../../trpc";
 import TaskCard from "../../../components/tasks/TaskCard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../../_App";
 import { UserContext } from "../../../context/userContext";
 import { UserContextType } from "../../../context/types";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 type TabTasksScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TabTasks">;
@@ -26,27 +27,27 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <View className="h-full bg-[#F8F3ED] px-6">
-      <View className="mb-6 gap-y-3">
-        <Pressable
-          onPress={goToCreateTask}
-          className="h-10 w-full justify-center rounded-xl bg-[#7B61FF] pl-4"
-        >
-          <Text className="text-base text-[#F8F3ED]">Nueva tarea</Text>
-        </Pressable>
-        <Pressable
-          onPress={goToMyTasks}
-          className="h-10 w-full justify-center rounded-xl bg-[#212529] pl-4"
-        >
-          <Text className="text-base text-[#F8F3ED]">Mis tareas</Text>
+    <ScrollView
+      className="h-full bg-light px-6"
+      showsVerticalScrollIndicator={false}
+    >
+      <View className="mb-6 items-end">
+        <Pressable onPress={goToCreateTask}>
+          <Icon name="shape-square-rounded-plus" size={24} color={"#7B61FF"} />
         </Pressable>
       </View>
-      <View className="mb-6 gap-y-3">
-        <Pressable className="h-10 w-full justify-center rounded-xl border-[1.5px] border-[#7B61FF] pl-4">
-          <Text className="text-base">Tareas sin asignar</Text>
+      <Pressable
+        onPress={goToMyTasks}
+        className="mb-6 h-10 w-full justify-center rounded-xl bg-dark pl-4"
+      >
+        <Text className="text-base text-light">Mis tareas</Text>
+      </Pressable>
+      <View className="mb-6 flex-row justify-between gap-x-2">
+        <Pressable className="h-16 flex-1 justify-center rounded-xl bg-white shadow-sm shadow-dark">
+          <Text className="text-center text-base">Tareas sin asignar</Text>
         </Pressable>
-        <Pressable className="h-10 w-full justify-center rounded-xl border-[1.5px] border-[#7B61FF] pl-4">
-          <Text className="text-base">Grupo cocina</Text>
+        <Pressable className="h-16 flex-1 justify-center rounded-xl bg-white shadow-sm shadow-dark">
+          <Text className="text-center text-base">Grupo cocina</Text>
         </Pressable>
       </View>
       <Text className="mb-2 text-lg">Otras tareas</Text>
@@ -57,7 +58,7 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
           <Text>No hay tareas</Text>
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

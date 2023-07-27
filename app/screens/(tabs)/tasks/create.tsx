@@ -26,7 +26,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
     label,
   }));
 
-  const inputStyle = "mb-2 text-lg border-b-[1px] border-light p-2 text-light";
+  const inputStyle = "mb-2 text-lg border-b-[1px] border-light p-2 text-dark";
 
   const { User } = useContext(UserContext) as UserContextType;
   const utils = trpc.useContext();
@@ -42,6 +42,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
   const mutation = trpc.task.create.useMutation({
     onSuccess() {
       utils.task.getAllTasks.invalidate();
+      navigation.navigate("Tabs");
     },
   });
 
