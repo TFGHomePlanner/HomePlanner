@@ -6,15 +6,15 @@ import { prisma } from "../../../common/prisma";
 
 export const listrouter = router({
   getAllLists: publicProcedure
-    .input(z.object({ GroupId: z.string(), IsClosed: z.boolean() }))
+    .input(z.object({ groupId: z.string(), isClosed: z.boolean() }))
     .output(z.array(listSchema))
     .query(async ({ input, ctx }) => {
       const lists = await ctx.prisma.list.findMany({
         select: {
-          Name: true,
-          Description: true,
-          IsClosed: true,
-          Id: true,
+          name: true,
+          description: true,
+          isClosed: true,
+          id: true,
           items: {
             select: {
               isPurchased: true,
@@ -23,6 +23,10 @@ export const listrouter = router({
             },
           },
         },
+        where: {
+          groupId: input.groupId,
+          isClosed: input.isClosed,
+        }
       });
       const messageParse = z.array(listSchema).parse(lists);
       return messageParse;
