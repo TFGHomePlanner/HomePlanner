@@ -77,6 +77,7 @@ async function main() {
       name: "Limpiar baño",
       description: "Limpieza a fondo.",
       frequency: "never",
+      groupId: minigrupo.id,
     },
   });
 
@@ -84,6 +85,7 @@ async function main() {
     data: {
       name: "Fregar platos",
       frequency: "oncePerDay",
+      groupId: minigrupo.id,
     },
   });
 
@@ -92,6 +94,7 @@ async function main() {
       id: "1",
       name: "Limpiar cristales",
       frequency: "oncePerWeek",
+      groupId: minigrupo.id,
     },
   });
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import { Header } from "../../../components/Header";
 import { trpc } from "../../../trpc";
@@ -6,17 +6,14 @@ import { Select, SelectItem, IndexPath } from "@ui-kitten/components";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../../_App";
 import { Frequency } from "@prisma/client";
+import { UserContext } from "../../../context/userContext";
+import { UserContextType } from "../../../context/types";
 
 type CreateTaskScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateTask">;
 };
 
 const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
-  const inputStyle = "mb-2 text-lg border-b-[1px] border-light p-2 text-light";
-
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-
   const frequencyTranslations: Record<Frequency, string> = {
     never: "Nunca",
     oncePerDay: "Cada día",
@@ -29,14 +26,32 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
     label,
   }));
 
+  const inputStyle = "mb-2 text-lg border-b-[1px] border-light p-2 text-light";
+
+  const { User } = useContext(UserContext) as UserContextType;
+  const utils = trpc.useContext();
+
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+
   const [selectedIndex, setSelectedIndex] = useState<IndexPath>(
     new IndexPath(0)
   );
-
   const selectedFrequency = data[selectedIndex.row].value as Frequency;
-  const mutation = trpc.task.create.useMutation();
+
+  const mutation = trpc.task.create.useMutation({
+    onSuccess() {
+      utils.task.getAllTasks.invalidate();
+    },
+  });
+
   const createTask = () => {
-    mutation.mutateAsync({ name, description, frequency: selectedFrequency });
+    mutation.mutateAsync({
+      name,
+      description,
+      frequency: selectedFrequency,
+      groupId: User.groupId,
+    });
     console.log(
       "Task created: " +
         name +

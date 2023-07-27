@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Pressable, Text, View } from "react-native";
 import { trpc } from "../../../trpc";
 import TaskCard from "../../../components/tasks/TaskCard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../../_App";
+import { UserContext } from "../../../context/userContext";
+import { UserContextType } from "../../../context/types";
 
 type TabTasksScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TabTasks">;
 };
 
 const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
-  const { data: allTasks } = trpc.task.getAllTasks.useQuery();
+  const { User } = useContext(UserContext) as UserContextType;
+  const { data: allTasks } = trpc.task.getAllTasks.useQuery({
+    groupId: User.groupId,
+  });
 
   function goToCreateTask() {
     navigation.navigate("CreateTask");

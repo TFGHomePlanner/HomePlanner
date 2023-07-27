@@ -56,7 +56,8 @@ model Group {
   admin     User      @relation("UserAdmin", fields: [adminId], references: [id])
   adminId   String
   users     User[]    @relation("Users")
-  lists     List[]    
+  lists     List[]
+  Task      Task[]
 
   @@index([adminId])
 }
@@ -103,8 +104,12 @@ model Task {
   frequency   Frequency
   isDone      Boolean     @default(false)
   createdAt   DateTime    @default(now())
+  group       Group       @relation(fields: [groupId], references: [id])
+  groupId     String
   groupTask   GroupTask[]
   userTask    UserTask[]
+
+  @@index([groupId])
 }
 
 model UserTask {

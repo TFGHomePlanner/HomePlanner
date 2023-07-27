@@ -17,6 +17,7 @@ export const CreateTaskSchema = z.object({
     })
     .nullable(),
   frequency: z.nativeEnum(Frequency),
+  groupId: z.string(),
 });
 
 export type ITask = z.infer<typeof TaskSchema>;
