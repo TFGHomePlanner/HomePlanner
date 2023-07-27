@@ -44,7 +44,7 @@ export const listrouter = router({
               data: input.items.map((item) => ({
                 name: item.name,
                 isPurchased: item.isPurchased,
-                
+              
               })),
             },
           },

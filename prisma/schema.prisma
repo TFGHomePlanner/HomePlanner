@@ -58,6 +58,7 @@ model Group {
   users     User[]    @relation("Users")
   lists     List[]
   Task      Task[]
+  favouritesProducts FavouritesProducts[]
 
   @@index([adminId])
 }
@@ -83,6 +84,14 @@ model List {
   group       Group     @relation(fields: [groupId], references: [id])
   groupId     String
   items       Product[]
+
+  @@index([groupId])
+}
+model FavouritesProducts {
+  id         String    @id @default(cuid())
+  name       String
+  group      Group     @relation(fields: [groupId], references: [id])
+  groupId    String
 
   @@index([groupId])
 }

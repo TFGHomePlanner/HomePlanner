@@ -23,6 +23,7 @@ export type AppStackParamList = {
   Register: undefined;
   Tabs: undefined;
   TabTasks: undefined;
+  TabLists: undefined;
   Chat: undefined;
   CreateTask: undefined;
   MyTasks: undefined;
