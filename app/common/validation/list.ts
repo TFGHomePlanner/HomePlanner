@@ -13,9 +13,20 @@ export const listSchema = z.object({
   })),
 });
 
-export const listsSchemaCreate = listSchema.extend({
-  groupId: z.string().nullable(), 
+export const listsSchemaCreate = z.object({
+  name: z.string().min(1, "El campo no puede estar vacío"),
+  description: z.string().min(1, "El campo no puede estar vacío"),
+  groupId: z.string(),
+  items: z.array(
+    z.object({
+      name: z.string().min(1, "el nombre no puede ser vacio"),
+      isPurchased: z.boolean(),
+      id: z.string(),
+      listName: z.string().min(1, "el nombre no puede ser vacio"),
+    })
+  ),
 });
+
 
 export type IListCreate = z.infer<typeof listsSchemaCreate>;
 export type IList = z.infer<typeof listSchema>;

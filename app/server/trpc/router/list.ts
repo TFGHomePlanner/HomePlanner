@@ -1,8 +1,7 @@
 import { publicProcedure, router } from "../trpc";
 import { listSchema } from "../../../common/validation/list";
-import * as trpc from "@trpc/server";
 import z from "zod";
-import { prisma } from "../../../common/prisma";
+import { listsSchemaCreate } from "../../../common/validation/list";
 
 export const listrouter = router({
   getAllLists: publicProcedure
@@ -30,5 +29,31 @@ export const listrouter = router({
       });
       const messageParse = z.array(listSchema).parse(lists);
       return messageParse;
+    }),
+  createList: publicProcedure
+    .input(listsSchemaCreate)
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.list.create({
+        data: {
+          name: input.name,
+          description: input.description,
+          isClosed: false,
+          group: { connect: { id: input.groupId } },
+          items: {
+            createMany: {
+              data: input.items.map((item) => ({
+                name: item.name,
+                isPurchased: item.isPurchased,
+                
+              })),
+            },
+          },
+        
+        },
+      });
+      return {
+        status: 201,
+        message: "Mensaje Creado correctamente",
+      };
     }),
 });
