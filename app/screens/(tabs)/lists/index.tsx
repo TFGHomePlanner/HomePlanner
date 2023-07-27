@@ -1,13 +1,19 @@
 
 import React from "react";
 import AddIcon from "react-native-vector-icons/FontAwesome5";
-import { Text, View, ScrollView } from "react-native";
+import { Text, View, ScrollView, TouchableOpacity } from "react-native";
 import { trpc } from "../../../server/utils/trpc";
 import { UserContext } from "../../../context/userContext";
 import { UserContextType } from "../../../context/types";
 import ListCard from "../../../components/lists/Listcard";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AppStackParamList } from "../../../_App";
 
-export default function TabListsScreen() {
+type TabsListcreenProps = {
+  navigation: NativeStackNavigationProp<AppStackParamList, "TabTasks">;
+};
+
+const TabListsScreen : React.FC<TabsListcreenProps> = ({ navigation }) =>  {
   const {User} = React.useContext (UserContext) as UserContextType;
   const {data: activelist} = trpc.list.getAllLists.useQuery ({
     groupId: User.groupId,
@@ -18,14 +24,21 @@ export default function TabListsScreen() {
     isClosed: true,
   });
 
+  function goToCreateList() {
+    navigation.navigate("CreateList");
+  }
+
+
   return (
     <View className="bg-[#F8F3ED] p-4 w-full h-full">
-      <View className="bg-[#F1889f] p-3 rounded-xl flex flex-row items-center justify-start w-full">
-        <AddIcon name="plus" size={20} color="white" className="mr-2" />
-        <Text className="text-lg font-bold ml-2 text-white pl-4">Nueva lista</Text>
-      </View>
+      <TouchableOpacity onPress={goToCreateList}>
+        <View className="bg-[#F1889f] p-3 rounded-xl flex flex-row items-center justify-start w-full">
+          <AddIcon name="plus" size={20} color="white" className="mr-2" />
+          <Text className="text-lg font-bold ml-2 text-white pl-4">Nueva lista</Text>
+        </View>
+      </TouchableOpacity>
       {/* ScrollView */}
-      <ScrollView className="p-1">
+      <ScrollView showsVerticalScrollIndicator={false} className="p-1">
         
         <Text className="text-lg font-bold mb-2">Listas</Text>
         {activelist?.map((list) => {
@@ -48,5 +61,5 @@ export default function TabListsScreen() {
       </ScrollView>
     </View>
   );
-}
-
+};
+export default TabListsScreen;
