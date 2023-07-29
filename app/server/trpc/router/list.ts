@@ -1,7 +1,7 @@
 import { publicProcedure, router } from "../trpc";
 import { listSchema } from "../../../common/validation/list";
 import z from "zod";
-import { listsSchemaCreate } from "../../../common/validation/list";
+import { listsSchemaCreate, favouritesProductsSchema} from "../../../common/validation/list";
 
 export const listrouter = router({
   getAllLists: publicProcedure
@@ -56,4 +56,21 @@ export const listrouter = router({
         message: "Mensaje Creado correctamente",
       };
     }),
+
+  getAllFavouritesProducts: publicProcedure
+    .input(z.object({ groupId: z.string()}))
+    .output(z.array(favouritesProductsSchema))
+    .query(async ({input, ctx}) => {
+      const favouritesProducts = await ctx.prisma.favouritesProducts.findMany({
+        select: {
+          name: true,
+        },
+        where : {
+          groupId: input.groupId,
+        }
+      });
+      const favouritesProductsparse = z.array(favouritesProductsSchema).parse(favouritesProducts);
+      return favouritesProductsparse;
+    }),
+  
 });
