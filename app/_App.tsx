@@ -14,11 +14,13 @@ import ChatScreen from "./screens/chat";
 import { ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import UserProvider from "./context/userContext";
-import MyTasksScreen from "./components/tasks/MyTasks";
+import MyTasksScreen from "./screens/tasks/MyTasks";
 import CreatelistScreen from "./screens/lists/createList";
+import ProfileScreen from "./screens/profile/profile";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
+  Header: undefined;
   Login: undefined;
   Register: undefined;
   Tabs: undefined;
@@ -29,6 +31,8 @@ export type AppStackParamList = {
   MyTasks: undefined;
   Modal: undefined;
   CreateList: undefined;
+  Profile: undefined;
+  CreateGroup: undefined;
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -55,6 +59,7 @@ export function App() {
                 {/*gestureEnabled: false*/}
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Register" component={RegisterScreen} />
+                <Stack.Screen name="Profile" component={ProfileScreen} />
                 <Stack.Screen name="Chat" component={ChatScreen} />
                 <Stack.Screen name="Tabs" component={AppLayout} />
                 <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
