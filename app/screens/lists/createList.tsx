@@ -9,17 +9,18 @@ import { IFavouriteProduct } from "../../common/validation/list";
 type CreateListScreenProps = {
     navigation: NativeStackNavigationProp<AppStackParamList, "CreateList">;
   };
-const [list, setList] = useState<string[]>(["apple", "banana", "orange"]);
-const updateList = (newItem: string) => {
-  const index = list.indexOf(newItem);
-  if (index !== -1) {
-    setList((prevList) => prevList.filter((item) => item !== newItem));
-  } else {
-    setList((prevList) => [...prevList, newItem]);
-  }
-};
+
 
 const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
+  const [list, setList] = useState<string[]>([]);
+  const updateList = (newItem: string) => {
+    const index = list.indexOf(newItem);
+    if (index !== -1) {
+      setList((prevList) => prevList.filter((item) => item !== newItem));
+    } else {
+      setList((prevList) => [...prevList, newItem]);
+    }
+  };
   return (
     <View className="h-full flex flex-col w-full bg-light">
       <Header/> 
