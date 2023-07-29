@@ -1,13 +1,13 @@
 import { Pressable, Text, View } from "react-native";
 import React, { useContext } from "react";
-import { Header } from "../Header";
+import { Header } from "../../components/Header";
 import { trpc } from "../../trpc";
 import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import Icon from "react-native-vector-icons/AntDesign";
-import TaskCard from "./TaskCard";
+import TaskCard from "../../components/tasks/TaskCard";
 
 type MyTasksScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "MyTasks">;

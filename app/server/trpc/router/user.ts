@@ -51,20 +51,16 @@ export const userRouter = router({
     .input(signUpSchema)
     .mutation(async ({ input, ctx }) => {
       const { username, email, password } = input;
-
       const exists = await ctx.prisma.user.findFirst({
         where: { email: email },
       });
-
       if (exists) {
         throw new trpc.TRPCError({
           code: "CONFLICT",
           message: "User already exists.",
         });
       }
-
       const hashedPassword = password;
-
       const result = await ctx.prisma.user.create({
         data: {
           name: username,
@@ -79,6 +75,30 @@ export const userRouter = router({
         result: result.email,
       };
     }),
+
+  getUserGroups: publicProcedure
+    .input(z.object({ userId: z.string() }).nullish())
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.group.findMany({
+        select: {
+          id: true,
+          name: true,
+          adminId: true,
+          _count: true,
+          codeGroup: true,
+          description: true,
+          users: true,
+        },
+        where: {
+          users: {
+            some: {
+              id: input?.userId,
+            },
+          },
+        },
+      });
+    }),
+
   getUserTasks: publicProcedure
     .input(z.object({ userId: z.string() }).nullish())
     .query(async ({ ctx, input }) => {

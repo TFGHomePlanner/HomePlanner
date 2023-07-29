@@ -49,15 +49,16 @@ model User {
 }
 
 model Group {
-  id        String    @id @default(cuid())
-  name      String
-  codeGroup String    @unique
-  messages  Message[]
-  admin     User      @relation("UserAdmin", fields: [adminId], references: [id])
-  adminId   String
-  users     User[]    @relation("Users")
-  lists     List[]
-  Task      Task[]
+  id                 String               @id @default(cuid())
+  name               String
+  codeGroup          String               @unique
+  admin              User                 @relation("UserAdmin", fields: [adminId], references: [id])
+  adminId            String
+  description        String?
+  users              User[]               @relation("Users")
+  messages           Message[]
+  lists              List[]
+  Task               Task[]
   favouritesProducts FavouritesProducts[]
 
   @@index([adminId])
@@ -87,11 +88,12 @@ model List {
 
   @@index([groupId])
 }
+
 model FavouritesProducts {
-  id         String    @id @default(cuid())
-  name       String
-  group      Group     @relation(fields: [groupId], references: [id])
-  groupId    String
+  id      String @id @default(cuid())
+  name    String
+  group   Group  @relation(fields: [groupId], references: [id])
+  groupId String
 
   @@index([groupId])
 }
