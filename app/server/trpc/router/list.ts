@@ -42,8 +42,8 @@ export const listrouter = router({
           items: {
             createMany: {
               data: input.items.map((item) => ({
-                name: item.name,
-                isPurchased: item.isPurchased,
+                name: item,
+                isPurchased: false,
               
               })),
             },
@@ -59,18 +59,15 @@ export const listrouter = router({
 
   getAllFavouritesProducts: publicProcedure
     .input(z.object({ groupId: z.string()}))
-    .output(z.array(favouritesProductsSchema))
     .query(async ({input, ctx}) => {
-      const favouritesProducts = await ctx.prisma.favouritesProducts.findMany({
+      return await ctx.prisma.favouritesProducts.findMany({
         select: {
           name: true,
         },
         where : {
           groupId: input.groupId,
         }
-      });
-      const favouritesProductsparse = z.array(favouritesProductsSchema).parse(favouritesProducts);
-      return favouritesProductsparse;
+      });      
     }),
   
 });

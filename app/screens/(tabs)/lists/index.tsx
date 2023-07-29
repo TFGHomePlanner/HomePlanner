@@ -39,7 +39,6 @@ const TabListsScreen : React.FC<TabsListcreenProps> = ({ navigation }) =>  {
       </TouchableOpacity>
       {/* ScrollView */}
       <ScrollView showsVerticalScrollIndicator={false} className="p-1">
-        
         <Text className="text-lg font-bold mb-2">Listas</Text>
         {activelist?.map((list) => {
           return (

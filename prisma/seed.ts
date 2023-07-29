@@ -35,6 +35,22 @@ async function main() {
       codeGroup: "lasminissonmonas",
       name: "Grupo de minis",
       admin: { connect: { id: marta.id } },
+      favouritesProducts: 
+      {
+        createMany: {
+          data: [
+            {
+              name: "macarrones",
+            },
+            {
+              name: "calabaza"
+            },
+            {
+              name: "chuches"
+            }
+          ]
+        },
+      },
       messages: {
         createMany: {
           data: [
