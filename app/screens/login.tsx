@@ -30,7 +30,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       if (output.success) {
         const NewUser: IUser = {
           id: output.user.id,
-          groupId: "clklmvf2o0003uc8gqua2dtp4",
+          groupId: "clko4gtg300033qhw5qzto0q3",
         };
         updateUser(NewUser);
         console.log(NewUser);
@@ -81,8 +81,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         </Pressable>
         <Text className="mt-2 text-sm text-placeholderGray">
           ¿Todavía no tienes cuenta?{" "}
-          <Link to={{ screen: "Tabs" }}>
-            {/*PRUEBAS: cambiar Tabs por Register*/}
+          <Link to={{ screen: "Register" }}>
             <Text className="font-semibold text-blue">Únete</Text>
           </Link>
         </Text>

@@ -9,7 +9,6 @@ export const taskRouter = router({
       return await ctx.prisma.task.findMany({
         select: {
           id: true,
-          _count: true,
           name: true,
           description: true,
           userTask: {
@@ -29,6 +28,7 @@ export const taskRouter = router({
         },
       });
     }),
+
   create: publicProcedure
     .input(CreateTaskSchema)
     .mutation(
