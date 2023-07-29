@@ -17,16 +17,23 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
   const { data: userGroups } = trpc.user.getUserGroups.useQuery({
     userId: User.id,
   });
+
+  function goToCreateGroup() {
+    navigation.navigate("CreateGroup");
+  }
+
   return (
     <View className="h-full bg-light px-6 pt-16">
-      <View className="flex-row justify-between">
-        <Pressable onPress={navigation.goBack}>
-          <Icon name="left" size={16} color={"#7B61FF"} />
-        </Pressable>
-        <Pressable>
-          <Icon name="addusergroup" size={16} color={"#7B61FF"} />
-        </Pressable>
-      </View>
+      <Pressable onPress={navigation.goBack}>
+        <Icon name="left" size={16} color={"#7B61FF"} />
+      </Pressable>
+      <Pressable
+        onPress={goToCreateGroup}
+        className="mt-4 flex-row space-x-2 rounded-lg bg-white p-4"
+      >
+        <Icon name="addusergroup" size={20} color={"#7B61FF"} />
+        <Text className="self-center text-purple">Nuevo grupo</Text>
+      </Pressable>
       <View className="my-6">
         {userGroups ? (
           userGroups.map((group) => <GroupCard key={group.id} group={group} />)
