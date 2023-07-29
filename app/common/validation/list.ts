@@ -27,6 +27,11 @@ export const listsSchemaCreate = z.object({
   ),
 });
 
+export const favouritesProductsSchema = z.object({
+  name: z.string().min(1, "minimo un caracter"),
 
+});
+
+export type IFavouriteProduct = z.infer<typeof favouritesProductsSchema>;
 export type IListCreate = z.infer<typeof listsSchemaCreate>;
 export type IList = z.infer<typeof listSchema>;

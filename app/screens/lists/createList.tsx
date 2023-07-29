@@ -1,14 +1,24 @@
 import {View, Text, TextInput, ScrollView} from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import { Header } from "../../components/Header";
-
+import { IFavouriteProduct } from "../../common/validation/list";
 
 
 type CreateListScreenProps = {
     navigation: NativeStackNavigationProp<AppStackParamList, "CreateList">;
   };
+const [list, setList] = useState<string[]>(["apple", "banana", "orange"]);
+const updateList = (newItem: string) => {
+  const index = list.indexOf(newItem);
+  if (index !== -1) {
+    setList((prevList) => prevList.filter((item) => item !== newItem));
+  } else {
+    setList((prevList) => [...prevList, newItem]);
+  }
+};
+
 const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
   return (
     <View className="h-full flex flex-col w-full bg-light">
