@@ -23,8 +23,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const { updateUser } = React.useContext(UserContext) as UserContextType;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const inputStyle =
-    "mb-3 border-[1px] rounded-xl border-darkGray bg-lightGray p-2 text-dark";
+  const inputStyle = "mb-3 shadow-md rounded-xl bg-white p-2 text-dark";
   const { mutate } = trpc.user.login.useMutation({
     onSuccess: (output) => {
       if (output.success) {
