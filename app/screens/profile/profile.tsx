@@ -1,5 +1,5 @@
-import { Pressable, Text, View } from "react-native";
-import React, { useContext } from "react";
+import { Pressable, Text, TextInput, View } from "react-native";
+import React, { useContext, useState } from "react";
 import { trpc } from "../../trpc";
 import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
@@ -17,6 +17,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
   const { data: userGroups } = trpc.user.getUserGroups.useQuery({
     userId: User.id,
   });
+
+  const [codeGroup, setCodeGroup] = useState("");
 
   function goToCreateGroup() {
     navigation.navigate("CreateGroup");
@@ -41,6 +43,16 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
           <Text>Todavía no tienes grupos</Text>
         )}
       </View>
+      <Text>Unirse a un grupo</Text>
+      <TextInput
+        className={
+          "my-2 rounded-lg border-b-[1px] border-light bg-white px-4 py-2 text-dark"
+        }
+        placeholderTextColor="#95999C"
+        value={codeGroup}
+        onChangeText={setCodeGroup}
+        placeholder="Código de invitación"
+      />
     </View>
   );
 };

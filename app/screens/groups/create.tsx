@@ -1,12 +1,13 @@
 import React, { useContext, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
-import { trpc } from "../../trpc";
 import { Header } from "../../components/Header";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
+import { trpc } from "../../trpc";
 import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
-import Icon from "react-native-vector-icons/AntDesign";
+import Icon from "react-native-vector-icons/Feather";
+import * as Clipboard from "expo-clipboard";
 
 type CreateGroupScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateGroup">;
@@ -15,7 +16,8 @@ type CreateGroupScreenProps = {
 const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
   navigation,
 }) => {
-  const inputStyle = "mb-2 text-lg border-b-[1px] border-light p-2 text-dark";
+  const inputStyle =
+    "mb-4 text-base py-2 px-4 bg-white rounded-lg border-b-[1px] border-light text-dark";
 
   const { User } = useContext(UserContext) as UserContextType;
   const utils = trpc.useContext();
@@ -39,12 +41,10 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
       codeGroup,
       users,
     });
-    console.log("Group created: " + name + ", " + codeGroup);
   }
 
   function generateCode() {
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     const codeLength = 6;
     let code = "";
     for (let i = 0; i < codeLength; i++) {
@@ -54,28 +54,23 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
     setCodeGroup(code);
   }
 
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(codeGroup);
+  };
+
   return (
     <View className="h-full bg-light">
       <Header />
       <View className="px-6">
-        <View className="flex flex-row justify-between">
+        <View className="mb-4 flex flex-row justify-between">
           <Pressable onPress={navigation.goBack}>
-            <Text className="text-purple">Cancelar</Text>
+            <Text className="text-blue">Cancelar</Text>
           </Pressable>
-          <Text className="mr-4 self-center">Nuevo grupo</Text>
+          <Text className="mr-10 self-center text-dark">Nuevo grupo</Text>
           <Pressable className="self-end" onPress={createGroup}>
-            <Text className="font-semibold text-purple">Añadir</Text>
+            <Text className="font-semibold text-blue">OK</Text>
           </Pressable>
         </View>
-        <Pressable
-          onPress={generateCode}
-          className="my-6 flex-row space-x-2 rounded-lg bg-white p-4"
-        >
-          <Icon name="codepen" size={20} color={"#7B61FF"} />
-          <Text className="self-center text-base text-purple">
-            Generar código
-          </Text>
-        </Pressable>
 
         <View>
           <TextInput
@@ -83,17 +78,38 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
             placeholderTextColor="#95999C"
             value={name}
             onChangeText={setName}
-            placeholder="Título"
+            placeholder="Nombre del grupo *"
           />
           <TextInput
-            className={`${inputStyle}`}
+            className={`${inputStyle} h-20`}
             placeholderTextColor="#95999C"
             value={description}
             onChangeText={setDescription}
             placeholder="Descripción"
+            multiline={true}
           />
         </View>
-        <Text className="text-lg tracking-widest">{codeGroup}</Text>
+
+        <Pressable
+          onPress={generateCode}
+          className="mb-4 flex-row space-x-2 rounded-lg bg-white p-4"
+        >
+          <Icon name="codepen" size={20} color={"#1E88E5"} />
+          <Text className="self-center text-base text-blue">
+            Generar código
+          </Text>
+        </Pressable>
+        <View className="flex-row items-center space-x-2">
+          <Text className="text-dark">
+            Código de invitación:{" "}
+            <Text className="text-lg font-semibold tracking-widest text-blue">
+              {codeGroup}
+            </Text>
+          </Text>
+          {codeGroup && (
+            <Icon onPress={copyToClipboard} name="copy" size={16} />
+          )}
+        </View>
       </View>
     </View>
   );
