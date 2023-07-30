@@ -17,6 +17,7 @@ import UserProvider from "./context/userContext";
 import MyTasksScreen from "./screens/tasks/MyTasks";
 import CreatelistScreen from "./screens/lists/createList";
 import ProfileScreen from "./screens/profile/profile";
+import CreateGroupScreen from "./screens/groups/create";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -60,6 +61,10 @@ export function App() {
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Register" component={RegisterScreen} />
                 <Stack.Screen name="Profile" component={ProfileScreen} />
+                <Stack.Screen
+                  name="CreateGroup"
+                  component={CreateGroupScreen}
+                />
                 <Stack.Screen name="Chat" component={ChatScreen} />
                 <Stack.Screen name="Tabs" component={AppLayout} />
                 <Stack.Screen name="CreateTask" component={CreateTaskScreen} />

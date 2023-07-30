@@ -57,7 +57,8 @@
     "react-native-svg": "13.4.0",
     "react-native-vector-icons": "^10.0.0",
     "react-native-web": "~0.18.10",
-    "zod": "^3.21.4"
+    "zod": "^3.21.4",
+    "expo-clipboard": "~4.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
