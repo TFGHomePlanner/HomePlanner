@@ -43,10 +43,10 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
         <Text className="text-base text-light">Mis tareas</Text>
       </Pressable>
       <View className="mb-6 flex-row justify-between gap-x-2">
-        <Pressable className="h-16 flex-1 justify-center rounded-xl bg-white shadow-sm shadow-dark">
+        <Pressable className="h-16 flex-1 justify-center rounded-xl bg-white shadow-sm">
           <Text className="text-center text-base">Tareas sin asignar</Text>
         </Pressable>
-        <Pressable className="h-16 flex-1 justify-center rounded-xl bg-white shadow-sm shadow-dark">
+        <Pressable className="h-16 flex-1 justify-center rounded-xl bg-white shadow-sm">
           <Text className="text-center text-base">Grupo cocina</Text>
         </Pressable>
       </View>
