@@ -50,10 +50,26 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
       setListItems((prevList) => [...prevList, newItem]);
     }
     setNewItem("");
+    if(newItem in checkedItems) {
+      console.log("entro");
+      setCheckedItems((prevCheckedItems) => ({
+        ...prevCheckedItems,
+        [newItem]: true,
+      })); 
+      console.log("entro");
+    }
   };
   
   const removeItemFromList = (itemToRemove: string) => {
     setListItems((prevList) => prevList.filter((item) => item !== itemToRemove));
+    if(itemToRemove in checkedItems) {
+      console.log("salgo");
+      setCheckedItems((prevCheckedItems) => ({
+        ...prevCheckedItems,
+        [itemToRemove]: false,
+      })
+      ); 
+    }
   };
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(() => {
     const initialCheckedItems: { [key: string]: boolean } = {};
@@ -62,25 +78,6 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
     });
     return initialCheckedItems;
   });
-
-  const handleCheckItem = (item: string) => {
-    setCheckedItems((prevCheckedItems) => ({
-      ...prevCheckedItems,
-      [item]: true,
-    }));
-    addItemToList(item);
-  };
-
-  const handleUncheckItem = (item: string) => {
-    setCheckedItems((prevCheckedItems) => ({
-      ...prevCheckedItems,
-      [item]: false,
-    })
-    );
-    removeItemFromList(item);
-  };
-
-  
 
   return (
     <View className="h-full flex flex-col w-full bg-light">
@@ -127,9 +124,9 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
                       key={item.name}
                       onPress={() => {
                         if (checkedItems[item.name]) {
-                          handleUncheckItem(item.name);
+                          removeItemFromList(item.name);
                         } else {
-                          handleCheckItem(item.name);
+                          addItemToList(item.name);
                         }
                       }}
                     >
