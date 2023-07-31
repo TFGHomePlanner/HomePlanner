@@ -103,6 +103,7 @@ export const userRouter = router({
     .input(z.object({ userId: z.string() }).nullish())
     .query(async ({ ctx, input }) => {
       const tasks = await ctx.prisma.userTask.findMany({
+        where: { userId: input?.userId },
         select: {
           Task: {
             select: {
@@ -111,11 +112,9 @@ export const userRouter = router({
               description: true,
               frequency: true,
               createdAt: true,
-              isDone: true,
             },
           },
         },
-        where: { userId: input?.userId },
       });
       return tasks;
     }),
