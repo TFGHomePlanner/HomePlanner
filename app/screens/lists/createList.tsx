@@ -29,7 +29,6 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
     groupId: User.groupId,
   });
   function CreateList() {
-    console.log(listItemes.length.toString);
     mutation.mutateAsync({
       description: description,
       groupId: User.groupId,
@@ -167,19 +166,10 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
               </TouchableOpacity>
             ))}
           </View>
-       
-          <View className = "bg-light w-full px-4 pt-2 mb-4">
-            <Text className = "text-start text-xl font-bold text-gray-700 mb-2">Lista Recurrente:</Text>
-          </View>
-          <View className="flex-row w-full px-4 pt-2 mb-4">
-            <TouchableOpacity onPress={CreateList} className="w-full">
-              <View className="bg-[#F1999F] p-3 rounded-xl flex flex-row items-center justify-start w-full">
-                <Icon name="plus" size={20} color="white" className="mr-2" />
-                <Text className="text-lg font-bold ml-2 text-white pl-4">Crear lista</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
         </View>
+        <Pressable onPress={CreateList} className="p-2 rounded-full bg-gray">
+          <Text> HOla </Text>
+        </Pressable>
       </ScrollView>
     </View>
   );
