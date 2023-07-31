@@ -25,6 +25,7 @@ export const taskRouter = router({
         },
         where: {
           groupId: input.groupId,
+          isDone: false,
         },
       });
     }),
@@ -43,4 +44,15 @@ export const taskRouter = router({
         });
       }
     ),
+
+  checkTask: publicProcedure
+    .input(z.object({ taskId: z.string() }))
+    .mutation(async ({ ctx, input: { taskId } }) => {
+      return await ctx.prisma.task.update({
+        where: { id: taskId },
+        data: {
+          isDone: true,
+        },
+      });
+    }),
 });
