@@ -2,10 +2,22 @@ import { Pressable, Text, View } from "react-native";
 import React from "react";
 import { ITask } from "../../common/validation/task";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-export default function TaskCard({ task }: { task: ITask }) {
+type TaskCardProps = {
+  navigation: NativeStackNavigationProp<any>;
+  task: ITask;
+};
+
+const TaskCard: React.FC<TaskCardProps> = ({ navigation, task }) => {
+  function goToTaskDetails() {
+    navigation.navigate("TaskDetail", { Task: task });
+  }
   return (
-    <View className="bg-white mb-4 w-full rounded-lg px-4 py-3 shadow-md shadow-lightGray">
+    <Pressable
+      onPress={goToTaskDetails}
+      className="mb-4 w-full rounded-lg bg-white px-4 py-3"
+    >
       <View className="flex-row justify-between">
         <Text className="text-base font-semibold">{task.name}</Text>
         <Icon name="chevron-right" size={24} />
@@ -18,6 +30,8 @@ export default function TaskCard({ task }: { task: ITask }) {
           <Text className="text-center text-purple">reasignar tarea</Text>
         </Pressable>
       </View>
-    </View>
+    </Pressable>
   );
-}
+};
+
+export default TaskCard;
