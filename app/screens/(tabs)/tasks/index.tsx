@@ -53,7 +53,9 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
       <Text className="mb-2 text-lg">Otras tareas</Text>
       <View>
         {allTasks ? (
-          allTasks.map((task) => <TaskCard key={task.id} task={task} />)
+          allTasks.map((task) => (
+            <TaskCard key={task.id} task={task} navigation={navigation} />
+          ))
         ) : (
           <Text>No hay tareas</Text>
         )}

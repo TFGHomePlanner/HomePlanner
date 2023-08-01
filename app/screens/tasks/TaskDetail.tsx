@@ -1,11 +1,21 @@
 import { Text, View } from "react-native";
 import React from "react";
-import { ITask } from "../../common/validation/task";
+import { RouteProp } from "@react-navigation/native";
+import { AppStackParamList } from "../../_App";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-export default function TaskDetail({ task }: { task: ITask }) {
+type TaskDetailScreenProps = {
+  route: RouteProp<AppStackParamList, "TaskDetail">;
+  navigation: NativeStackNavigationProp<AppStackParamList, "TaskDetail">;
+};
+
+const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({ route }) => {
+  const { Task } = route.params;
   return (
-    <View className="">
-      <Text>{task.name}</Text>
+    <View className="p-16">
+      <Text>{Task.name}</Text>
     </View>
   );
-}
+};
+
+export default TaskDetailScreen;
