@@ -1,10 +1,11 @@
 import React, {useState} from "react";
-import {View, Text, ScrollView, TouchableOpacity} from "react-native";
+import {View, Text, ScrollView, TouchableOpacity, Image} from "react-native";
 import {trpc} from "../../server/utils/trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import { RouteProp } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome5";
+
 
 type DetailsScreenProps = {
   route: RouteProp<AppStackParamList, "DetailsList">;
@@ -55,31 +56,60 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route }) => {
   }
 
   return (
-    <View className="w-screen h-screen">
-      <Text> Culo</Text>
+    <View className="px-6 w-screen h-screen pt-10">
+      <View className="flex flex-row justify-between items-center px-4 py-2">
+        <Text className="text-2xl font-bold text-center flex-1 text-pink">{List.name}</Text>
+        {!List.isClosed && 
+        <TouchableOpacity>
+          <Icon name="ellipsis-v" size={24} color="#F1889F" />
+        </TouchableOpacity>}
+      </View>
+      <View className="">
+        <Text className="text-sm">{List.description}</Text>
+      </View>
       <ScrollView>
         <View>
           {List?.items.map((item) => (
             <TouchableOpacity
               key={item.name}
               onPress={() => {
-                if (checkedItems[item.name]) {
-                  checKItem(item.id, item.name ,false);
-                } else {
-                  uncheckItem(item.id, item.name, true);
+                if(!List.isClosed) {
+                  if (checkedItems[item.name]) {
+                    checKItem(item.id, item.name ,false);
+                  } else {
+                    uncheckItem(item.id, item.name, true);
+                  }
                 }
               }}
             >
-              <View className="flex flex-row pt-2">
-                <View className = "bg-pink border-[1px] border-black h-5 w-5 flex-row rounded-full">
-                  {checkedItems[item.name] && <Icon name="check" className="px-1" size={15} color="black" />}
+              <View className=" flex flex-row pt-4">
+                <View className="bg-pink border-[1px] border-black h-7 w-7 flex-row rounded-md">
+                  {checkedItems[item.name] && <Icon name="check" className="px-1" size={25} color="black" />}
                 </View>
-                <Text className = "px-2">{item.name}</Text>
+                <Text className="px-2 text-xl">{item.name}</Text>
               </View>
             </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
+      <View className="flex-row w-full">
+        {!List.isClosed ?
+          <TouchableOpacity className="w-full">
+            <View className="bg-pink p-3 rounded-xl flex flex-row items-center justify-center w-full">
+              <Icon name="lock" size={20} color="white" className="mr-2" />
+              <Text className="text-lg font-bold text-center mx-2 text-white px-4">Cerrar lista</Text>
+              <Icon name="lock" size={20} color="white" className="mr-2" />
+            </View>
+          </TouchableOpacity>
+          : 
+          <View className="w-full">
+            <Image
+              source={require("../../../assets/images/ticket.jpg")}
+              style={{width: 200, height: 200}}
+            />
+          </View>
+        }
+      </View>
     </View>
   );
 };
