@@ -27,15 +27,18 @@ const ChatScreen = () => {
 
 
   function sendMessage() {
-    const currentDate = new Date();
-    const formattedDate = format(currentDate,  "yyyy-MM-dd'T'HH:mm:ssxxx");
-    mutation.mutateAsync({
-      text: message,
-      day: formattedDate,
-      groupId: User.groupId,
-      userId: User.id,
-    });
-    setmessage("");
+    if(message != "" || message != null) {
+      const currentDate = new Date();
+      const formattedDate = format(currentDate,  "yyyy-MM-dd'T'HH:mm:ssxxx");
+      mutation.mutateAsync({
+        text: message,
+        day: formattedDate,
+        groupId: User.groupId,
+        userId: User.id,
+      });
+      setmessage("");
+    }
+  
   }
 
   function goBack() {

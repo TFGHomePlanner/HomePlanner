@@ -28,7 +28,6 @@ const TabListsScreen : React.FC<TabsListcreenProps> = ({ navigation }) =>  {
     navigation.navigate("CreateList");
   }
 
-
   return (
     <View className="bg-[#F8F3ED] p-4 w-full h-full">
       <TouchableOpacity onPress={goToCreateList}>
@@ -45,6 +44,7 @@ const TabListsScreen : React.FC<TabsListcreenProps> = ({ navigation }) =>  {
             <ListCard
               key={list.id}
               list={list}
+              navigation={navigation}
             />
           );
         })}
@@ -54,6 +54,7 @@ const TabListsScreen : React.FC<TabsListcreenProps> = ({ navigation }) =>  {
             <ListCard
               key={list.id}
               list={list}
+              navigation={navigation}
             />
           );
         })}
