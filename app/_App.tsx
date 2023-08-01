@@ -19,7 +19,7 @@ import CreatelistScreen from "./screens/lists/createList";
 import ProfileScreen from "./screens/profile/profile";
 import CreateGroupScreen from "./screens/groups/create";
 import DetailsListScreen from "./screens/lists/detailsList";
-
+import {IList} from "./common/validation/list";
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
   Header: undefined;
@@ -36,7 +36,7 @@ export type AppStackParamList = {
   Profile: undefined;
   CreateGroup: undefined;
   ListCard: undefined;
-  DetailsList: { listId: string };
+  DetailsList: { List: IList };
 
 };
 

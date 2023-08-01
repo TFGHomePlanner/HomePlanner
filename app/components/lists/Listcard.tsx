@@ -18,7 +18,7 @@ const ListCard: React.FC< ListCardProps> = ({ navigation, list }) => {
 
   function move() {
    
-    navigation.navigate("DetailsList", {listId: list.id});
+    navigation.navigate("DetailsList", {listId: list});
   }
   return (
     <Pressable onPress={move}>
