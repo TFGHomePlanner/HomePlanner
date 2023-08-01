@@ -5,12 +5,15 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import { RouteProp } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome5";
-
+import { Menu, MenuOptions, MenuOption, MenuTrigger, MenuContext } from "react-native-popup-menu";
 
 type DetailsScreenProps = {
   route: RouteProp<AppStackParamList, "DetailsList">;
   navigation: NativeStackNavigationProp<AppStackParamList, "DetailsList">;
 };
+
+
+  
 
 const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route }) => {
   const utils = trpc.useContext();
@@ -54,15 +57,26 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route }) => {
   function uncheckItem(id: string, itemName: string, isPurchased: boolean) { 
     mutate({id, isPurchased});
   }
+  function popUpEvents(value: number) {
+    value == 1 ? console.log("Editar") :  console.log("Eliminar");
+  }
 
   return (
     <View className="px-6 w-screen h-screen pt-10">
       <View className="flex flex-row justify-between items-center px-4 py-2">
         <Text className="text-2xl font-bold text-center flex-1 text-pink">{List.name}</Text>
         {!List.isClosed && 
-        <TouchableOpacity>
-          <Icon name="ellipsis-v" size={24} color="#F1889F" />
-        </TouchableOpacity>}
+         <Menu onSelect={value => popUpEvents(value)}>
+           <MenuTrigger>
+             <Icon name="ellipsis-v" size={24} color="#F1889F" />
+           </MenuTrigger>
+           <MenuOptions>
+             <MenuOption value={1} text='Editar' />
+             <MenuOption value={2} text= 'Eliminar'/>
+           </MenuOptions>
+         </Menu>
+                 
+        }
       </View>
       <View className="">
         <Text className="text-sm">{List.description}</Text>
