@@ -8,7 +8,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 
 type ListCardProps = {
-  navigation: NativeStackNavigationProp<AppStackParamList, "ListCard">;
+   navigation: NativeStackNavigationProp<any>;
   list: IList;
 };
 
@@ -17,8 +17,8 @@ const ListCard: React.FC< ListCardProps> = ({ navigation, list }) => {
   const firstFiveItems = list.items.slice(0, 4);
 
   function move() {
-    const navigation = useNavigation();
-    navigation.navigate("OpenList", {idList: list.id});
+   
+    navigation.navigate("DetailsList", {listId: list.id});
   }
   return (
     <Pressable onPress={move}>

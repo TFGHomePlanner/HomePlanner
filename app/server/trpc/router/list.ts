@@ -69,5 +69,49 @@ export const listrouter = router({
         }
       });      
     }),
-  
+
+  getListById: publicProcedure
+    .input(z.object({ groupId: z.string(), listId: z.string() }))
+    .output(z.array(listSchema))
+    .query(async ({ input, ctx }) => {
+      const lists = await ctx.prisma.list.findMany({
+        select: {
+          name: true,
+          description: true,
+          isClosed: true,
+          id: true,
+          items: {
+            select: {
+              isPurchased: true,
+              name: true,
+              id: true,   
+            },
+          },
+        },
+        where: {
+          groupId: input.groupId,
+          id: input.listId,
+        }
+      });
+      const messageParse = z.array(listSchema).parse(lists);
+      return messageParse;
+    }),
+  updateProduct: publicProcedure
+    .input(z.object({id: z.string(), isPurchased: z.boolean()}))
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const updatedProduct = await ctx.prisma.product.update({
+          where: { id: input.id },
+          data: { isPurchased: input.isPurchased },
+        });
+        return {
+          success: true,
+          message: "Correct Update",
+          product: updatedProduct,
+        };
+      } catch (error) {
+        console.error("Error al actualizar el producto:", error);
+        throw new Error("No se pudo actualizar el producto.");
+      }
+    })
 });

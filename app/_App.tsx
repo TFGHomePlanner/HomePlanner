@@ -18,6 +18,7 @@ import MyTasksScreen from "./screens/tasks/MyTasks";
 import CreatelistScreen from "./screens/lists/createList";
 import ProfileScreen from "./screens/profile/profile";
 import CreateGroupScreen from "./screens/groups/create";
+import DetailsListScreen from "./screens/lists/detailsList";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -34,6 +35,9 @@ export type AppStackParamList = {
   CreateList: undefined;
   Profile: undefined;
   CreateGroup: undefined;
+  ListCard: undefined;
+  DetailsList: { listId: string };
+
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -61,16 +65,14 @@ export function App() {
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Register" component={RegisterScreen} />
                 <Stack.Screen name="Profile" component={ProfileScreen} />
-                <Stack.Screen
-                  name="CreateGroup"
-                  component={CreateGroupScreen}
+                <Stack.Screen name="CreateGroup"component={CreateGroupScreen}
                 />
                 <Stack.Screen name="Chat" component={ChatScreen} />
                 <Stack.Screen name="Tabs" component={AppLayout} />
                 <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
                 <Stack.Screen name="MyTasks" component={MyTasksScreen} />
                 <Stack.Screen name="Modal" component={ModalScreen} />
-                <Stack.Screen name="CreateList" component={CreatelistScreen} />
+                <Stack.Screen name="DetailsList" component={DetailsListScreen} />
               </Stack.Navigator>
             </NavigationContainer>
           </ApplicationProvider>
