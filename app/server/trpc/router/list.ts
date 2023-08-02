@@ -122,5 +122,29 @@ export const listrouter = router({
         console.error("Error al actualizar el producto:", error);
         throw new Error("No se pudo actualizar el producto.");
       }
+    }),
+
+  deletelist: publicProcedure
+    .input(z.object({id: z.string()}))
+    .mutation(async ({input, ctx}) => {
+      try {
+        const deletedList = await ctx.prisma.$transaction(async (tx) => {
+          await tx.product.deleteMany({
+            where: { listId: input.id },
+          });
+          const deletedList = await tx.list.delete({
+            where: { id: input.id },
+          });
+          return deletedList;
+        });
+  
+        return {
+          success: "deleted",
+          message: "Correct Delete",
+        };
+      } catch (error) {
+        console.error("Error al eliminar la lista:", error);
+        throw new Error("No se pudo eliminar la lista.");
+      }
     })
 });

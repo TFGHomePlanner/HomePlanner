@@ -21,7 +21,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
   const mutation = trpc.list.createList.useMutation({
     onSuccess() {
       utils.list.getAllLists.invalidate();
-      
+      navigation.goBack();
     },
   });
   const {User} = React.useContext (UserContext) as UserContextType;
