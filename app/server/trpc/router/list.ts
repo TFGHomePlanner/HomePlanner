@@ -152,5 +152,24 @@ export const listrouter = router({
         console.error("Error al eliminar la lista:", error);
         throw new Error("No se pudo eliminar la lista.");
       }
+    }),
+
+  closeList: publicProcedure
+    .input(z.object({id: z.string()}))
+    .mutation(async ({input, ctx}) => { 
+      try {
+        const closedList = await ctx.prisma.list.update({
+          where: { id: input.id },
+          data: { isClosed: true },
+        });
+        return {
+          success: "closed",
+          message: "Correct Update",
+          list: closedList,
+        };
+      } catch (error) {
+        console.error("Error al cerrar la lista:", error);
+        throw new Error("No se pudo cerrar la lista.");
+      }
     })
 });

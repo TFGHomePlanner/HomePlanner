@@ -26,7 +26,15 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route, navigation }) 
     });
     return initialCheckedItems;
   });
-  const {mutate: deleteProduct} = trpc.list.deletelist.useMutation({
+
+  const {mutate: closeList} = trpc.list.closeList.useMutation({
+    onSuccess: () => {
+      utils.list.getAllLists.invalidate();
+      navigation.goBack();
+    }
+  });
+  
+  const {mutate: deleteList} = trpc.list.deletelist.useMutation({
     onSuccess: () => {
       utils.list.getAllLists.invalidate();
       navigation.goBack();
@@ -64,7 +72,7 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route, navigation }) 
   }
   function popUpEvents(value: number) {
     const id = List.id;
-    value == 1 ? navigation.navigate("CreateList", {List: List, Edit: true }) :deleteProduct({id});
+    value == 1 ? navigation.navigate("CreateList", {List: List, Edit: true }) :deleteList({id});
   }
 
   return (
@@ -114,7 +122,7 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route, navigation }) 
       </ScrollView>
       <View className="flex-row w-full">
         {!List.isClosed ?
-          <TouchableOpacity className="w-full">
+          <TouchableOpacity onPress={() => {closeList({id: List.id});}} className="w-full">
             <View className="bg-pink p-3 rounded-xl flex flex-row items-center justify-center w-full">
               <Icon name="lock" size={20} color="white" className="mr-2" />
               <Text className="text-lg font-bold text-center mx-2 text-white px-4">Cerrar lista</Text>
