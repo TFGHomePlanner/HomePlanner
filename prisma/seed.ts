@@ -35,20 +35,19 @@ async function main() {
       codeGroup: "lasminissonmonas",
       name: "Grupo de minis",
       admin: { connect: { id: marta.id } },
-      favouritesProducts: 
-      {
+      favouritesProducts: {
         createMany: {
           data: [
             {
               name: "macarrones",
             },
             {
-              name: "calabaza"
+              name: "calabaza",
             },
             {
-              name: "chuches"
-            }
-          ]
+              name: "chuches",
+            },
+          ],
         },
       },
       messages: {
@@ -102,6 +101,8 @@ async function main() {
       name: "Fregar platos",
       frequency: "oncePerDay",
       groupId: minigrupo.id,
+      isDone: true,
+      userId: marta.id,
     },
   });
 
@@ -114,24 +115,12 @@ async function main() {
     },
   });
 
-  const tareaAsignada1 = await prisma.userTask.create({
+  const tarea4 = await prisma.task.create({
     data: {
-      Task: { connect: { id: tarea1.id } },
-      User: { connect: { id: marta.id } },
-    },
-  });
-
-  const tareaAsignada2 = await prisma.userTask.create({
-    data: {
-      Task: { connect: { id: tarea1.id } },
-      User: { connect: { id: a.id } },
-    },
-  });
-
-  const tareaAsignada3 = await prisma.userTask.create({
-    data: {
-      Task: { connect: { id: tarea3.id } },
-      User: { connect: { id: a.id } },
+      name: "Cook zome minitrotila.",
+      description: "Pliz!!",
+      frequency: "oncePerDay",
+      groupId: minigrupo.id,
     },
   });
 
