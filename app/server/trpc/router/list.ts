@@ -153,7 +153,6 @@ export const listrouter = router({
         throw new Error("No se pudo eliminar la lista.");
       }
     }),
-
   closeList: publicProcedure
     .input(z.object({id: z.string()}))
     .mutation(async ({input, ctx}) => { 
