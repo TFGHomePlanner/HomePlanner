@@ -1,4 +1,4 @@
-import {View, Text, TextInput, ScrollView, TouchableOpacity, Pressable} from "react-native";
+import {View, Text, TextInput, ScrollView, TouchableOpacity,} from "react-native";
 import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
@@ -31,12 +31,12 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
   const Edit = route.params.Edit;
   const {User} = React.useContext (UserContext) as UserContextType;
   const {data: favouriteProducts} = trpc.list.getAllFavouritesProducts.useQuery({
-    groupId: User.groupId,
+    groupId: User.groupId || "",
   });
   function CreateList() {
     mutation.mutateAsync({
       description: description,
-      groupId: User.groupId,
+      groupId: User.groupId || "",
       items: listItemes,
       name: title,
       creatorId: User.id,
@@ -47,13 +47,14 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
 
 
   //VAL
+  const [isPublic, setIsPublic] = useState(true);
   const [newItem, setNewItem] = useState("");
   const [title, settitle] = useState("");
   const [description, setdescrpition] = useState("");
   const [listItemes, setListItems] = useState<string[]>([]);
   const [selected, setSelected] = React.useState("");
   const frequency = [
-    {key:"1", value:"Nunca", disabled:true},
+    {key:"1", value:"Nunca"},
     {key:"2", value:"Cada dia"},
     {key:"3", value:"Cada semana"},
     {key:"4", value: "Cada mes"},
@@ -94,9 +95,10 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
 
   const iseditable = () => {
     if(Edit){
+      setIsPublic(List?.isPublic || true);
       settitle(List?.name || ""),
       setdescrpition(List?.description || ""),
-      setListItems(List?.items?.map((item) => item.name) || []);
+      List?.items?.map((item) => addItemToList(item.name));
     }
   };
   useEffect(() => {iseditable();}, []);
@@ -128,13 +130,15 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
           <View className = "bg-light w-full px-4 pt-2 mb-4">
             <Text className = "text-start text-xl font-bold text-gray-700 mb-2">Permisos de edición:</Text>
             <View className = "bg-[#ffff] shadow-md  rounded-md p-2 pt-4 mb-2">
-              <View className = "flex-row items-center mb-2">
-                <View className = "w-5 h-5 border border-gray-400 mr-2 rounded-full"></View>
-                <Text className = "text-gray-700 mr-4">Permitir</Text>
-              </View>
-              <View className = "flex-row items-center">
-                <View className = "w-5 h-5 border border-gray-400 mr-2 rounded-full"></View>
-                <Text className = "text-gray-700">Denegar</Text>
+              <View>
+                <TouchableOpacity className="flex flex-row aling-items-center pb-3" onPress={() => setIsPublic(true)}>
+                  <View className= {`w-6 h-6 rounded-full border-2 border-gray mr-4 ${isPublic ? "bg-pink" : "bg-grey"}`}/>
+                  <Text className="text-md">Permitir</Text>
+                </TouchableOpacity>
+                <TouchableOpacity className="flex flex-row aling-items-center" onPress={() => setIsPublic(false)}>
+                  <View className= {`w-6 h-6 rounded-full border-2 border-gray mr-4  ${isPublic ? "bg-gray" : "bg-pink"}`}/>
+                  <Text className="text-md pt-1">No permitir</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -155,7 +159,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
                       }}
                     >
                       <View className="flex flex-row pt-2">
-                        <View className = "bg-pink border-[1px] border-black h-5 w-5 flex-row rounded-full">
+                        <View className = "bg-pink border-[1px] border-black h-5 w-5 flex-row rounded-full items-center">
                           {checkedItems[item.name] && <Icon name="check" className="px-1" size={15} color="black" />}
                         </View>
                         <Text className = "px-2">{item.name}</Text>
