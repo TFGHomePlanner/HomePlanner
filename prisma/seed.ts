@@ -9,16 +9,16 @@ async function main() {
   const juan = await prisma.user.create({
     data: {
       name: "Juan",
-      email: "johnny.altes1@gmail.com",
-      passwordHash: hashedPassword,
+      email: "johnny",
+      passwordHash: "a",
     },
   });
 
   const marta = await prisma.user.create({
     data: {
       name: "Marta",
-      email: "marta.yun.lopez@gmail.com",
-      passwordHash: hashedPassword,
+      email: "marta",
+      passwordHash: "a",
     },
   });
 
@@ -82,7 +82,7 @@ async function main() {
         },
       },
       users: {
-        connect: [{ id: a.id }, { id: juan.id }],
+        connect: [{ id: a.id }, { id: juan.id }, { id: marta.id }],
       },
     },
   });

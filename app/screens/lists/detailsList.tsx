@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {View, Text, ScrollView, TouchableOpacity, Image} from "react-native";
 import {trpc} from "../../server/utils/trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -6,19 +6,26 @@ import { AppStackParamList } from "../../_App";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { Menu, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
+import { UserContextType } from "../../context/types";
+import { UserContext } from "../../context/userContext";
 
 type DetailsScreenProps = {
   route: RouteProp<AppStackParamList, "DetailsList">;
   navigation: NativeStackNavigationProp<AppStackParamList, "DetailsList">;
 };
 
-
-  
-
 const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route, navigation }) => {
   const utils = trpc.useContext();
   const { List } = route.params;
+  const {User} = useContext(UserContext) as UserContextType;
   console.log(List);
+
+  function canEdit() {
+    if(List.isClosed) return false;
+    else if(!List.isPublic) return (List.creatorId == User?.id || User.isAdmin);
+    else return true;
+  }
+
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(() => {
     const initialCheckedItems: { [key: string]: boolean } = {};
     List?.items.forEach((item) => {
@@ -79,7 +86,7 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route, navigation }) 
     <View className="px-6 w-screen h-screen pt-10">
       <View className="flex flex-row justify-between items-center px-4 py-2">
         <Text className="text-2xl font-bold text-center flex-1 text-pink">{List.name}</Text>
-        {!List.isClosed && 
+        {canEdit() && 
          <Menu onSelect={value => popUpEvents(value)}>
            <MenuTrigger>
              <Icon name="ellipsis-v" size={24} color="#F1889F" />
