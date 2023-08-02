@@ -19,14 +19,24 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
     userId: User.id,
   });
 
+  const mutation = trpc.group.getAdminId.useMutation({
+    onSuccess(output) {
+      const user: IUser = {
+        ...User,
+        isAdmin: User.id == output?.adminId,
+      };
+      updateUser(user);
+      navigation.navigate("Tabs");
+    },
+  });
+
   function selectGroup(groupId: string) {
     const user: IUser = {
       id: User.id,
       groupId: groupId,
     };
     updateUser(user);
-    console.log(user);
-    navigation.navigate("Tabs");
+    mutation.mutateAsync({ id: groupId });
   }
 
   return (

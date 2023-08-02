@@ -13,6 +13,7 @@ const UserProvider: React.FunctionComponent<UserProviderProps> = ({
   const [User, setUser] = React.useState<IUser>({
     id: "",
     groupId: "",
+    isAdmin: false,
   });
 
   const updateUser = (User: IUser) => {

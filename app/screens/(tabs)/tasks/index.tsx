@@ -15,7 +15,7 @@ type TabTasksScreenProps = {
 const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
   const { User } = useContext(UserContext) as UserContextType;
   const { data: allTasks } = trpc.task.getAllTasks.useQuery({
-    groupId: User.groupId,
+    groupId: User.groupId!,
   });
 
   function goToCreateTask() {

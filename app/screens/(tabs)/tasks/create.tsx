@@ -51,7 +51,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
       name,
       description,
       frequency: selectedFrequency,
-      groupId: User.groupId,
+      groupId: User.groupId!,
     });
     console.log(
       "Task created: " +

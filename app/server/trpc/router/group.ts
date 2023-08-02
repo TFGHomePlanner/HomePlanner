@@ -1,5 +1,6 @@
 import { publicProcedure, router } from "../trpc";
 import { CreateGroupSchema } from "../../../common/validation/group";
+import { z } from "zod";
 
 export const groupRouter = router({
   create: publicProcedure
@@ -20,4 +21,15 @@ export const groupRouter = router({
         });
       }
     ),
+
+  getAdminId: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.group.findFirst({
+        select: {
+          adminId: true,
+        },
+        where: { id: input.id },
+      });
+    }),
 });
