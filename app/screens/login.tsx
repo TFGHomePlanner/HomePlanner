@@ -25,16 +25,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const inputStyle =
     "mb-3 border-[1px] rounded-xl border-darkGray bg-lightGray p-2 text-dark";
+
   const { mutate } = trpc.user.login.useMutation({
     onSuccess: (output) => {
       if (output.success) {
-        const NewUser: IUser = {
+        const userId: IUser = {
           id: output.user.id,
-          groupId: "clktsziek00033qzkj8wgh4a2",
         };
-        updateUser(NewUser);
-        console.log(NewUser);
-        navigation.navigate("Tabs");
+        updateUser(userId);
+        navigation.navigate("GroupSelection");
       } else console.log(output.message);
     },
     onError: (error) => {

@@ -1,9 +1,8 @@
-
 export interface IUser {
-    id: string;
-    groupId: string;
-  }
+  id: string;
+  groupId?: string;
+}
 export type UserContextType = {
-    User: IUser;
-    updateUser: (User: IUser) => void;
-  };
+  User: IUser;
+  updateUser: (User: IUser) => void;
+};
