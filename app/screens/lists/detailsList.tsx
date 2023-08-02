@@ -15,8 +15,7 @@ type DetailsScreenProps = {
 
   
 
-const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route }) => {
-  const navigation = useNavigation();
+const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route, navigation }) => {
   const utils = trpc.useContext();
   const { List } = route.params;
   console.log(List);
@@ -65,7 +64,7 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route }) => {
   }
   function popUpEvents(value: number) {
     const id = List.id;
-    value == 1 ? console.log("Eliminar"):deleteProduct({id});
+    value == 1 ? navigation.navigate("CreateList", {List: List, Edit: true }) :deleteProduct({id});
   }
 
   return (

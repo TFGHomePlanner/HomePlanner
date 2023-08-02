@@ -1,5 +1,5 @@
 import {View, Text, TextInput, ScrollView, TouchableOpacity, Pressable} from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import { Header } from "../../components/Header";
@@ -9,12 +9,15 @@ import DeleteIcon from "react-native-vector-icons/FontAwesome5";
 import { trpc } from "../../server/utils/trpc";
 import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
+import { RouteProp } from "@react-navigation/native";
+import { router } from "expo-router";
 type CreateListScreenProps = {
+    route: RouteProp<AppStackParamList, "CreateList">;
     navigation: NativeStackNavigationProp<AppStackParamList, "CreateList">;
   };
 
 
-const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
+const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }) => {
 
   // TRPC
   const utils = trpc.useContext();
@@ -24,6 +27,8 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
       navigation.goBack();
     },
   });
+  const List = route.params.List;
+  const Edit = route.params.Edit;
   const {User} = React.useContext (UserContext) as UserContextType;
   const {data: favouriteProducts} = trpc.list.getAllFavouritesProducts.useQuery({
     groupId: User.groupId,
@@ -38,6 +43,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
       isPublic: true,
     });
   }
+
 
 
   //VAL
@@ -86,6 +92,15 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
     return initialCheckedItems;
   });
 
+  const iseditable = () => {
+    if(Edit){
+      settitle(List?.name || ""),
+      setdescrpition(List?.description || ""),
+      setListItems(List?.items?.map((item) => item.name) || []);
+    }
+  };
+  useEffect(() => {iseditable();}, []);
+
   return (
     <View className="h-full flex flex-col w-full bg-light">
       <Header/> 
@@ -94,6 +109,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
           <View className = "bg-light  w-full p-4 mb-4">
             <Text className = "text-xl font-bold text-gray-700 mb-2">Titulo <Text className="text-pink">*</Text></Text>
             <TextInput
+              value = {title}
               className = "bg-[#ffff] shadow-md  rounded-md px-4 py-2"
               placeholderTextColor="#F1999F"
               placeholder="Escribe el título aquí"
@@ -101,6 +117,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
             />
             <Text className = "mt-3 text-xl font-bold text-gray-700 mb-2">Descripción:</Text>
             <TextInput
+              value = {description}
               className ="bg-[#ffff] shadow-md  rounded-md px-4 py-2"
               placeholderTextColor="#F1999F"
               placeholder="Escribe una descripción aquí"

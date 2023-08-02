@@ -37,7 +37,7 @@ export type AppStackParamList = {
   MyTasks: undefined;
   TaskDetail: { Task: ITask };
   Modal: undefined;
-  CreateList: undefined;
+  CreateList: { List?: IList, Edit: boolean};
   Profile: undefined;
   CreateGroup: undefined;
   DetailsList: { List: IList };

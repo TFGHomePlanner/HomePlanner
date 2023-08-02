@@ -25,7 +25,7 @@ const TabListsScreen : React.FC<TabsListcreenProps> = ({ navigation }) =>  {
   });
 
   function goToCreateList() {
-    navigation.navigate("CreateList");
+    navigation.navigate("CreateList", {Edit: false});
   }
 
   return (
