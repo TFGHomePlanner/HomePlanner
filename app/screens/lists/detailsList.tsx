@@ -3,9 +3,9 @@ import {View, Text, ScrollView, TouchableOpacity, Image} from "react-native";
 import {trpc} from "../../server/utils/trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import { Menu, MenuOptions, MenuOption, MenuTrigger, MenuContext } from "react-native-popup-menu";
+import { Menu, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
 
 type DetailsScreenProps = {
   route: RouteProp<AppStackParamList, "DetailsList">;
@@ -15,7 +15,7 @@ type DetailsScreenProps = {
 
   
 
-const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route }) => {
+const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route, navigation }) => {
   const utils = trpc.useContext();
   const { List } = route.params;
   console.log(List);
@@ -26,8 +26,13 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route }) => {
     });
     return initialCheckedItems;
   });
-
-  const {mutate} = trpc.list.updateProduct.useMutation({
+  const {mutate: deleteProduct} = trpc.list.deletelist.useMutation({
+    onSuccess: () => {
+      utils.list.getAllLists.invalidate();
+      navigation.goBack();
+    }
+  });
+  const {mutate: updateProduct} = trpc.list.updateProduct.useMutation({
     onSuccess: (output) => {
       if (output.success == "added") {
         setCheckedItems((prevCheckedItems) => ({
@@ -51,14 +56,15 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({ route }) => {
   });
 
   function checKItem(id: string, itemName: string, isPurchased: boolean) {
-    mutate({id, isPurchased});
+    updateProduct({id, isPurchased});
   }
 
   function uncheckItem(id: string, itemName: string, isPurchased: boolean) { 
-    mutate({id, isPurchased});
+    updateProduct({id, isPurchased});
   }
   function popUpEvents(value: number) {
-    value == 1 ? console.log("Editar") :  console.log("Eliminar");
+    const id = List.id;
+    value == 1 ? navigation.navigate("CreateList", {List: List, Edit: true }) :deleteProduct({id});
   }
 
   return (

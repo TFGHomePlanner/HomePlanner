@@ -22,6 +22,7 @@ import { IList } from "./common/validation/list";
 import TaskDetailScreen from "./screens/tasks/TaskDetail";
 import { ITask } from "./common/validation/task";
 import { MenuProvider } from "react-native-popup-menu";
+import CreateListScreen from "./screens/lists/createList";
 import GroupSelectionScreen from "./screens/groupSelection";
 
 // Define los tipos de las rutas de la aplicación
@@ -38,7 +39,7 @@ export type AppStackParamList = {
   MyTasks: undefined;
   TaskDetail: { Task: ITask };
   Modal: undefined;
-  CreateList: undefined;
+  CreateList: { List?: IList; Edit: boolean };
   Profile: undefined;
   CreateGroup: undefined;
   DetailsList: { List: IList };
@@ -88,6 +89,10 @@ export function App() {
                   <Stack.Screen
                     name="TaskDetail"
                     component={TaskDetailScreen}
+                  />
+                  <Stack.Screen
+                    name="CreateList"
+                    component={CreateListScreen}
                   />
                   <Stack.Screen name="Modal" component={ModalScreen} />
                   <Stack.Screen

@@ -14,6 +14,8 @@ export const listrouter = router({
           description: true,
           isClosed: true,
           id: true,
+          creatorId: true,
+          isPublic: true,
           items: {
             select: {
               isPurchased: true,
@@ -38,6 +40,8 @@ export const listrouter = router({
           name: input.name,
           description: input.description,
           isClosed: false,
+          creatorId: input.creatorId,
+          isPublic: input.isPublic,
           group: { connect: { id: input.groupId } },
           items: {
             createMany: {
@@ -80,6 +84,8 @@ export const listrouter = router({
           description: true,
           isClosed: true,
           id: true,
+          creatorId: true,
+          isPublic: true,
           items: {
             select: {
               isPurchased: true,
@@ -121,6 +127,30 @@ export const listrouter = router({
       } catch (error) {
         console.error("Error al actualizar el producto:", error);
         throw new Error("No se pudo actualizar el producto.");
+      }
+    }),
+
+  deletelist: publicProcedure
+    .input(z.object({id: z.string()}))
+    .mutation(async ({input, ctx}) => {
+      try {
+        const deletedList = await ctx.prisma.$transaction(async (tx) => {
+          await tx.product.deleteMany({
+            where: { listId: input.id },
+          });
+          const deletedList = await tx.list.delete({
+            where: { id: input.id },
+          });
+          return deletedList;
+        });
+  
+        return {
+          success: "deleted",
+          message: "Correct Delete",
+        };
+      } catch (error) {
+        console.error("Error al eliminar la lista:", error);
+        throw new Error("No se pudo eliminar la lista.");
       }
     })
 });

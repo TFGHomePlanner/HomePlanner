@@ -1,29 +1,34 @@
 import {View, Text, TextInput, ScrollView, TouchableOpacity, Pressable} from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import { Header } from "../../components/Header";
-import { IFavouriteProduct } from "../../common/validation/list";
+import { SelectList } from "react-native-dropdown-select-list";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import DeleteIcon from "react-native-vector-icons/FontAwesome5";
 import { trpc } from "../../server/utils/trpc";
 import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
+import { RouteProp } from "@react-navigation/native";
+import { router } from "expo-router";
 type CreateListScreenProps = {
+    route: RouteProp<AppStackParamList, "CreateList">;
     navigation: NativeStackNavigationProp<AppStackParamList, "CreateList">;
   };
 
 
-const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
+const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }) => {
 
   // TRPC
   const utils = trpc.useContext();
   const mutation = trpc.list.createList.useMutation({
     onSuccess() {
       utils.list.getAllLists.invalidate();
-      
+      navigation.goBack();
     },
   });
+  const List = route.params.List;
+  const Edit = route.params.Edit;
   const {User} = React.useContext (UserContext) as UserContextType;
   const {data: favouriteProducts} = trpc.list.getAllFavouritesProducts.useQuery({
     groupId: User.groupId,
@@ -33,9 +38,12 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
       description: description,
       groupId: User.groupId,
       items: listItemes,
-      name: title
+      name: title,
+      creatorId: User.id,
+      isPublic: true,
     });
   }
+
 
 
   //VAL
@@ -43,8 +51,13 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
   const [title, settitle] = useState("");
   const [description, setdescrpition] = useState("");
   const [listItemes, setListItems] = useState<string[]>([]);
-
-
+  const [selected, setSelected] = React.useState("");
+  const frequency = [
+    {key:"1", value:"Nunca", disabled:true},
+    {key:"2", value:"Cada dia"},
+    {key:"3", value:"Cada semana"},
+    {key:"4", value: "Cada mes"},
+  ];
   const addItemToList = (newItem: string) => {
     if (!listItemes.includes(newItem)) {
       setListItems((prevList) => [...prevList, newItem]);
@@ -79,6 +92,15 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
     return initialCheckedItems;
   });
 
+  const iseditable = () => {
+    if(Edit){
+      settitle(List?.name || ""),
+      setdescrpition(List?.description || ""),
+      setListItems(List?.items?.map((item) => item.name) || []);
+    }
+  };
+  useEffect(() => {iseditable();}, []);
+
   return (
     <View className="h-full flex flex-col w-full bg-light">
       <Header/> 
@@ -87,6 +109,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
           <View className = "bg-light  w-full p-4 mb-4">
             <Text className = "text-xl font-bold text-gray-700 mb-2">Titulo <Text className="text-pink">*</Text></Text>
             <TextInput
+              value = {title}
               className = "bg-[#ffff] shadow-md  rounded-md px-4 py-2"
               placeholderTextColor="#F1999F"
               placeholder="Escribe el título aquí"
@@ -94,6 +117,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
             />
             <Text className = "mt-3 text-xl font-bold text-gray-700 mb-2">Descripción:</Text>
             <TextInput
+              value = {description}
               className ="bg-[#ffff] shadow-md  rounded-md px-4 py-2"
               placeholderTextColor="#F1999F"
               placeholder="Escribe una descripción aquí"
@@ -169,6 +193,11 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
         </View>
         <View className = "bg-light w-full px-4 pt-2 mb-4">
           <Text className = "text-start text-xl font-bold text-gray-700 mb-2">Lista Recurrente:</Text>
+          <SelectList 
+            setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
+            data={frequency} 
+            save="value"
+          />
         </View>
         <View className="flex-row w-full px-4 pt-2 mb-4">
           <TouchableOpacity onPress={CreateList} className="w-full">
