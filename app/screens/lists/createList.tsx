@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import { Header } from "../../components/Header";
-import { IFavouriteProduct } from "../../common/validation/list";
+import { SelectList } from "react-native-dropdown-select-list";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import DeleteIcon from "react-native-vector-icons/FontAwesome5";
 import { trpc } from "../../server/utils/trpc";
@@ -43,8 +43,13 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
   const [title, settitle] = useState("");
   const [description, setdescrpition] = useState("");
   const [listItemes, setListItems] = useState<string[]>([]);
-
-
+  const [selected, setSelected] = React.useState("");
+  const frequency = [
+    {key:"1", value:"Nunca", disabled:true},
+    {key:"2", value:"Cada dia"},
+    {key:"3", value:"Cada semana"},
+    {key:"4", value: "Cada mes"},
+  ];
   const addItemToList = (newItem: string) => {
     if (!listItemes.includes(newItem)) {
       setListItems((prevList) => [...prevList, newItem]);
@@ -169,6 +174,11 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
         </View>
         <View className = "bg-light w-full px-4 pt-2 mb-4">
           <Text className = "text-start text-xl font-bold text-gray-700 mb-2">Lista Recurrente:</Text>
+          <SelectList 
+            setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
+            data={frequency} 
+            save="value"
+          />
         </View>
         <View className="flex-row w-full px-4 pt-2 mb-4">
           <TouchableOpacity onPress={CreateList} className="w-full">
