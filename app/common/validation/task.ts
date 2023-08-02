@@ -6,6 +6,7 @@ export const TaskSchema = z.object({
   name: z.string(),
   description: z.string().optional().nullable(),
   frequency: z.nativeEnum(Frequency),
+  isDone: z.boolean(),
 });
 
 export const CreateTaskSchema = z.object({
@@ -20,5 +21,8 @@ export const CreateTaskSchema = z.object({
   groupId: z.string(),
 });
 
+export const updateTaskSchema = CreateTaskSchema.extend({ id: z.string() });
+
 export type ITask = z.infer<typeof TaskSchema>;
 export type ICreateTask = z.infer<typeof CreateTaskSchema>;
+export type IUpdateTask = z.infer<typeof updateTaskSchema>;
