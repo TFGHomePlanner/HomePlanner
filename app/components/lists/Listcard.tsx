@@ -17,8 +17,8 @@ const ListCard: React.FC< ListCardProps> = ({ navigation, list }) => {
   const firstFiveItems = list.items.slice(0, 4);
 
   function move() {
-   
-    navigation.navigate("DetailsList", {listId: list});
+    
+    navigation.navigate("DetailsList", {List: list});
   }
   return (
     <Pressable onPress={move}>

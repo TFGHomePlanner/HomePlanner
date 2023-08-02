@@ -104,11 +104,20 @@ export const listrouter = router({
           where: { id: input.id },
           data: { isPurchased: input.isPurchased },
         });
-        return {
-          success: true,
-          message: "Correct Update",
-          product: updatedProduct,
-        };
+        if(input.isPurchased) {
+          return {
+            success: "added",
+            message: "Correct Update",
+            product: updatedProduct,
+          };
+        }
+        else {
+          return {
+            success: "deleted",
+            message: "Correct Update",
+            product: updatedProduct,
+          };
+        }
       } catch (error) {
         console.error("Error al actualizar el producto:", error);
         throw new Error("No se pudo actualizar el producto.");

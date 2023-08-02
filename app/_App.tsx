@@ -21,6 +21,7 @@ import DetailsListScreen from "./screens/lists/detailsList";
 import { IList } from "./common/validation/list";
 import TaskDetailScreen from "./screens/tasks/TaskDetail";
 import { ITask } from "./common/validation/task";
+import { MenuProvider } from "react-native-popup-menu";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -49,7 +50,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.38:4000/trpc",
+          url: "http://192.168.1.41:4000/trpc",
         }),
       ],
     })
@@ -58,32 +59,34 @@ export function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <UserProvider>
-          <ApplicationProvider {...eva} theme={eva.light}>
-            <NavigationContainer>
-              <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {/*gestureEnabled: false*/}
-                <Stack.Screen name="Login" component={LoginScreen} />
-                <Stack.Screen name="Register" component={RegisterScreen} />
-                <Stack.Screen name="Profile" component={ProfileScreen} />
-                <Stack.Screen
-                  name="CreateGroup"
-                  component={CreateGroupScreen}
-                />
-                <Stack.Screen name="Chat" component={ChatScreen} />
-                <Stack.Screen name="Tabs" component={AppLayout} />
-                <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
-                <Stack.Screen name="MyTasks" component={MyTasksScreen} />
-                <Stack.Screen name="TaskDetail" component={TaskDetailScreen} />
-                <Stack.Screen name="Modal" component={ModalScreen} />
-                <Stack.Screen
-                  name="DetailsList"
-                  component={DetailsListScreen}
-                />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </ApplicationProvider>
-        </UserProvider>
+        <MenuProvider> 
+          <UserProvider>
+            <ApplicationProvider {...eva} theme={eva.light}>
+              <NavigationContainer>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                  {/*gestureEnabled: false*/}
+                  <Stack.Screen name="Login" component={LoginScreen} />
+                  <Stack.Screen name="Register" component={RegisterScreen} />
+                  <Stack.Screen name="Profile" component={ProfileScreen} />
+                  <Stack.Screen
+                    name="CreateGroup"
+                    component={CreateGroupScreen}
+                  />
+                  <Stack.Screen name="Chat" component={ChatScreen} />
+                  <Stack.Screen name="Tabs" component={AppLayout} />
+                  <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
+                  <Stack.Screen name="MyTasks" component={MyTasksScreen} />
+                  <Stack.Screen name="TaskDetail" component={TaskDetailScreen} />
+                  <Stack.Screen name="Modal" component={ModalScreen} />
+                  <Stack.Screen
+                    name="DetailsList"
+                    component={DetailsListScreen}
+                  />
+                </Stack.Navigator>
+              </NavigationContainer>
+            </ApplicationProvider>
+          </UserProvider>
+        </MenuProvider>
       </QueryClientProvider>
     </trpc.Provider>
   );
