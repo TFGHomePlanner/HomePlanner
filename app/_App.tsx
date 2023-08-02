@@ -23,12 +23,14 @@ import TaskDetailScreen from "./screens/tasks/TaskDetail";
 import { ITask } from "./common/validation/task";
 import { MenuProvider } from "react-native-popup-menu";
 import CreateListScreen from "./screens/lists/createList";
+import GroupSelectionScreen from "./screens/groupSelection";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
   Header: undefined;
   Login: undefined;
   Register: undefined;
+  GroupSelection: undefined;
   Tabs: undefined;
   TabTasks: undefined;
   TabLists: undefined;
@@ -37,7 +39,7 @@ export type AppStackParamList = {
   MyTasks: undefined;
   TaskDetail: { Task: ITask };
   Modal: undefined;
-  CreateList: { List?: IList, Edit: boolean};
+  CreateList: { List?: IList; Edit: boolean };
   Profile: undefined;
   CreateGroup: undefined;
   DetailsList: { List: IList };
@@ -51,7 +53,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.41:4000/trpc",
+          url: "http://192.168.1.38:4000/trpc",
         }),
       ],
     })
@@ -60,7 +62,7 @@ export function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <MenuProvider> 
+        <MenuProvider>
           <UserProvider>
             <ApplicationProvider {...eva} theme={eva.light}>
               <NavigationContainer>
@@ -68,6 +70,10 @@ export function App() {
                   {/*gestureEnabled: false*/}
                   <Stack.Screen name="Login" component={LoginScreen} />
                   <Stack.Screen name="Register" component={RegisterScreen} />
+                  <Stack.Screen
+                    name="GroupSelection"
+                    component={GroupSelectionScreen}
+                  />
                   <Stack.Screen name="Profile" component={ProfileScreen} />
                   <Stack.Screen
                     name="CreateGroup"
@@ -75,10 +81,19 @@ export function App() {
                   />
                   <Stack.Screen name="Chat" component={ChatScreen} />
                   <Stack.Screen name="Tabs" component={AppLayout} />
-                  <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
+                  <Stack.Screen
+                    name="CreateTask"
+                    component={CreateTaskScreen}
+                  />
                   <Stack.Screen name="MyTasks" component={MyTasksScreen} />
-                  <Stack.Screen name="TaskDetail" component={TaskDetailScreen} />
-                  <Stack.Screen name="CreateList" component={CreateListScreen} />
+                  <Stack.Screen
+                    name="TaskDetail"
+                    component={TaskDetailScreen}
+                  />
+                  <Stack.Screen
+                    name="CreateList"
+                    component={CreateListScreen}
+                  />
                   <Stack.Screen name="Modal" component={ModalScreen} />
                   <Stack.Screen
                     name="DetailsList"

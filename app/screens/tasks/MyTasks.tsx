@@ -15,8 +15,8 @@ type MyTasksScreenProps = {
 
 const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
   const { User } = useContext(UserContext) as UserContextType;
-  const { data: myTasks } = trpc.user.getUserTasks.useQuery({
-    userId: User.id,
+  const { data: myTasks } = trpc.task.getAllTasks.useQuery({
+    groupId: User.groupId!,
   });
   return (
     <View className="h-full bg-light">
@@ -28,7 +28,7 @@ const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
         <View className="my-6">
           {myTasks ? (
             myTasks.map((task) => (
-              <TaskCard key={task.Task.id} task={task.Task} />
+              <TaskCard key={task.id} task={task} navigation={navigation} />
             ))
           ) : (
             <Text>No hay tareas</Text>
