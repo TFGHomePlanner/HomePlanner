@@ -85,6 +85,8 @@ model List {
   group       Group     @relation(fields: [groupId], references: [id])
   groupId     String
   items       Product[]
+  creatorId   String
+  isPublic    Boolean    
 
   @@index([groupId])
 }

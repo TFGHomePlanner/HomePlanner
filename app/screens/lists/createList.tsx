@@ -33,7 +33,9 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation }) => {
       description: description,
       groupId: User.groupId,
       items: listItemes,
-      name: title
+      name: title,
+      creatorId: User.id,
+      isPublic: true,
     });
   }
 

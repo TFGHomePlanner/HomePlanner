@@ -5,6 +5,8 @@ export const listSchema = z.object({
   name: z.string().min(1, "El campo no puede estar vacío"),
   description: z.string().nullable(),
   isClosed: z.boolean(),
+  isPublic: z.boolean(),
+  creatorId: z.string(),
   id: z.string(),
   items: z.array(z.object ({
     name: z.string().min(1, "el nombre no puede ser vacio"),
@@ -18,6 +20,9 @@ export const listsSchemaCreate = z.object({
   description: z.string().min(1, "El campo no puede estar vacío"),
   groupId: z.string(),
   items: z.array(z.string().min(1, "el nombre no puede ser vacio")),
+  creatorId: z.string().min(1, "Ha de ser creada por alguien"),
+  isPublic: z.boolean(),
+
 });
 
 export const favouritesProductsSchema = z.object({

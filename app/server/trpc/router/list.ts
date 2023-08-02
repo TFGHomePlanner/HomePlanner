@@ -14,6 +14,8 @@ export const listrouter = router({
           description: true,
           isClosed: true,
           id: true,
+          creatorId: true,
+          isPublic: true,
           items: {
             select: {
               isPurchased: true,
@@ -38,6 +40,8 @@ export const listrouter = router({
           name: input.name,
           description: input.description,
           isClosed: false,
+          creatorId: input.creatorId,
+          isPublic: input.isPublic,
           group: { connect: { id: input.groupId } },
           items: {
             createMany: {
@@ -80,6 +84,8 @@ export const listrouter = router({
           description: true,
           isClosed: true,
           id: true,
+          creatorId: true,
+          isPublic: true,
           items: {
             select: {
               isPurchased: true,

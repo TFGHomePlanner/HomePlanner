@@ -130,6 +130,8 @@ async function main() {
       description: "Lista de la compra",
       groupId: minigrupo.id,
       isClosed: false,
+      isPublic: true,
+      creatorId: juan.id,
       items: {
         createMany: {
           data: [
@@ -156,6 +158,8 @@ async function main() {
       description: "Lista de la compra",
       groupId: minigrupo.id,
       isClosed: false,
+      isPublic: false,
+      creatorId: a.id,
       items: {
         createMany: {
           data: [
@@ -182,6 +186,8 @@ async function main() {
       description: "Lista de la compra",
       groupId: minigrupo.id,
       isClosed: true,
+      isPublic: true,
+      creatorId: juan.id,
       items: {
         createMany: {
           data: [
@@ -208,6 +214,8 @@ async function main() {
       description: "Lista de la compra",
       groupId: minigrupo.id,
       isClosed: true,
+      isPublic: true,
+      creatorId: juan.id,
       items: {
         createMany: {
           data: [
@@ -246,6 +254,8 @@ async function main() {
       description: "Lista de la compra",
       groupId: minigrupo.id,
       isClosed: true,
+      isPublic: true,
+      creatorId: juan.id,
       items: {
         createMany: {
           data: [
