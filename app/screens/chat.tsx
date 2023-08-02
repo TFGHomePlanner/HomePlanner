@@ -17,7 +17,7 @@ const ChatScreen = () => {
   const [message, setmessage] = useState("");
   const {User} = React.useContext(UserContext) as UserContextType;
   const {data: groupmessages} = trpc.chat.getAllMessages.useQuery ({
-    groupId : User.groupId,
+    groupId : User.groupId || "",
   });
   const mutation = trpc.chat.createmessage.useMutation({
     onSuccess() {
@@ -25,15 +25,16 @@ const ChatScreen = () => {
     },
   });
 
-
   function sendMessage() {
-    if(message != "" || message != null) {
+    if(message != "" && message != null) {
+      console.log("hola");
+      console.log(message);
       const currentDate = new Date();
       const formattedDate = format(currentDate,  "yyyy-MM-dd'T'HH:mm:ssxxx");
       mutation.mutateAsync({
         text: message,
         day: formattedDate,
-        groupId: User.groupId,
+        groupId: User.groupId || "",
         userId: User.id,
       });
       setmessage("");
