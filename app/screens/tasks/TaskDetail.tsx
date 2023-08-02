@@ -2,13 +2,11 @@ import { Pressable, Text, View } from "react-native";
 import React from "react";
 import { RouteProp } from "@react-navigation/native";
 import { AppStackParamList } from "../../_App";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Header } from "../../components/Header";
 import { trpc } from "../../trpc";
 
 type TaskDetailScreenProps = {
   route: RouteProp<AppStackParamList, "TaskDetail">;
-  navigation: NativeStackNavigationProp<AppStackParamList, "TaskDetail">;
 };
 
 const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({ route }) => {
