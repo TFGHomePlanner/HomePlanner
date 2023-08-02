@@ -1,7 +1,7 @@
 import { publicProcedure, router } from "../trpc";
-import { listSchema } from "../../../common/validation/list";
 import z from "zod";
-import { listsSchemaCreate, favouritesProductsSchema} from "../../../common/validation/list";
+import { listsSchemaCreate, listSchema, listsSchemaUpdate} from "../../../common/validation/list";
+
 
 export const listrouter = router({
   getAllLists: publicProcedure
@@ -170,5 +170,64 @@ export const listrouter = router({
         console.error("Error al cerrar la lista:", error);
         throw new Error("No se pudo cerrar la lista.");
       }
-    })
+    }),
+
+  updateList: publicProcedure
+    .input(listsSchemaUpdate)
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const currentList = await ctx.prisma.list.findUnique({
+          where: { id: input.id },
+          include: { items: true },
+        });
+  
+        if (!currentList) {
+          throw new Error("La lista no existe.");
+        }
+  
+        // Iniciar la transacción
+        await ctx.prisma.$transaction(async (tx) => {
+          await ctx.prisma.list.update({
+            where: { id: input.id },
+            data: {
+              name: input.name,
+              description: input.description || "",
+              isClosed: input.isClosed,
+              isPublic: input.isPublic,
+            },
+          });
+  
+          const currentProductIds = new Set(currentList.items.map((item) => item.id));
+          const newProducts = input.items.filter((item) => !currentProductIds.has(item));
+          const productsToDelete = currentList.items.filter((item) => !input.items.some((inputItem) => inputItem === item.name));
+  
+          // Eliminar los productos que ya no están en la nueva lista
+          await ctx.prisma.product.deleteMany({
+            where: {
+              id: {
+                in: productsToDelete.map((item) => item.id),
+              },
+            },
+          });
+  
+          // Crear nuevos productos y conectarlos a la lista
+          await ctx.prisma.product.createMany({
+            data: newProducts.map((item) => ({
+              name: item,
+              isPurchased: false,
+              listId: currentList.id,
+            })),
+          });
+        });
+  
+        return {
+          success: true,
+          message: "Lista actualizada correctamente.",
+        };
+      } catch (error) {
+        console.error("Error al actualizar la lista:", error);
+        throw new Error("No se pudo actualizar la lista.");
+      }
+    }),
+  
 });

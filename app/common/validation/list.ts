@@ -25,6 +25,11 @@ export const listsSchemaCreate = z.object({
 
 });
 
+export const listsSchemaUpdate = listsSchemaCreate.extend({ 
+  id: z.string(),
+  isClosed: z.boolean(),
+});
+
 export const favouritesProductsSchema = z.object({
   name: z.string().min(1, "minimo un caracter"),
 
