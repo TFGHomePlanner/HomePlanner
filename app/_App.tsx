@@ -24,6 +24,7 @@ import { ITask } from "./common/validation/task";
 import { MenuProvider } from "react-native-popup-menu";
 import CreateListScreen from "./screens/lists/createList";
 import GroupSelectionScreen from "./screens/groupSelection";
+import TabListsScreen from "./screens/(tabs)/lists";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -99,6 +100,7 @@ export function App() {
                     name="DetailsList"
                     component={DetailsListScreen}
                   />
+                  <Stack.Screen name="TabLists" component={TabListsScreen} />
                 </Stack.Navigator>
               </NavigationContainer>
             </ApplicationProvider>

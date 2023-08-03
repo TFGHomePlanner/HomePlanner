@@ -186,43 +186,42 @@ export const listrouter = router({
         }
   
         // Iniciar la transacción
-        await ctx.prisma.$transaction(async (tx) => {
-          await ctx.prisma.list.update({
-            where: { id: input.id },
-            data: {
-              name: input.name,
-              description: input.description || "",
-              isClosed: input.isClosed,
-              isPublic: input.isPublic,
-            },
-          });
-  
-          const currentProductIds = new Set(currentList.items.map((item) => item.id));
-          const newProducts = input.items.filter((item) => !currentProductIds.has(item));
-          const productsToDelete = currentList.items.filter((item) => !input.items.some((inputItem) => inputItem === item.name));
-  
-          // Eliminar los productos que ya no están en la nueva lista
-          await ctx.prisma.product.deleteMany({
-            where: {
-              id: {
-                in: productsToDelete.map((item) => item.id),
-              },
-            },
-          });
-  
-          // Crear nuevos productos y conectarlos a la lista
-          await ctx.prisma.product.createMany({
-            data: newProducts.map((item) => ({
-              name: item,
-              isPurchased: false,
-              listId: currentList.id,
-            })),
-          });
+       
+        await ctx.prisma.list.update({
+          where: { id: input.id },
+          data: {
+            name: input.name,
+            description: input.description || "",
+            isClosed: input.isClosed,
+            isPublic: input.isPublic,
+          },
         });
   
+        const currentProductIds = new Set(currentList.items.map((item) => item.name));
+        const newProducts = input.items.filter((item) => !currentProductIds.has(item));
+        const productsToDelete = currentList.items.filter((item) => !input.items.some((inputItem) => inputItem === item.name));
+  
+        // Eliminar los productos que ya no están en la nueva lista
+        await ctx.prisma.product.deleteMany({
+          where: {
+            id: {
+              in: productsToDelete.map((item) => item.id),
+            },
+          },
+        });
+  
+        // Crear nuevos productos y conectarlos a la lista
+        await ctx.prisma.product.createMany({
+          data: newProducts.map((item) => ({
+            name: item,
+            isPurchased: false,
+            listId: currentList.id,
+          })),
+        });
         return {
           success: true,
-          message: "Lista actualizada correctamente.",
+          message: "Correct Update",
+          curentList: currentList.id, 
         };
       } catch (error) {
         console.error("Error al actualizar la lista:", error);

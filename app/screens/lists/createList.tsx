@@ -10,7 +10,6 @@ import { trpc } from "../../server/utils/trpc";
 import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
 import { RouteProp } from "@react-navigation/native";
-import { router } from "expo-router";
 type CreateListScreenProps = {
     route: RouteProp<AppStackParamList, "CreateList">;
     navigation: NativeStackNavigationProp<AppStackParamList, "CreateList">;
@@ -21,7 +20,16 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
 
   // TRPC
   const utils = trpc.useContext();
-  const mutation = trpc.list.createList.useMutation({
+
+
+  const  updateListMutation = trpc.list.updateList.useMutation({
+    onSuccess() {
+      utils.list.getAllLists.invalidate();
+      navigation.navigate("TabLists");
+    },
+  });
+    
+  const createListMutation  = trpc.list.createList.useMutation({
     onSuccess() {
       utils.list.getAllLists.invalidate();
       navigation.goBack();
@@ -34,13 +42,25 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
     groupId: User.groupId || "",
   });
   function CreateList() {
-    mutation.mutateAsync({
+    createListMutation.mutateAsync({
       description: description,
       groupId: User.groupId || "",
       items: listItemes,
       name: title,
       creatorId: User.id,
       isPublic: true,
+    });
+  }
+  function EditList() { 
+    updateListMutation.mutateAsync({
+      description: description,
+      groupId: User.groupId || "",
+      items: listItemes,
+      name: title,
+      creatorId: User.id,
+      isPublic: true,
+      id: List?.id || "",
+      isClosed: false,
     });
   }
 
@@ -204,10 +224,10 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
           />
         </View>
         <View className="flex-row w-full px-4 pt-2 mb-4">
-          <TouchableOpacity onPress={CreateList} className="w-full">
+          <TouchableOpacity onPress={Edit ? EditList : CreateList} className="w-full">
             <View className="bg-[#F1999F] p-3 rounded-xl flex flex-row items-center justify-start w-full">
               <Icon name="plus" size={20} color="white" className="mr-2" />
-              <Text className="text-lg font-bold ml-2 text-white pl-4">Crear lista</Text>
+              <Text className="text-lg font-bold ml-2 text-white pl-4">{Edit ? "Editar Lsita" :"Crear lista"}</Text>
             </View>
           </TouchableOpacity>
         </View>

@@ -10,17 +10,17 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../../_App";
 
 type TabsListcreenProps = {
-  navigation: NativeStackNavigationProp<AppStackParamList, "TabTasks">;
+  navigation: NativeStackNavigationProp<AppStackParamList, "TabLists">;
 };
 
 const TabListsScreen : React.FC<TabsListcreenProps> = ({ navigation }) =>  {
   const {User} = React.useContext (UserContext) as UserContextType;
   const {data: activelist} = trpc.list.getAllLists.useQuery ({
-    groupId: User.groupId,
+    groupId: User.groupId || "",
     isClosed: false,
   });
   const {data: closedlist} = trpc.list.getAllLists.useQuery ({
-    groupId: User.groupId,
+    groupId: User.groupId || "",
     isClosed: true,
   });
 
