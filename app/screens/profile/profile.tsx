@@ -7,6 +7,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import GroupCard from "../../components/groups/GroupCard";
+import NoteCard from "../../components/NoteCard";
 
 type ProfileScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "Profile">;
@@ -29,7 +30,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
   });
 
   const [codeGroup, setCodeGroup] = useState("");
-
+  const Edit = false;
   function goToCreateGroup() {
     navigation.navigate("CreateGroup");
   }
@@ -40,7 +41,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
       codeGroup: codeGroup,
     });
   }
+  const {data: userNotes} = trpc.user.getNotes.useQuery({
+    userId: User.id,
+  });
 
+  console.log(userNotes);
   return (
     <View className="h-full bg-light px-6 pt-16">
       <Pressable onPress={navigation.goBack}>
@@ -75,7 +80,25 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
           <Icon name="paper-plane" size={24} color="black" />
         </Pressable>
       </View>
-
+      <View className="flex flex items-center justify-betwen mb-8 mt-4">
+        <Text className="font-bold text-lg">Notas Privadas </Text>
+        <View className="flex flex-row">
+          {
+            userNotes ? (
+              userNotes.map((note) =>  { return (
+                <View className="mr-2" key={note.id}>
+                  <NoteCard key={note.id} Note={note} navigation={navigation} />
+                </View>
+              );
+              })
+            ): 
+              <Text className="font-bold">No tienes notas</Text>
+          }
+        </View>
+        <Pressable onPress={() => navigation.navigate("UserNote", {Note: undefined, Edit: Edit})} className="p-2 rounded-full bg-gray">
+          <Text className="text-blue font-light text-md">Añadir nueva nota</Text>
+        </Pressable>
+      </View>
       <View className="flex flex justify-start">
         <Text className="text-center text-lg"> Datos personales</Text>
         <Text className="text-center text-gray">Nombre: Juan</Text>

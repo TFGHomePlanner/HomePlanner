@@ -3,7 +3,7 @@ import { signUpSchema } from "../../../common/validation/auth";
 import * as trpc from "@trpc/server";
 import z from "zod";
 import { prisma } from "../../../common/prisma";
-import { noteSchema, noteUpdateSchema } from "../../../common/validation/note";
+import { noteSchema } from "../../../common/validation/note";
 
 export const userRouter = router({
   login: publicProcedure
@@ -106,8 +106,10 @@ export const userRouter = router({
     .query(async ({ ctx, input }) => {
       const note = await ctx.prisma.note.findMany({
         select: {
+          id: true,
           title: true,
           text: true,
+        
         },
         where: {
           userId: input.userId,
@@ -135,7 +137,7 @@ export const userRouter = router({
     }),
   
   updateNote: publicProcedure
-    .input(noteUpdateSchema)
+    .input(noteSchema)
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.note.update({
         where: {id: input.id},
