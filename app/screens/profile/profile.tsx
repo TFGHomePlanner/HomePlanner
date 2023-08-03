@@ -80,7 +80,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
           <Icon name="paper-plane" size={24} color="black" />
         </Pressable>
       </View>
-      <View className="flex flex items-center justify-betwen mb-8 mt-4">
+      <View className="flex  items-center justify-betwen mb-8 mt-4">
         <Text className="font-bold text-lg">Notas Privadas </Text>
         <View className="flex flex-row">
           {

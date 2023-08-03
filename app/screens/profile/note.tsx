@@ -4,7 +4,7 @@ import {trpc} from "../../server/utils/trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import { RouteProp, useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/FontAwesome5";
+import { Header } from "../../components/Header";
 import { Menu, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
 import { UserContextType } from "../../context/types";
 import { UserContext } from "../../context/userContext";
@@ -61,20 +61,31 @@ const UserNoteScreen: React.FC<NotesScreenProps> = ({ route, navigation }) => {
   useEffect(() => {iseditable();}, []);
     
   return (
-    <View className="w-full h-full flex bg-light"> 
-      <TextInput className="bg-light text-black text-2xl font-bold p-4" 
-        placeholder="Titulo" 
-        value={title} 
-        onChangeText={setTitle}/>
-      <TextInput className="bg-light text-black text-lg p-4" 
+    <View className="flex flex-col justify-start h-full bg-light">
+      <Header />
+      <TextInput
+        className="bg-light text-black text-2xl font-bold p-4 w-full border-b-2 border-black"
+        placeholder="Titulo"
+        placeholderTextColor="black"
+        value={title}
+        onChangeText={setTitle}
+      />
+      <TextInput
+        className="bg-light text-black text-lg p-4 w-full flex-1" 
+        multiline={true}
         placeholder="Escribe una nota"
+        placeholderTextColor="black"
         value={text}
-        onChangeText={setText}/>
-      <TouchableOpacity onPress={Edit ? EditNote : createNote} className="w-full">
-        <View className="bg-black p-3 rounded-xl flex flex-row items-center justify-start w-full">
-          <Text className="text-lg font-bold ml-2 text-white pl-4">Guardar</Text>
-        </View>
-      </TouchableOpacity>
+        onChangeText={setText}
+      />
+      { (text.length > 0 && title.length> 0) &&
+        <TouchableOpacity onPress={Edit ? EditNote : createNote} className="bg-dark mx-4 mb-10 rounded-md items-center justify-center">
+          <View className="bg-black p-3 rounded-xl flex flex-row items-center justify-center w-full">
+            <Text className="text-lg font-bold ml-2 text-white">Guardar</Text>
+          </View>
+        </TouchableOpacity>
+      }
+    
     </View>
   );
 };
