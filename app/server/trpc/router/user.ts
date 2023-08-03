@@ -161,5 +161,23 @@ export const userRouter = router({
         message: "Note deleted successfully",
       };
     }),
+
+  
+  updateUser: publicProcedure
+    .input(z.object({ id: z.string(), passwordHash: z.string(), imageprofile: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.user.update({
+        where: {id: input.id},
+        data: {
+          passwordHash: input.passwordHash,
+          imageprofile: input.imageprofile,
+        }
+      });
+      return {
+        status: 200,
+        message: "User updated successfully",
+      };
+    }
+    ),
   
 });
