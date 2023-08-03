@@ -31,6 +31,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       if (output.success) {
         const userId: IUser = {
           id: output.user.id,
+          groupId: "",
+          isAdmin: false,
         };
         updateUser(userId);
         navigation.navigate("GroupSelection");

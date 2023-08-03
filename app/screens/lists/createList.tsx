@@ -39,12 +39,12 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
   const Edit = route.params.Edit;
   const {User} = React.useContext (UserContext) as UserContextType;
   const {data: favouriteProducts} = trpc.list.getAllFavouritesProducts.useQuery({
-    groupId: User.groupId || "",
+    groupId: User.groupId,
   });
   function CreateList() {
     createListMutation.mutateAsync({
       description: description,
-      groupId: User.groupId || "",
+      groupId: User.groupId,
       items: listItemes,
       name: title,
       creatorId: User.id,
@@ -54,7 +54,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
   function EditList() { 
     updateListMutation.mutateAsync({
       description: description,
-      groupId: User.groupId || "",
+      groupId: User.groupId,
       items: listItemes,
       name: title,
       creatorId: User.id,
