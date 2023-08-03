@@ -2,42 +2,43 @@ import React, { useContext, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import { Header } from "../../../components/Header";
 import { trpc } from "../../../trpc";
-import { Select, SelectItem, IndexPath } from "@ui-kitten/components";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../../_App";
 import { Frequency } from "@prisma/client";
 import { UserContext } from "../../../context/userContext";
 import { UserContextType } from "../../../context/types";
+import { SelectList } from "react-native-dropdown-select-list";
 
 type CreateTaskScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateTask">;
 };
 
 const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
-  const frequencyTranslations: Record<Frequency, string> = {
-    never: "Nunca",
-    oncePerDay: "Cada día",
-    oncePerWeek: "Cada semana",
-    oncePerMonth: "Cada mes",
-  };
-
-  const data = Object.entries(frequencyTranslations).map(([value, label]) => ({
-    value,
-    label,
-  }));
-
-  const inputStyle = "mb-2 text-lg border-b-[1px] border-light p-2 text-dark";
+  const inputStyle =
+    "mb-2 bg-white rounded-lg text-base border-b-[1px] border-light p-2 text-dark";
 
   const { User } = useContext(UserContext) as UserContextType;
   const utils = trpc.useContext();
 
+  const frequencyOptions = [
+    { key: Frequency.never, value: "Nunca" },
+    { key: Frequency.oncePerDay, value: "Cada día" },
+    { key: Frequency.oncePerWeek, value: "Cada semana" },
+    { key: Frequency.oncePerMonth, value: "Cada mes" },
+  ];
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-
-  const [selectedIndex, setSelectedIndex] = useState<IndexPath>(
-    new IndexPath(0)
+  const [selectedFrequency, setSelectedFrequency] = useState<Frequency>(
+    Frequency.never
   );
-  const selectedFrequency = data[selectedIndex.row].value as Frequency;
+
+  const { data: users } = trpc.group.getUsers.useQuery({ id: User.groupId });
+  const [selectedUser, setSelectedUser] = useState("");
+  const userOptions = users?.map((user) => ({
+    key: user.id,
+    value: user.name,
+  }));
 
   const mutation = trpc.task.create.useMutation({
     onSuccess() {
@@ -52,21 +53,15 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
       description,
       frequency: selectedFrequency,
       groupId: User.groupId!,
+      userId: selectedUser,
     });
-    console.log(
-      "Task created: " +
-        name +
-        ", " +
-        description +
-        ", " +
-        selectedFrequency.valueOf()
-    );
+    console.log("Task created: " + selectedUser);
   };
 
   return (
     <View className="bg-light">
       <Header />
-      <View className="px-6">
+      <View className="h-full px-6">
         <View className="flex flex-row justify-between">
           <Pressable onPress={navigation.goBack}>
             <Text className="text-purple">Cancelar</Text>
@@ -93,17 +88,42 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
             placeholder="Descripción"
           />
         </View>
-        <Select
-          selectedIndex={selectedIndex}
-          onSelect={(index) =>
-            setSelectedIndex(Array.isArray(index) ? index[0] : index)
-          }
-          placeholder="Repetir tarea"
-        >
-          {data.map((f, index) => (
-            <SelectItem key={index} title={f.label} />
-          ))}
-        </Select>
+        <View className="mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
+          <Text>Repetir tarea</Text>
+          <SelectList
+            data={frequencyOptions}
+            setSelected={setSelectedFrequency}
+            save="key"
+            defaultOption={{ value: "Nunca", key: Frequency.never }}
+            search={false}
+            boxStyles={{
+              height: 42,
+              width: 140,
+              borderColor: "#F8F3ED",
+              alignSelf: "flex-end",
+            }}
+          />
+        </View>
+        <View className="flex-row items-center justify-between rounded-lg bg-white pl-4">
+          <Text>Asignar encargado</Text>
+          {userOptions ? (
+            <SelectList
+              data={userOptions}
+              setSelected={setSelectedUser}
+              save="key"
+              search={false}
+              boxStyles={{
+                height: 42,
+                width: 140,
+                borderColor: "#F8F3ED",
+                alignSelf: "flex-end",
+              }}
+              placeholder="Seleccionar"
+            />
+          ) : (
+            <Text>Este grupo no tiene usuarios.</Text>
+          )}
+        </View>
       </View>
     </View>
   );
