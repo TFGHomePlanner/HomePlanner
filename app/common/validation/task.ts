@@ -19,6 +19,7 @@ export const CreateTaskSchema = z.object({
     .nullable(),
   frequency: z.nativeEnum(Frequency),
   groupId: z.string(),
+  userId: z.string(),
 });
 
 export const updateTaskSchema = CreateTaskSchema.extend({ id: z.string() });

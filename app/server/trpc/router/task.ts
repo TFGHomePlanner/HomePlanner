@@ -32,13 +32,17 @@ export const taskRouter = router({
   create: publicProcedure
     .input(CreateTaskSchema)
     .mutation(
-      async ({ ctx, input: { name, description, frequency, groupId } }) => {
+      async ({
+        ctx,
+        input: { name, description, frequency, groupId, userId },
+      }) => {
         return await ctx.prisma.task.create({
           data: {
             name,
             description,
             frequency,
             groupId,
+            userId,
           },
         });
       }
