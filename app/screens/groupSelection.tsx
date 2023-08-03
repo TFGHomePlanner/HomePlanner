@@ -34,6 +34,7 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
     const user: IUser = {
       id: User.id,
       groupId: groupId,
+      isAdmin: false,
     };
     updateUser(user);
     mutation.mutateAsync({ id: groupId });

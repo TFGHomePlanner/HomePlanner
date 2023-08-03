@@ -32,4 +32,39 @@ export const groupRouter = router({
         where: { id: input.id },
       });
     }),
+
+
+  joinGroup: publicProcedure
+    .input(z.object({userId: z.string(), codeGroup: z.string(), groupId: z.string()}))
+    .mutation(async ({ctx, input}) => {
+      await ctx.prisma.group.update({
+        where: {id: input.groupId},
+        data: {
+          users: {
+            connect: {id: input.userId}
+          }
+        }
+      });
+      return {
+        status: 200,
+        message: "User joined group successfully",
+      };
+    }),
+
+  exitGroup: publicProcedure
+    .input(z.object({userId: z.string(), groupId: z.string()}))
+    .mutation(async ({ctx, input}) => {
+      await ctx.prisma.group.update({
+        where: {id: input.groupId},
+        data: {
+          users: {
+            disconnect: {id: input.userId}
+          }
+        }
+      });
+      return {
+        status: 200,
+        message: "User exit group successfully",
+      };
+    }),
 });
