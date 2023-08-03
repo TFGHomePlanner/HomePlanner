@@ -3,6 +3,7 @@ import { signUpSchema } from "../../../common/validation/auth";
 import * as trpc from "@trpc/server";
 import z from "zod";
 import { prisma } from "../../../common/prisma";
+import { noteSchema, noteUpdateSchema } from "../../../common/validation/note";
 
 export const userRouter = router({
   login: publicProcedure
@@ -98,4 +99,67 @@ export const userRouter = router({
         },
       });
     }),
+
+  getNotes: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .output(z.array(noteSchema))
+    .query(async ({ ctx, input }) => {
+      const note = await ctx.prisma.note.findMany({
+        select: {
+          title: true,
+          text: true,
+        },
+        where: {
+          userId: input.userId,
+        },
+      });
+      const noteParse = z.array(noteSchema).parse(note);
+      return noteParse;
+    }),  
+
+  createNote: publicProcedure
+    .input(z.object({ userId: z.string(), title: z.string(), text: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.note.create({
+        data: {
+          title: input.title,
+          text: input.text,
+          createdAt: new Date(),
+          user: {connect: {id: input.userId}},
+        },
+      });
+      return {
+        status: 201,
+        message: "Note created successfully",
+      };
+    }),
+  
+  updateNote: publicProcedure
+    .input(noteUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.note.update({
+        where: {id: input.id},
+        data: {
+          title: input.title,
+          text: input.text,
+        }
+      });
+      return {
+        status: 200,
+        message: "Note updated successfully",
+      };
+    }),
+
+  deleteNote: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.note.delete({
+        where: {id: input.id},
+      });
+      return {
+        status: 200,
+        message: "Note deleted successfully",
+      };
+    }),
+  
 });

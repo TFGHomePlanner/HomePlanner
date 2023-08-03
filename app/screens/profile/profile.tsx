@@ -13,15 +13,31 @@ type ProfileScreenProps = {
 };
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
+
+  const utils = trpc.useContext();
   const { User } = useContext(UserContext) as UserContextType;
   const { data: userGroups } = trpc.user.getUserGroups.useQuery({
     userId: User.id,
+  });
+
+  const joingroup = trpc.group.joinGroup.useMutation({
+    onSuccess() {
+      utils.user.getUserGroups.invalidate();
+    }
   });
 
   const [codeGroup, setCodeGroup] = useState("");
 
   function goToCreateGroup() {
     navigation.navigate("CreateGroup");
+  }
+
+  function joinGroup() {
+    joingroup.mutateAsync({
+      userId: User.id,
+      codeGroup: codeGroup,
+      groupId: User.groupId,
+    });
   }
 
   return (
@@ -43,16 +59,23 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
           <Text>Todavía no tienes grupos</Text>
         )}
       </View>
-      <Text>Unirse a un grupo</Text>
-      <TextInput
-        className={
-          "my-2 rounded-lg border-b-[1px] border-light bg-white px-4 py-2 text-dark"
-        }
-        placeholderTextColor="#95999C"
-        value={codeGroup}
-        onChangeText={setCodeGroup}
-        placeholder="Código de invitación"
-      />
+      <View className="flex flex-row items-center justify-center">
+        <Text>Unirse a un grupo</Text>
+        <TextInput
+          className={
+            "my-2 rounded-lg border-b-[1px] border-light bg-white px-4 py-2 text-dark"
+          }
+          placeholderTextColor="#95999C"
+          value={codeGroup}
+          onChangeText={setCodeGroup}
+          placeholder="Código de invitación"
+        />
+        <Pressable onPress={joinGroup} className="p-2 rounded-full bg-gray">
+          <Icon name="paper-plane" size={24} color="black" />
+        </Pressable>
+      </View>
+
+      <View className="flex flex"></View>
     </View>
   );
 };
