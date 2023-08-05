@@ -29,7 +29,7 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({ route }) => {
         <Text className="text-xl font-bold">{Task.name}</Text>
         {Task.description && <Text>{Task.description}</Text>}
         {Task.assignedTo && <Text>Asignada a {Task.assignedTo.name}</Text>}
-        <View className="flex-row space-x-1">
+        <View className="flex-row space-x-4">
           <Pressable
             onPress={checkTask}
             className="w-36 rounded-full border-[1px] border-light bg-purple p-1"

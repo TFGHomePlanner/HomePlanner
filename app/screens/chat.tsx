@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, ScrollView, Pressable } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  ScrollView,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { trpc } from "../server/utils/trpc";
 import Message from "../components/Message";
@@ -9,15 +17,15 @@ import { format } from "date-fns";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const ChatScreen = () => {
-  
-  const navigation  = useNavigation();
-  const inputStyle ="mb-2 text-lg border-b-[1px] border-lightBg p-2 pl-8 text-lightBg";
+  const navigation = useNavigation();
+  const inputStyle =
+    "mb-2 text-lg border-b-[1px] border-lightBg p-2 pl-8 text-lightBg";
   const utils = trpc.useContext();
   const namegroup = "miniconsejo";
   const [message, setmessage] = useState("");
-  const {User} = React.useContext(UserContext) as UserContextType;
-  const {data: groupmessages} = trpc.chat.getAllMessages.useQuery ({
-    groupId : User.groupId || "",
+  const { User } = React.useContext(UserContext) as UserContextType;
+  const { data: groupmessages } = trpc.chat.getAllMessages.useQuery({
+    groupId: User.groupId || "",
   });
   const mutation = trpc.chat.createmessage.useMutation({
     onSuccess() {
@@ -26,11 +34,11 @@ const ChatScreen = () => {
   });
 
   function sendMessage() {
-    if(message != "" && message != null) {
+    if (message != "" && message != null) {
       console.log("hola");
       console.log(message);
       const currentDate = new Date();
-      const formattedDate = format(currentDate,  "yyyy-MM-dd'T'HH:mm:ssxxx");
+      const formattedDate = format(currentDate, "yyyy-MM-dd'T'HH:mm:ssxxx");
       mutation.mutateAsync({
         text: message,
         day: formattedDate,
@@ -39,24 +47,30 @@ const ChatScreen = () => {
       });
       setmessage("");
     }
-  
   }
 
   function goBack() {
-    navigation.goBack(); 
+    navigation.goBack();
   }
   return (
-    <View className="h-full  flex flex-col">
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex h-full flex-col"
+    >
       {/* Cabecera */}
-      <View className="w-full bg-[#f1889f] flex flex-row items-center">
+      <View className="flex w-full flex-row items-center bg-[#f1889f] pt-6">
         {/* Icono para navegar hacia atrás */}
-        <Pressable onPress={goBack} className="px-2 pt-5">
-          <Icon name="chevron-left" size={24} color="white" />
+        <Pressable onPress={goBack} className="pl-3 pt-5">
+          <Icon name="chevron-left" size={16} color="white" />
         </Pressable>
         {/* Texto de la cabecera */}
-        <Text className="font-semibold text-center text-[18px] text-white p-4 pt-8 flex-1">Chat {namegroup}</Text>
+        <Text className="mr-4 flex-1 p-4 pt-8 text-center text-[18px] font-semibold text-white">
+          Chat {namegroup}
+        </Text>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false} className="bg-[#F8F3ED] px-4"
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        className="bg-[#F8F3ED] px-4"
         contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }} // Añade esta línea
         keyboardShouldPersistTaps="handled" // Permite el manejo de taps en el teclado
       >
@@ -73,21 +87,20 @@ const ChatScreen = () => {
           );
         })}
       </ScrollView>
-      <View className="flex flex-row items-center bg-gray p-4">
+      <View className="bg-gray flex flex-row items-center p-4">
         <TextInput
-          className={`${inputStyle} flex-1 mr-2`}
+          className={`${inputStyle} mr-2 flex-1`}
           placeholderTextColor="#95999C"
           value={message}
           onChangeText={setmessage}
-          placeholder="escribe aqui tu mensaje"
+          placeholder="escribe aquí tu mensaje"
         />
-        <Pressable onPress={sendMessage} className="p-2 rounded-full bg-gray">
+        <Pressable onPress={sendMessage} className="bg-gray rounded-full p-2">
           <Icon name="paper-plane" size={24} color="black" />
         </Pressable>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
-
 
 export default ChatScreen;

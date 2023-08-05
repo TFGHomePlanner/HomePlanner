@@ -1,12 +1,5 @@
 import React, { useContext, useState } from "react";
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Pressable,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { Header } from "../../../components/Header";
 import { trpc } from "../../../trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -67,16 +60,18 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView className="bg-light">
+    <ScrollView
+      keyboardShouldPersistTaps="always"
+      keyboardDismissMode="on-drag"
+      className="bg-light"
+    >
       <Header />
       <View className="h-full px-6">
         <View className="flex flex-row justify-between">
           <Pressable onPress={navigation.goBack}>
             <Text className="text-purple">Cancelar</Text>
           </Pressable>
-          <Text onPress={Keyboard.dismiss} className="mr-4 self-center">
-            Nueva tarea
-          </Text>
+          <Text className="mr-4 self-center">Nueva tarea</Text>
           <Pressable className="self-end" onPress={createTask}>
             <Text className="font-semibold text-purple">Añadir</Text>
           </Pressable>
@@ -160,7 +155,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
           </View>
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
