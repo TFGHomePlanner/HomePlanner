@@ -15,7 +15,8 @@ type MyTasksScreenProps = {
 
 const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
   const { User } = useContext(UserContext) as UserContextType;
-  const { data: myTasks } = trpc.task.getAllTasks.useQuery({
+  const { data: myTasks } = trpc.user.getUserTasks.useQuery({
+    userId: User.id,
     groupId: User.groupId!,
   });
   return (
