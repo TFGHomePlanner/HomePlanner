@@ -4,6 +4,8 @@ import * as trpc from "@trpc/server";
 import z from "zod";
 import { prisma } from "../../../common/prisma";
 import { noteSchema } from "../../../common/validation/note";
+import { userProfileSchema } from "../../../common/validation/user";
+
 
 export const userRouter = router({
   login: publicProcedure
@@ -165,15 +167,16 @@ export const userRouter = router({
     }),
 
   
-  updateUser: publicProcedure
-    .input(z.object({ id: z.string(), passwordHash: z.string(), imageprofile: z.string() }))
+  updateUserPassword: publicProcedure
+    .input(z.object({ id: z.string(), passwordHash: z.string()}))
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.user.update({
-        where: {id: input.id},
-        data: {
-          passwordHash: input.passwordHash,
-          imageprofile: input.imageprofile,
-        }
+        where : {
+          id: input.id,
+        },
+        data: { 
+          passwordHash: input.passwordHash
+        },
       });
       return {
         status: 200,
@@ -181,5 +184,46 @@ export const userRouter = router({
       };
     }
     ),
+
+  getUserByID: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .output(userProfileSchema)
+    .query(async ({ ctx, input }) => {
+      const userprofile = await ctx.prisma.user.findUnique({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          passwordHash: true,
+          imageprofile: true,
+        },
+        where: { id: input.id },
+      });
+      if (!userprofile) {
+        throw new Error("Usuario no encontrado"); // Maneja la ausencia de usuario
+      }
+      const userParse = userProfileSchema.parse(userprofile);
+      return userParse;
+    }),
+
+  getUserTasks: publicProcedure
+    .input(z.object({ userId: z.string(), groupId: z.string() }).nullish())
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.task.findMany({
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          assignedTo: true,
+          frequency: true,
+          isDone: true,
+          groupTask: true,
+        },
+        where: {
+          userId: input?.userId,
+          groupId: input?.groupId,
+        },
+      });
+    }),
   
 });

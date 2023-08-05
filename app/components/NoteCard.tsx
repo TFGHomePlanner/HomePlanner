@@ -19,8 +19,8 @@ const NoteCard: React.FC< NoteCardProps> = ({ navigation, Note }) => {
   return (
     <Pressable onPress={move}>
       <View className="flex flex-col mb-4 items-start rounded-lg  shadow-md shadow-black bg-[#fbf9f7] p-4">
-        <Text className="text-lg font-bold">{Note.title.length <15 ? Note.title: Note.text.slice(0, 13) + "..."}</Text>
-        <Text className="text-sm">{Note.text.slice(0, 15) + "..."}</Text>
+        <Text className="text-lg font-bold">{Note.title.length <20 ? Note.title: Note.text.slice(0, 20) + "..."}</Text>
+        <Text className="text-sm">{Note.text.slice(0, 30) + "..."}</Text>
       </View>
     </Pressable>
   );

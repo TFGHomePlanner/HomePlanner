@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {View, Text, ScrollView, TouchableOpacity, Image, TextInput} from "react-native";
+import {View, Text, ScrollView, TouchableOpacity, Image, TextInput, KeyboardAvoidingView} from "react-native";
 import {trpc} from "../../server/utils/trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
@@ -61,7 +61,7 @@ const UserNoteScreen: React.FC<NotesScreenProps> = ({ route, navigation }) => {
   useEffect(() => {iseditable();}, []);
     
   return (
-    <View className="flex flex-col justify-start h-full bg-light">
+    <KeyboardAvoidingView className="flex flex-col justify-start h-full bg-light">
       <Header />
       <TextInput
         className="bg-light text-black text-2xl font-bold p-4 w-full border-b-2 border-black"
@@ -86,7 +86,7 @@ const UserNoteScreen: React.FC<NotesScreenProps> = ({ route, navigation }) => {
         </TouchableOpacity>
       }
     
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 export default UserNoteScreen;
