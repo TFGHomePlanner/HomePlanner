@@ -54,16 +54,10 @@ export const groupRouter = router({
     }),
 
   joinGroup: publicProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-        codeGroup: z.string(),
-        groupId: z.string(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
+    .input(z.object({userId: z.string(), codeGroup: z.string()}))
+    .mutation(async ({ctx, input}) => {
       await ctx.prisma.group.update({
-        where: { id: input.groupId },
+        where: {codeGroup: input.codeGroup},
         data: {
           users: {
             connect: { id: input.userId },

@@ -19,12 +19,14 @@ import ProfileScreen from "./screens/profile/profile";
 import CreateGroupScreen from "./screens/groups/create";
 import DetailsListScreen from "./screens/lists/detailsList";
 import { IList } from "./common/validation/list";
+import {INote} from "./common/validation/note";
 import TaskDetailScreen from "./screens/tasks/TaskDetail";
 import { ITask } from "./common/validation/task";
 import { MenuProvider } from "react-native-popup-menu";
 import CreateListScreen from "./screens/lists/createList";
 import GroupSelectionScreen from "./screens/groupSelection";
 import TabListsScreen from "./screens/(tabs)/lists";
+import UserNoteScreen from "./screens/profile/note";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -44,6 +46,7 @@ export type AppStackParamList = {
   Profile: undefined;
   CreateGroup: undefined;
   DetailsList: { List: IList };
+  UserNote: { Note?: INote; Edit: boolean };
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -101,6 +104,7 @@ export function App() {
                     component={DetailsListScreen}
                   />
                   <Stack.Screen name="TabLists" component={TabListsScreen} />
+                  <Stack.Screen name="UserNote" component={UserNoteScreen} />
                 </Stack.Navigator>
               </NavigationContainer>
             </ApplicationProvider>

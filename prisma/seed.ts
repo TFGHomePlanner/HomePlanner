@@ -30,6 +30,24 @@ async function main() {
     },
   });
 
+  const note = await prisma.note.create({
+    data: {
+      title: "Nota de prueba",
+      text: "Esto es una nota de prueba",
+      createdAt: new Date(),
+      user: { connect: { id: a.id } },
+    },
+  });
+
+  const note1 = await prisma.note.create({
+    data: {
+      title: "Nota de prueba",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum luctus elit a sem ullamcorper, vel scelerisque orci ultricies. Proin tincidunt justo vel libero faucibus hendrerit. Donec ut elit nulla. Sed et eleifend libero. Fusce facilisis tincidunt tellus, ut varius nunc congue nec. Duis in nisi arcu. Integer non nisi vel neque cursus luctus. Nunc sit amet elit consectetur, vehicula ipsum vel, feugiat ligula. Aliquam a vehicula dolor. In hac habitasse platea dictumst. Proin nec purus mauris. Nullam tincidunt metus eu erat cursus, vitae ullamcorper lorem sagittis. Donec at quam facilisis, faucibus ex id, fringilla nisl. Suspendisse potenti. Curabitur auctor nisl in velit tincidunt, eu gravida libero dapibus.",
+      createdAt: new Date(),
+      user: { connect: { id: a.id } },
+    },
+  });
+
   const minigrupo = await prisma.group.create({
     data: {
       codeGroup: "lasminissonmonas",

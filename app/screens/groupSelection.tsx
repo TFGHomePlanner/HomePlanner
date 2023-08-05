@@ -5,6 +5,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../_App";
 import { IUser, UserContextType } from "../context/types";
 import { trpc } from "../trpc";
+import { Header } from "../components/Header";
+
 
 // Define el tipo de props para el componente LoginScreen
 type GroupSelectionScreenProps = {
@@ -42,6 +44,7 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
 
   return (
     <View>
+      <Header/>
       {myGroups ? (
         myGroups.map((group) => (
           <Pressable
