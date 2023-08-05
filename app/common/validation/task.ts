@@ -7,6 +7,12 @@ export const TaskSchema = z.object({
   description: z.string().optional().nullable(),
   frequency: z.nativeEnum(Frequency),
   isDone: z.boolean(),
+  assignedTo: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+    })
+    .nullable(),
 });
 
 export const CreateTaskSchema = z.object({
