@@ -58,4 +58,25 @@ export const taskRouter = router({
         },
       });
     }),
+
+  getUnassignedTasks: publicProcedure
+    .input(z.object({ groupId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.task.findMany({
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          frequency: true,
+          isDone: true,
+          createdAt: true,
+          groupTask: true,
+        },
+        where: {
+          groupId: input.groupId,
+          isDone: false,
+          userId: null,
+        },
+      });
+    }),
 });

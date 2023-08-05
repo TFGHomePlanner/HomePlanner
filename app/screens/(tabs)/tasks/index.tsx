@@ -18,12 +18,21 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
     groupId: User.groupId!,
   });
 
+  // provisional
+  const { data: unassignedTasks } = trpc.task.getUnassignedTasks.useQuery({
+    groupId: User.groupId!,
+  });
+
   function goToCreateTask() {
     navigation.navigate("CreateTask");
   }
 
   function goToMyTasks() {
     navigation.navigate("MyTasks");
+  }
+
+  function goToUnassignedTasks() {
+    unassignedTasks?.map((t) => console.log(t.name));
   }
 
   return (
@@ -43,10 +52,13 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
         <Text className="text-base text-light">Mis tareas</Text>
       </Pressable>
       <View className="mb-6 flex-row justify-between gap-x-2">
-        <Pressable className="h-16 flex-1 justify-center rounded-xl bg-white shadow-sm shadow-dark">
+        <Pressable
+          onPress={goToUnassignedTasks}
+          className="h-16 flex-1 justify-center rounded-xl bg-white shadow-sm"
+        >
           <Text className="text-center text-base">Tareas sin asignar</Text>
         </Pressable>
-        <Pressable className="h-16 flex-1 justify-center rounded-xl bg-white shadow-sm shadow-dark">
+        <Pressable className="h-16 flex-1 justify-center rounded-xl bg-white shadow-sm">
           <Text className="text-center text-base">Grupo cocina</Text>
         </Pressable>
       </View>
