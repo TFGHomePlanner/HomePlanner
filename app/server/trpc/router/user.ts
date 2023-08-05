@@ -6,7 +6,6 @@ import { prisma } from "../../../common/prisma";
 import { noteSchema } from "../../../common/validation/note";
 import { userProfileSchema } from "../../../common/validation/user";
 
-
 export const userRouter = router({
   login: publicProcedure
     .input(
@@ -71,7 +70,6 @@ export const userRouter = router({
           passwordHash: hashedPassword,
         },
       });
-
       return {
         status: 201,
         message: "Account created successfully",
@@ -102,6 +100,26 @@ export const userRouter = router({
       });
     }),
 
+  getUserTasks: publicProcedure
+    .input(z.object({ userId: z.string(), groupId: z.string() }).nullish())
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.task.findMany({
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          assignedTo: true,
+          frequency: true,
+          isDone: true,
+          groupTask: true,
+        },
+        where: {
+          userId: input?.userId,
+          groupId: input?.groupId,
+        },
+      });
+    }),
+
   getNotes: publicProcedure
     .input(z.object({ userId: z.string() }))
     .output(z.array(noteSchema))
@@ -111,7 +129,6 @@ export const userRouter = router({
           id: true,
           title: true,
           text: true,
-        
         },
         where: {
           userId: input.userId,
@@ -119,17 +136,19 @@ export const userRouter = router({
       });
       const noteParse = z.array(noteSchema).parse(note);
       return noteParse;
-    }),  
+    }),
 
   createNote: publicProcedure
-    .input(z.object({ userId: z.string(), title: z.string(), text: z.string() }))
+    .input(
+      z.object({ userId: z.string(), title: z.string(), text: z.string() })
+    )
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.note.create({
         data: {
           title: input.title,
           text: input.text,
           createdAt: new Date(),
-          user: {connect: {id: input.userId}},
+          user: { connect: { id: input.userId } },
         },
       });
       return {
@@ -137,16 +156,16 @@ export const userRouter = router({
         message: "Note created successfully",
       };
     }),
-  
+
   updateNote: publicProcedure
     .input(noteSchema)
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.note.update({
-        where: {id: input.id},
+        where: { id: input.id },
         data: {
           title: input.title,
           text: input.text,
-        }
+        },
       });
       return {
         status: 200,
@@ -158,7 +177,7 @@ export const userRouter = router({
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.note.delete({
-        where: {id: input.id},
+        where: { id: input.id },
       });
       return {
         status: 200,
@@ -166,24 +185,22 @@ export const userRouter = router({
       };
     }),
 
-  
   updateUserPassword: publicProcedure
-    .input(z.object({ id: z.string(), passwordHash: z.string()}))
+    .input(z.object({ id: z.string(), passwordHash: z.string() }))
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.user.update({
-        where : {
+        where: {
           id: input.id,
         },
-        data: { 
-          passwordHash: input.passwordHash
+        data: {
+          passwordHash: input.passwordHash,
         },
       });
       return {
         status: 200,
         message: "User updated successfully",
       };
-    }
-    ),
+    }),
 
   getUserByID: publicProcedure
     .input(z.object({ id: z.string() }))
@@ -205,25 +222,4 @@ export const userRouter = router({
       const userParse = userProfileSchema.parse(userprofile);
       return userParse;
     }),
-
-  getUserTasks: publicProcedure
-    .input(z.object({ userId: z.string(), groupId: z.string() }).nullish())
-    .query(async ({ ctx, input }) => {
-      return await ctx.prisma.task.findMany({
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          assignedTo: true,
-          frequency: true,
-          isDone: true,
-          groupTask: true,
-        },
-        where: {
-          userId: input?.userId,
-          groupId: input?.groupId,
-        },
-      });
-    }),
-  
 });
