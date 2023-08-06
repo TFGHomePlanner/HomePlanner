@@ -19,7 +19,7 @@ import ProfileScreen from "./screens/profile/profile";
 import CreateGroupScreen from "./screens/groups/create";
 import DetailsListScreen from "./screens/lists/detailsList";
 import { IList } from "./common/validation/list";
-import {INote} from "./common/validation/note";
+import { INote } from "./common/validation/note";
 import TaskDetailScreen from "./screens/tasks/TaskDetail";
 import { ITask } from "./common/validation/task";
 import { MenuProvider } from "react-native-popup-menu";
@@ -27,6 +27,7 @@ import CreateListScreen from "./screens/lists/createList";
 import GroupSelectionScreen from "./screens/groupSelection";
 import TabListsScreen from "./screens/(tabs)/lists";
 import UserNoteScreen from "./screens/profile/note";
+import UnassignedTasksSCreen from "./screens/tasks/UnassignedTasks";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -40,7 +41,8 @@ export type AppStackParamList = {
   Chat: undefined;
   CreateTask: undefined;
   MyTasks: undefined;
-  TaskDetail: { Task: ITask };
+  UnassignedTasks: undefined;
+  TaskDetail: { Task: ITask; isAssigned?: boolean };
   Modal: undefined;
   CreateList: { List?: IList; Edit: boolean };
   Profile: undefined;
@@ -57,7 +59,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.41:4000/trpc",
+          url: "http://192.168.1.223:4000/trpc",
         }),
       ],
     })
@@ -90,6 +92,10 @@ export function App() {
                     component={CreateTaskScreen}
                   />
                   <Stack.Screen name="MyTasks" component={MyTasksScreen} />
+                  <Stack.Screen
+                    name="UnassignedTasks"
+                    component={UnassignedTasksSCreen}
+                  />
                   <Stack.Screen
                     name="TaskDetail"
                     component={TaskDetailScreen}

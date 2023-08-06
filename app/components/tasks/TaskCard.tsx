@@ -8,11 +8,16 @@ import { trpc } from "../../trpc";
 type TaskCardProps = {
   navigation: NativeStackNavigationProp<any>;
   task: ITask;
+  isAssigned?: boolean;
 };
 
-const TaskCard: React.FC<TaskCardProps> = ({ navigation, task }) => {
+const TaskCard: React.FC<TaskCardProps> = ({
+  navigation,
+  task,
+  isAssigned,
+}) => {
   function goToTaskDetails() {
-    navigation.navigate("TaskDetail", { Task: task });
+    navigation.navigate("TaskDetail", { Task: task, isAssigned: isAssigned });
   }
 
   const utils = trpc.useContext();
@@ -36,12 +41,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ navigation, task }) => {
         <Icon name="chevron-right" size={24} />
       </View>
       <View className="flex-row space-x-1">
-        <Pressable
-          onPress={checkTask}
-          className="mt-6 w-36 rounded-full border-[1px] border-light bg-purple p-1"
-        >
-          <Text className="text-center text-light">marcar hecha</Text>
-        </Pressable>
+        {isAssigned && (
+          <Pressable
+            onPress={checkTask}
+            className="mt-6 w-36 rounded-full border-[1px] border-light bg-purple p-1"
+          >
+            <Text className="text-center text-light">marcar hecha</Text>
+          </Pressable>
+        )}
         <Pressable className="mt-6 w-36 rounded-full border-[1px] border-purple p-1">
           <Text className="text-center text-purple">reasignar tarea</Text>
         </Pressable>

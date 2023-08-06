@@ -1,5 +1,12 @@
 import React, { useContext, useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  Switch,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { Header } from "../../../components/Header";
 import { trpc } from "../../../trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -8,7 +15,7 @@ import { Frequency } from "@prisma/client";
 import { UserContext } from "../../../context/userContext";
 import { UserContextType } from "../../../context/types";
 import { SelectList } from "react-native-dropdown-select-list";
-import { Divider } from "@ui-kitten/components";
+import { Divider, Toggle } from "@ui-kitten/components";
 
 type CreateTaskScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateTask">;
@@ -41,6 +48,13 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
     value: user.name,
   }));
 
+  const [checked, setChecked] = React.useState(false);
+  const onCheckedChange = (
+    isChecked: boolean | ((prevState: boolean) => boolean)
+  ): void => {
+    setChecked(isChecked);
+  };
+
   const mutation = trpc.task.create.useMutation({
     onSuccess() {
       utils.task.getAllTasks.invalidate();
@@ -56,7 +70,6 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
       groupId: User.groupId!,
       userId: selectedUser,
     });
-    console.log("Task created: " + selectedUser);
   };
 
   return (
@@ -92,8 +105,13 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
             multiline={true}
           />
         </View>
+        <Pressable className="items-end">
+          <Text className="text-purple">Crear grupo</Text>
+        </Pressable>
         <View className="mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
-          <Text>Grupo de tareas</Text>
+          <View>
+            <Text>Grupo de tareas</Text>
+          </View>
           <SelectList
             data={frequencyOptions}
             setSelected={setSelectedFrequency}
@@ -152,6 +170,12 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
           <Divider />
           <View className="mt-3 flex-row items-center justify-between rounded-lg bg-white px-4">
             <Text>Añadir al calendario</Text>
+            <Switch
+              className="-mb-1"
+              trackColor={{ false: "#929193", true: "#7B61FF" }}
+              onValueChange={onCheckedChange}
+              value={checked}
+            />
           </View>
         </View>
       </View>

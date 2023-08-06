@@ -69,6 +69,7 @@ export const taskRouter = router({
           description: true,
           frequency: true,
           isDone: true,
+          assignedTo: true,
           createdAt: true,
           groupTask: true,
         },

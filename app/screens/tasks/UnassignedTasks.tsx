@@ -9,14 +9,15 @@ import { AppStackParamList } from "../../_App";
 import Icon from "react-native-vector-icons/AntDesign";
 import TaskCard from "../../components/tasks/TaskCard";
 
-type MyTasksScreenProps = {
+type UnassignedTasksSCreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "MyTasks">;
 };
 
-const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
+const UnassignedTasksSCreen: React.FC<UnassignedTasksSCreenProps> = ({
+  navigation,
+}) => {
   const { User } = useContext(UserContext) as UserContextType;
-  const { data: myTasks } = trpc.user.getUserTasks.useQuery({
-    userId: User.id,
+  const { data: tasks } = trpc.task.getUnassignedTasks.useQuery({
     groupId: User.groupId!,
   });
   return (
@@ -27,13 +28,13 @@ const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
           <Icon name="left" size={16} color={"#7B61FF"} />
         </Pressable>
         <View className="my-6">
-          {myTasks ? (
-            myTasks.map((task) => (
+          {tasks ? (
+            tasks.map((task) => (
               <TaskCard
                 key={task.id}
                 task={task}
                 navigation={navigation}
-                isAssigned={true}
+                isAssigned={false}
               />
             ))
           ) : (
@@ -45,4 +46,4 @@ const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
   );
 };
 
-export default MyTasksScreen;
+export default UnassignedTasksSCreen;

@@ -18,11 +18,6 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
     groupId: User.groupId!,
   });
 
-  // provisional
-  const { data: unassignedTasks } = trpc.task.getUnassignedTasks.useQuery({
-    groupId: User.groupId!,
-  });
-
   function goToCreateTask() {
     navigation.navigate("CreateTask");
   }
@@ -32,7 +27,7 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
   }
 
   function goToUnassignedTasks() {
-    unassignedTasks?.map((t) => console.log(t.name));
+    navigation.navigate("UnassignedTasks");
   }
 
   return (
@@ -66,7 +61,12 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
       <View>
         {allTasks ? (
           allTasks.map((task) => (
-            <TaskCard key={task.id} task={task} navigation={navigation} />
+            <TaskCard
+              key={task.id}
+              task={task}
+              navigation={navigation}
+              isAssigned={task.assignedTo == null}
+            />
           ))
         ) : (
           <Text>No hay tareas</Text>

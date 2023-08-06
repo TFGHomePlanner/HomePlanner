@@ -10,7 +10,8 @@ type TaskDetailScreenProps = {
 };
 
 const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({ route }) => {
-  const { Task } = route.params;
+  const Task = route.params.Task;
+  const isAssigned = route.params.isAssigned;
 
   const utils = trpc.useContext();
   const mutation = trpc.task.checkTask.useMutation({
@@ -30,12 +31,14 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({ route }) => {
         {Task.description && <Text>{Task.description}</Text>}
         {Task.assignedTo && <Text>Asignada a {Task.assignedTo.name}</Text>}
         <View className="flex-row space-x-4">
-          <Pressable
-            onPress={checkTask}
-            className="w-36 rounded-full border-[1px] border-light bg-purple p-1"
-          >
-            <Text className="text-center text-light">marcar hecha</Text>
-          </Pressable>
+          {isAssigned && (
+            <Pressable
+              onPress={checkTask}
+              className="w-36 rounded-full border-[1px] border-light bg-purple p-1"
+            >
+              <Text className="text-center text-light">marcar hecha</Text>
+            </Pressable>
+          )}
           <Pressable className="w-36 rounded-full border-[1px] border-purple p-1">
             <Text className="text-center text-purple">reasignar tarea</Text>
           </Pressable>
