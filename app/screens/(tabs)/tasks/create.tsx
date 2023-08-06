@@ -164,7 +164,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
                 placeholder="Seleccionar"
               />
             ) : (
-              <Text>Este grupo no tiene usuarios.</Text>
+              <Text>Cargando...</Text>
             )}
           </View>
           <Divider />
