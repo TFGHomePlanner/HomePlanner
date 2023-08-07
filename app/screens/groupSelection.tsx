@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, ScrollView } from "react-native";
 import { UserContext } from "../context/userContext";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../_App";
 import { IUser, UserContextType } from "../context/types";
 import { trpc } from "../trpc";
-import { Header } from "../components/Header";
-
+import GroupCard from "../components/groups/GroupCard";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 // Define el tipo de props para el componente LoginScreen
 type GroupSelectionScreenProps = {
@@ -43,21 +43,25 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
   }
 
   return (
-    <View>
-      <Header/>
-      {myGroups ? (
-        myGroups.map((group) => (
-          <Pressable
-            className="bg-light p-16"
-            onPress={() => selectGroup(group.id)}
-            key={group.id}
-          >
-            <Text>{group.name}</Text>
-          </Pressable>
-        ))
-      ) : (
-        <Text>Todavía no tienes grupos</Text>
-      )}
+    <View className="h-full bg-light p-6 pt-16">
+      <ScrollView>
+        <Text className="mb-4">Elige un grupo para empezar</Text>
+        {myGroups ? (
+          myGroups.map((group) => (
+            <Pressable onPress={() => selectGroup(group.id)} key={group.id}>
+              <GroupCard group={group} />
+            </Pressable>
+          ))
+        ) : (
+          <Text>Todavía no tienes grupos</Text>
+        )}
+      </ScrollView>
+      <View className="flex-row items-center">
+        <Text className="flex-1 text-center">{myGroups?.length} grupos</Text>
+        <Pressable>
+          <Icon name="shape-square-rounded-plus" size={24} color={"#1E88E5"} />
+        </Pressable>
+      </View>
     </View>
   );
 };
