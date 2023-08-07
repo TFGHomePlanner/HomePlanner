@@ -1,5 +1,8 @@
 import { publicProcedure, router } from "../trpc";
-import { CreateTaskSchema } from "../../../common/validation/task";
+import {
+  CreateTaskGroupSchema,
+  CreateTaskSchema,
+} from "../../../common/validation/task";
 import { z } from "zod";
 
 export const taskRouter = router({
@@ -20,7 +23,6 @@ export const taskRouter = router({
               name: true,
             },
           },
-          groupTask: true,
         },
         where: {
           groupId: input.groupId,
@@ -71,12 +73,35 @@ export const taskRouter = router({
           isDone: true,
           assignedTo: true,
           createdAt: true,
-          groupTask: true,
         },
         where: {
           groupId: input.groupId,
           isDone: false,
           userId: null,
+        },
+      });
+    }),
+
+  getAllTaskGroups: publicProcedure
+    .input(z.object({ groupId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.taskGroup.findMany({
+        select: {
+          id: true,
+          name: true,
+        },
+        where: {
+          groupId: input.groupId,
+        },
+      });
+    }),
+  createTaskGroup: publicProcedure
+    .input(CreateTaskGroupSchema)
+    .mutation(async ({ ctx, input: { name, groupId } }) => {
+      return await ctx.prisma.taskGroup.create({
+        data: {
+          name,
+          groupId,
         },
       });
     }),

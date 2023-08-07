@@ -28,8 +28,34 @@ export const CreateTaskSchema = z.object({
   userId: z.string(),
 });
 
-export const updateTaskSchema = CreateTaskSchema.extend({ id: z.string() });
+export const UpdateTaskSchema = CreateTaskSchema.extend({ id: z.string() });
+
+export const TaskGroupSchema = z.object({
+  name: z.string(),
+  tasks: z
+    .array(
+      z.object({
+        TaskSchema,
+      })
+    )
+    .nullable()
+    .optional(),
+});
+export const CreateTaskGroupSchema = z.object({
+  name: z.string().min(1, { message: "El nombre no puede estar vacío." }),
+  tasks: z
+    .array(
+      z.object({
+        TaskSchema,
+      })
+    )
+    .nullable()
+    .optional(),
+  groupId: z.string(),
+});
 
 export type ITask = z.infer<typeof TaskSchema>;
 export type ICreateTask = z.infer<typeof CreateTaskSchema>;
-export type IUpdateTask = z.infer<typeof updateTaskSchema>;
+export type IUpdateTask = z.infer<typeof UpdateTaskSchema>;
+export type ITaskGroup = z.infer<typeof TaskGroupSchema>;
+export type ICreateTaskGroup = z.infer<typeof CreateTaskGroupSchema>;

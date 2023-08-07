@@ -36,7 +36,7 @@ model Session {
 model User {
   id            String    @id @default(cuid())
   name          String
-  email         String   @unique
+  email         String    @unique
   emailVerified DateTime?
   passwordHash  String
   accounts      Account[]
@@ -61,6 +61,7 @@ model Group {
   lists              List[]
   Task               Task[]
   favouritesProducts FavouritesProducts[]
+  TaskGroup          TaskGroup[]
 
   @@index([adminId])
 }
@@ -87,7 +88,7 @@ model List {
   groupId     String
   items       Product[]
   creatorId   String
-  isPublic    Boolean    
+  isPublic    Boolean
 
   @@index([groupId])
 }
@@ -112,34 +113,29 @@ model Product {
 }
 
 model Task {
-  id          String      @id @default(cuid())
+  id          String     @id @default(cuid())
   name        String
   description String?
   frequency   Frequency
-  isDone      Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  assignedTo  User?       @relation(fields: [userId], references: [id])
-  group       Group       @relation(fields: [groupId], references: [id])
+  isDone      Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  assignedTo  User?      @relation(fields: [userId], references: [id])
+  group       Group      @relation(fields: [groupId], references: [id])
   groupId     String
-  groupTask   GroupTask[]
   userId      String?
+  TaskGroup   TaskGroup? @relation(fields: [taskGroupId], references: [id])
+  taskGroupId String?
 
   @@index([groupId])
 }
 
 model TaskGroup {
-  id        String      @id @default(cuid())
-  name      String
-  groupTask GroupTask[]
-}
+  id      String @id @default(cuid())
+  name    String
+  group   Group  @relation(fields: [groupId], references: [id])
+  groupId String
+  Tasks   Task[]
 
-model GroupTask {
-  groupId   String
-  taskGroup TaskGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  taskId    String
-  task      Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
-
-  @@id([groupId, taskId])
   @@index([groupId])
 }
 

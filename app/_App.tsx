@@ -24,7 +24,7 @@ import TaskDetailScreen from "./screens/tasks/TaskDetail";
 import { ITask } from "./common/validation/task";
 import { MenuProvider } from "react-native-popup-menu";
 import CreateListScreen from "./screens/lists/createList";
-import GroupSelectionScreen from "./screens/groupSelection";
+import GroupSelectionScreen from "./screens/GroupSelection";
 import TabListsScreen from "./screens/(tabs)/lists";
 import UserNoteScreen from "./screens/profile/note";
 import UnassignedTasksSCreen from "./screens/tasks/UnassignedTasks";
@@ -59,7 +59,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.223:4000/trpc",
+          url: "http://192.168.1.38:4000/trpc",
         }),
       ],
     })

@@ -15,7 +15,8 @@ import { Frequency } from "@prisma/client";
 import { UserContext } from "../../../context/userContext";
 import { UserContextType } from "../../../context/types";
 import { SelectList } from "react-native-dropdown-select-list";
-import { Divider, Toggle } from "@ui-kitten/components";
+import { Divider } from "@ui-kitten/components";
+import CreateTaskGroupScreen from "../../../components/tasks/CreateTaskGroup";
 
 type CreateTaskScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateTask">;
@@ -46,6 +47,15 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
   const userOptions = users?.map((user) => ({
     key: user.id,
     value: user.name,
+  }));
+
+  const { data: groups } = trpc.task.getAllTaskGroups.useQuery({
+    groupId: User.groupId,
+  });
+  const [selectedGroup, setSelectedGroup] = useState("");
+  const groupOptions = groups?.map((group) => ({
+    key: group.id,
+    value: group.name,
   }));
 
   const [checked, setChecked] = React.useState(false);
@@ -105,26 +115,28 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
             multiline={true}
           />
         </View>
-        <Pressable className="items-end">
-          <Text className="text-purple">Crear grupo</Text>
-        </Pressable>
+        <CreateTaskGroupScreen />
         <View className="mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
           <View>
             <Text>Grupo de tareas</Text>
           </View>
-          <SelectList
-            data={frequencyOptions}
-            setSelected={setSelectedFrequency}
-            save="key"
-            defaultOption={{ value: "Nunca", key: Frequency.never }}
-            search={false}
-            boxStyles={{
-              height: 42,
-              width: 140,
-              borderColor: "#FFFF",
-              alignSelf: "flex-end",
-            }}
-          />
+          {groupOptions ? (
+            <SelectList
+              data={groupOptions}
+              setSelected={setSelectedGroup}
+              save="key"
+              search={false}
+              boxStyles={{
+                height: 42,
+                width: 140,
+                borderColor: "#FFFF",
+                alignSelf: "flex-end",
+              }}
+              placeholder="Seleccionar"
+            />
+          ) : (
+            <Text>Cargando...</Text>
+          )}
         </View>
         <View className="mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
           <Text>Repetir tarea</Text>
