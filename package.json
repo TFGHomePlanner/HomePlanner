@@ -13,7 +13,7 @@
     "web": "expo start --web",
     "lint": "eslint .",
     "db:generate": "prisma generate",
-    "db:push": "prisma db push --skip-generate ",
+    "db:push": "prisma db push",
     "prisma:studio": "prisma studio --port 5556",
     "prisma:seed": "prisma db push --force-reset && prisma db seed"
   },
