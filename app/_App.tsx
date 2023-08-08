@@ -24,10 +24,11 @@ import TaskDetailScreen from "./screens/tasks/TaskDetail";
 import { ITask } from "./common/validation/task";
 import { MenuProvider } from "react-native-popup-menu";
 import CreateListScreen from "./screens/lists/createList";
-import GroupSelectionScreen from "./screens/GroupSelection";
+import GroupSelectionScreen from "./screens/groupSelection";
 import TabListsScreen from "./screens/(tabs)/lists";
 import UserNoteScreen from "./screens/profile/note";
 import UnassignedTasksSCreen from "./screens/tasks/UnassignedTasks";
+
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -59,7 +60,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.38:4000/trpc",
+          url: "http://192.168.1.144:4000/trpc",
         }),
       ],
     })
