@@ -21,7 +21,6 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-   
     "@eva-design/eva": "^2.2.0",
     "@expo/vector-icons": "^13.0.0",
     "@prisma/client": "^4.16.1",
