@@ -11,6 +11,7 @@ export const appRouter = router({
   task: taskRouter,
   list: listrouter,
   group: groupRouter,
+  taskGroup: taskRouter,
 });
 
 export type AppRouter = typeof appRouter;

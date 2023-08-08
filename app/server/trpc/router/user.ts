@@ -111,7 +111,6 @@ export const userRouter = router({
           assignedTo: true,
           frequency: true,
           isDone: true,
-          groupTask: true,
         },
         where: {
           userId: input?.userId,
