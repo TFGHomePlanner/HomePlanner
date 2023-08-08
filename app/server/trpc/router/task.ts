@@ -36,7 +36,7 @@ export const taskRouter = router({
     .mutation(
       async ({
         ctx,
-        input: { name, description, frequency, groupId, userId },
+        input: { name, description, frequency, groupId, userId, taskGroupId },
       }) => {
         return await ctx.prisma.task.create({
           data: {
@@ -45,6 +45,7 @@ export const taskRouter = router({
             frequency,
             groupId,
             userId,
+            taskGroupId,
           },
         });
       }
@@ -102,6 +103,32 @@ export const taskRouter = router({
         data: {
           name,
           groupId,
+        },
+      });
+    }),
+
+  getAllGroupTasks: publicProcedure
+    .input(z.object({ groupId: z.string(), taskGroupId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.task.findMany({
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          frequency: true,
+          isDone: true,
+          createdAt: true,
+          assignedTo: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        where: {
+          groupId: input.groupId,
+          taskGroupId: input.taskGroupId,
+          isDone: false,
         },
       });
     }),

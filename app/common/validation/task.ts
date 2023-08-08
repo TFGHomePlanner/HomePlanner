@@ -26,11 +26,13 @@ export const CreateTaskSchema = z.object({
   frequency: z.nativeEnum(Frequency),
   groupId: z.string(),
   userId: z.string(),
+  taskGroupId: z.string(),
 });
 
 export const UpdateTaskSchema = CreateTaskSchema.extend({ id: z.string() });
 
 export const TaskGroupSchema = z.object({
+  id: z.string(),
   name: z.string(),
   tasks: z
     .array(

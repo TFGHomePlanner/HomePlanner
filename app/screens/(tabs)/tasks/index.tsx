@@ -7,6 +7,8 @@ import { AppStackParamList } from "../../../_App";
 import { UserContext } from "../../../context/userContext";
 import { UserContextType } from "../../../context/types";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import TaskGroupCard from "../../../components/tasks/TaskGroupCard";
+import { Divider } from "@ui-kitten/components";
 
 type TabTasksScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TabTasks">;
@@ -16,6 +18,10 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
   const { User } = useContext(UserContext) as UserContextType;
   const { data: allTasks } = trpc.task.getAllTasks.useQuery({
     groupId: User.groupId!,
+  });
+
+  const { data: groups } = trpc.task.getAllTaskGroups.useQuery({
+    groupId: User.groupId,
   });
 
   function goToCreateTask() {
@@ -35,27 +41,36 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
       className="h-full bg-light px-6"
       showsVerticalScrollIndicator={false}
     >
-      <View className="mb-6 items-end">
+      <View className="mb-4 items-end">
         <Pressable onPress={goToCreateTask}>
           <Icon name="shape-square-rounded-plus" size={24} color={"#7B61FF"} />
         </Pressable>
       </View>
-      <Pressable
-        onPress={goToMyTasks}
-        className="mb-6 h-10 w-full justify-center rounded-xl bg-dark pl-4"
-      >
-        <Text className="text-base text-light">Mis tareas</Text>
-      </Pressable>
-      <View className="mb-6 flex-row justify-between gap-x-2">
+      <View className="mb-4 h-24 w-full justify-center space-y-3 rounded-xl bg-white px-4 shadow-sm">
+        <Pressable onPress={goToMyTasks} className="flex-row justify-between">
+          <View className="flex-row items-center space-x-2">
+            <Icon name="account-details" color={"#7B61FF"} size={20} />
+            <Text className="text-base text-dark">Mis tareas</Text>
+          </View>
+          <Icon name="chevron-right" color={"#212529"} size={20} />
+        </Pressable>
+        <Divider />
         <Pressable
           onPress={goToUnassignedTasks}
-          className="h-16 flex-1 justify-center rounded-xl bg-white shadow-sm"
+          className="flex-row justify-between"
         >
-          <Text className="text-center text-base">Tareas sin asignar</Text>
+          <View className="flex-row items-center space-x-2">
+            <Icon name="account-question-outline" color={"#7B61FF"} size={20} />
+            <Text className="text-base text-dark">Tareas sin asignar</Text>
+          </View>
+          <Icon name="chevron-right" color={"#212529"} size={20} />
         </Pressable>
-        <Pressable className="h-16 flex-1 justify-center rounded-xl bg-white shadow-sm">
-          <Text className="text-center text-base">Grupo cocina</Text>
-        </Pressable>
+      </View>
+      <View className="mb-2 flex flex-row flex-wrap justify-between">
+        {groups &&
+          groups.map((group) => (
+            <TaskGroupCard key={group.id} taskGroup={group} />
+          ))}
       </View>
       <Text className="mb-2 text-lg">Otras tareas</Text>
       <View>

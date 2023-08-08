@@ -79,6 +79,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
       frequency: selectedFrequency,
       groupId: User.groupId!,
       userId: selectedUser,
+      taskGroupId: selectedGroup,
     });
   };
 
