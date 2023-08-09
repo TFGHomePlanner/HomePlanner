@@ -27,7 +27,8 @@ import CreateListScreen from "./screens/lists/createList";
 import GroupSelectionScreen from "./screens/GroupSelection";
 import TabListsScreen from "./screens/(tabs)/lists";
 import UserNoteScreen from "./screens/profile/note";
-import UnassignedTasksSCreen from "./screens/tasks/UnassignedTasks";
+import UnassignedTasksScreen from "./screens/tasks/UnassignedTasks";
+import GroupTasksScreen from "./screens/tasks/GroupTasks";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -43,7 +44,7 @@ export type AppStackParamList = {
   MyTasks: undefined;
   UnassignedTasks: undefined;
   TaskDetail: { Task: ITask; isAssigned?: boolean };
-  GroupTasks: { TaskGroup: ITaskGroup };
+  GroupTasks: { taskGroup: ITaskGroup };
   Modal: undefined;
   CreateList: { List?: IList; Edit: boolean };
   Profile: undefined;
@@ -95,11 +96,15 @@ export function App() {
                   <Stack.Screen name="MyTasks" component={MyTasksScreen} />
                   <Stack.Screen
                     name="UnassignedTasks"
-                    component={UnassignedTasksSCreen}
+                    component={UnassignedTasksScreen}
                   />
                   <Stack.Screen
                     name="TaskDetail"
                     component={TaskDetailScreen}
+                  />
+                  <Stack.Screen
+                    name="GroupTasks"
+                    component={GroupTasksScreen}
                   />
                   <Stack.Screen
                     name="CreateList"

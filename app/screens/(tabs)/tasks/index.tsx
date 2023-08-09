@@ -69,7 +69,11 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
       <View className="mb-2 flex flex-row flex-wrap justify-between">
         {groups &&
           groups.map((group) => (
-            <TaskGroupCard key={group.id} taskGroup={group} />
+            <TaskGroupCard
+              key={group.id}
+              taskGroup={group}
+              navigation={navigation}
+            />
           ))}
       </View>
       <Text className="mb-2 text-lg">Otras tareas</Text>

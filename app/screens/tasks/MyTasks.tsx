@@ -23,9 +23,12 @@ const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
     <View className="h-full bg-light">
       <Header />
       <View className="px-6">
-        <Pressable onPress={navigation.goBack}>
-          <Icon name="left" size={16} color={"#7B61FF"} />
-        </Pressable>
+        <View className="flex-row items-center">
+          <Pressable onPress={navigation.goBack}>
+            <Icon name="left" size={20} color={"#7B61FF"} />
+          </Pressable>
+          <Text className="mr-6 flex-1 text-center text-base">Mis tareas</Text>
+        </View>
         <View className="my-6">
           {myTasks ? (
             myTasks.map((task) => (

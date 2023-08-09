@@ -8,21 +8,21 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import Icon from "react-native-vector-icons/AntDesign";
 import TaskCard from "../../components/tasks/TaskCard";
-import { ITaskGroup } from "../../common/validation/task";
+import { RouteProp } from "@react-navigation/native";
 
-type GroupTasksSCreenProps = {
+type GroupTasksScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "GroupTasks">;
-  taskGroup: ITaskGroup;
+  route: RouteProp<AppStackParamList, "GroupTasks">;
 };
 
-const GroupTasksSCreen: React.FC<GroupTasksSCreenProps> = ({
+const GroupTasksScreen: React.FC<GroupTasksScreenProps> = ({
   navigation,
-  taskGroup,
+  route,
 }) => {
   const { User } = useContext(UserContext) as UserContextType;
   const { data: tasks } = trpc.task.getAllGroupTasks.useQuery({
     groupId: User.groupId!,
-    taskGroupId: taskGroup.id,
+    taskGroupId: route.params.taskGroup.id,
   });
   return (
     <View className="h-full bg-light">
@@ -50,4 +50,4 @@ const GroupTasksSCreen: React.FC<GroupTasksSCreenProps> = ({
   );
 };
 
-export default GroupTasksSCreen;
+export default GroupTasksScreen;
