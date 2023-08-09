@@ -11,6 +11,8 @@ const CreateTaskGroupScreen = () => {
     setVisible(!visible);
   }
 
+  const [info, setInfo] = useState("");
+
   const { User } = useContext(UserContext) as UserContextType;
   const utils = trpc.useContext();
   const mutation = trpc.task.createTaskGroup.useMutation({
@@ -20,11 +22,13 @@ const CreateTaskGroupScreen = () => {
   });
 
   const createTaskGroup = () => {
-    mutation.mutateAsync({
-      name,
-      groupId: User.groupId!,
-    });
-    openCreateTaskGroup();
+    name &&
+      mutation.mutateAsync({
+        name,
+        groupId: User.groupId!,
+      });
+    name && openCreateTaskGroup();
+    !name && setInfo("Debes introducir el nombre del grupo.");
   };
 
   return (
@@ -35,17 +39,23 @@ const CreateTaskGroupScreen = () => {
         </Text>
       </Pressable>
       {visible && (
-        <View className="mt-2 flex-row items-center justify-between space-x-2">
-          <TextInput
-            className="flex-1 rounded-lg bg-white px-4 py-3"
-            placeholderTextColor="#95999C"
-            value={name}
-            onChangeText={setName}
-            placeholder="Nombre del grupo"
-          />
-          <Text onPress={createTaskGroup} className="font-semibold text-purple">
-            OK
-          </Text>
+        <View>
+          <View className="flex-row items-center justify-between space-x-2">
+            <TextInput
+              className="flex-1 rounded-lg bg-white px-4 py-3"
+              placeholderTextColor="#95999C"
+              value={name}
+              onChangeText={setName}
+              placeholder="Nombre del grupo"
+            />
+            <Text
+              onPress={createTaskGroup}
+              className="font-semibold text-purple"
+            >
+              OK
+            </Text>
+          </View>
+          {!name && <Text className="mb-2 ml-1 text-purple">{info}</Text>}
         </View>
       )}
     </View>

@@ -118,9 +118,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
         </View>
         <CreateTaskGroupScreen />
         <View className="mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
-          <View>
-            <Text>Grupo de tareas</Text>
-          </View>
+          <Text>Grupo de tareas</Text>
           {groupOptions ? (
             <SelectList
               data={groupOptions}
