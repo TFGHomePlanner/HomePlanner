@@ -44,75 +44,62 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
   });
 
   return (
-    <ScrollView>
-      <View className="h-full bg-light px-6 pt-16">
-        <View className="mb-8 mt-4">
-          <Profileinformation />
-        </View>
-        <Pressable onPress={navigation.goBack}>
-          <Icon name="angle-left" size={16} color={"#7B61FF"} />
+    <ScrollView className="h-full bg-light px-6 pt-16">
+      <Profileinformation />
+      <Pressable
+        onPress={goToCreateGroup}
+        className="mt-4 flex-row space-x-2 rounded-lg bg-white p-4"
+      >
+        <Icon name="pen" size={20} color={"#7B61FF"} />
+        <Text className="self-center text-purple">Nuevo grupo</Text>
+      </Pressable>
+      <View className="my-6">
+        {userGroups ? (
+          userGroups.map((group) => <GroupCard key={group.id} group={group} />)
+        ) : (
+          <Text>Todavía no tienes grupos</Text>
+        )}
+      </View>
+      <View className="flex flex-row items-center justify-center">
+        <Text>Unirse a un grupo</Text>
+        <TextInput
+          className={
+            "my-2 rounded-lg border-b-[1px] border-light bg-white px-4 py-2 text-dark"
+          }
+          placeholderTextColor="#95999C"
+          value={codeGroup}
+          onChangeText={setCodeGroup}
+          placeholder="Código de invitación"
+        />
+        <Pressable onPress={joinGroup} className="bg-gray rounded-full p-2">
+          <Icon name="paper-plane" size={24} color="black" />
         </Pressable>
-        <Pressable
-          onPress={goToCreateGroup}
-          className="mt-4 flex-row space-x-2 rounded-lg bg-white p-4"
-        >
-          <Icon name="pen" size={20} color={"#7B61FF"} />
-          <Text className="self-center text-purple">Nuevo grupo</Text>
-        </Pressable>
-        <View className="my-6">
-          {userGroups ? (
-            userGroups.map((group) => (
-              <GroupCard key={group.id} group={group} />
-            ))
+      </View>
+      <View className="mb-8 mt-4 flex justify-between">
+        <Text className="text-lg font-bold">Notas Privadas </Text>
+        <View className="grid grid-cols-2">
+          {userNotes ? (
+            userNotes.map((note) => {
+              return (
+                <View className="mr-2" key={note.id}>
+                  <NoteCard key={note.id} Note={note} navigation={navigation} />
+                </View>
+              );
+            })
           ) : (
-            <Text>Todavía no tienes grupos</Text>
+            <Text className="font-bold">No tienes notas</Text>
           )}
         </View>
-        <View className="flex flex-row items-center justify-center">
-          <Text>Unirse a un grupo</Text>
-          <TextInput
-            className={
-              "my-2 rounded-lg border-b-[1px] border-light bg-white px-4 py-2 text-dark"
-            }
-            placeholderTextColor="#95999C"
-            value={codeGroup}
-            onChangeText={setCodeGroup}
-            placeholder="Código de invitación"
-          />
-          <Pressable onPress={joinGroup} className="bg-gray rounded-full p-2">
-            <Icon name="paper-plane" size={24} color="black" />
-          </Pressable>
-        </View>
-        <View className="mb-8 mt-4 flex justify-between">
-          <Text className="text-lg font-bold">Notas Privadas </Text>
-          <View className="grid grid-cols-2">
-            {userNotes ? (
-              userNotes.map((note) => {
-                return (
-                  <View className="mr-2" key={note.id}>
-                    <NoteCard
-                      key={note.id}
-                      Note={note}
-                      navigation={navigation}
-                    />
-                  </View>
-                );
-              })
-            ) : (
-              <Text className="font-bold">No tienes notas</Text>
-            )}
-          </View>
-          <Pressable
-            onPress={() =>
-              navigation.navigate("UserNote", { Note: undefined, Edit: Edit })
-            }
-            className="bg-gray rounded-full p-2"
-          >
-            <Text className="text-md text-center font-light text-blue">
-              Añadir nueva nota
-            </Text>
-          </Pressable>
-        </View>
+        <Pressable
+          onPress={() =>
+            navigation.navigate("UserNote", { Note: undefined, Edit: Edit })
+          }
+          className="bg-gray rounded-full p-2"
+        >
+          <Text className="text-md text-center font-light text-blue">
+            Añadir nueva nota
+          </Text>
+        </Pressable>
       </View>
     </ScrollView>
   );
