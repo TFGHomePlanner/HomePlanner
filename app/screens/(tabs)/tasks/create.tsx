@@ -17,6 +17,7 @@ import { UserContextType } from "../../../context/types";
 import { SelectList } from "react-native-dropdown-select-list";
 import { Divider } from "@ui-kitten/components";
 import CreateTaskGroupScreen from "../../../components/tasks/CreateTaskGroup";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 type CreateTaskScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateTask">;
@@ -64,6 +65,8 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
   ): void => {
     setChecked(isChecked);
   };
+
+  const [date, setDate] = useState(new Date());
 
   const mutation = trpc.task.create.useMutation({
     onSuccess() {
@@ -153,8 +156,8 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
             }}
           />
         </View>
-        <View className="mb-4 rounded-lg border-light bg-white py-4 text-base text-dark">
-          <View className="mb-3 flex-row items-center justify-between rounded-lg bg-white px-4">
+        <View className="mb-4 rounded-lg border-light bg-white text-base text-dark">
+          <View className="my-2 flex-row items-center justify-between rounded-lg bg-white px-4">
             <Text>Empieza</Text>
           </View>
           <Divider />
@@ -179,7 +182,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
             )}
           </View>
           <Divider />
-          <View className="mt-3 flex-row items-center justify-between rounded-lg bg-white px-4">
+          <View className="my-3 flex-row items-center justify-between rounded-lg bg-white px-4">
             <Text>Añadir al calendario</Text>
             <Switch
               className="-mb-1"
