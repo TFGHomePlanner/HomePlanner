@@ -10,7 +10,6 @@ export default function TabPaymentsScreen() {
         {/*PRUEBAS: cambiar Tabs por Register*/}
         <Text className="text-[#F1889F] underline">Únete</Text>
       </Link>
-      <ImagePickerC />
     </View>
   );
 }
