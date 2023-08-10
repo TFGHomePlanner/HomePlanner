@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import {
+  Platform,
   Pressable,
   ScrollView,
   Switch,
@@ -60,13 +61,12 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
   }));
 
   const [checked, setChecked] = React.useState(false);
-  const onCheckedChange = (
-    isChecked: boolean | ((prevState: boolean) => boolean)
-  ): void => {
+  const onCheckedChange = (isChecked: boolean) => {
     setChecked(isChecked);
   };
 
   const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
 
   const mutation = trpc.task.create.useMutation({
     onSuccess() {
@@ -159,6 +159,38 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
         <View className="mb-4 rounded-lg border-light bg-white text-base text-dark">
           <View className="my-2 flex-row items-center justify-between rounded-lg bg-white px-4">
             <Text>Empieza</Text>
+            {Platform.OS === "android" && (
+              <Pressable
+                onPress={() => setShow(true)}
+                className="rounded-md bg-lightGray p-2"
+              >
+                <Text>{date.toLocaleDateString()}</Text>
+              </Pressable>
+            )}
+            {Platform.OS === "ios" && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                onChange={(event, selectedDate) => {
+                  setDate(selectedDate || new Date());
+                }}
+                accentColor="#7B61FF"
+                locale="es-ES"
+                positiveButton={{ label: "OK", textColor: "#7B61FF" }}
+              />
+            )}
+            {Platform.OS === "android" && show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                positiveButton={{ label: "OK", textColor: "#7B61FF" }}
+                negativeButton={{ label: "Cancelar", textColor: "#7B61FF" }}
+                onChange={(event, selectedDate) => {
+                  setShow(false);
+                  setDate(selectedDate || new Date());
+                }}
+              />
+            )}
           </View>
           <Divider />
           <View className="flex-row items-center justify-between rounded-lg bg-white pl-4">
