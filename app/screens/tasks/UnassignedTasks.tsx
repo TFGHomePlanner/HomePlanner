@@ -9,11 +9,11 @@ import { AppStackParamList } from "../../_App";
 import Icon from "react-native-vector-icons/AntDesign";
 import TaskCard from "../../components/tasks/TaskCard";
 
-type UnassignedTasksSCreenProps = {
+type UnassignedTasksScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "MyTasks">;
 };
 
-const UnassignedTasksSCreen: React.FC<UnassignedTasksSCreenProps> = ({
+const UnassignedTasksScreen: React.FC<UnassignedTasksScreenProps> = ({
   navigation,
 }) => {
   const { User } = useContext(UserContext) as UserContextType;
@@ -46,4 +46,4 @@ const UnassignedTasksSCreen: React.FC<UnassignedTasksSCreenProps> = ({
   );
 };
 
-export default UnassignedTasksSCreen;
+export default UnassignedTasksScreen;

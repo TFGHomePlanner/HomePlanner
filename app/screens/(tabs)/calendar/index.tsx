@@ -1,28 +1,13 @@
-import { Text, View, StyleSheet } from "react-native";
 import React from "react";
+import { ScrollView, Text, View } from "react-native";
 
-export default function TabTwoScreen() {
+export default function CalendarScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Calendario</Text>
-      <View style={styles.separator} />
-    </View>
+    <ScrollView className="h-full bg-light px-6">
+      <Text>Calendario</Text>
+      <View>
+        <Text>hola</Text>
+      </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});

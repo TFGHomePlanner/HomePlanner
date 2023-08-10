@@ -8,35 +8,37 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import Icon from "react-native-vector-icons/AntDesign";
 import TaskCard from "../../components/tasks/TaskCard";
+import { RouteProp } from "@react-navigation/native";
 
-type MyTasksScreenProps = {
-  navigation: NativeStackNavigationProp<AppStackParamList, "MyTasks">;
+type GroupTasksScreenProps = {
+  navigation: NativeStackNavigationProp<AppStackParamList, "GroupTasks">;
+  route: RouteProp<AppStackParamList, "GroupTasks">;
 };
 
-const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
+const GroupTasksScreen: React.FC<GroupTasksScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const { User } = useContext(UserContext) as UserContextType;
-  const { data: myTasks } = trpc.user.getUserTasks.useQuery({
-    userId: User.id,
+  const { data: tasks } = trpc.task.getAllGroupTasks.useQuery({
     groupId: User.groupId!,
+    taskGroupId: route.params.taskGroup.id,
   });
   return (
     <View className="h-full bg-light">
       <Header />
       <View className="px-6">
-        <View className="flex-row items-center">
-          <Pressable onPress={navigation.goBack}>
-            <Icon name="left" size={20} color={"#7B61FF"} />
-          </Pressable>
-          <Text className="mr-6 flex-1 text-center text-base">Mis tareas</Text>
-        </View>
+        <Pressable onPress={navigation.goBack}>
+          <Icon name="left" size={16} color={"#7B61FF"} />
+        </Pressable>
         <View className="my-6">
-          {myTasks ? (
-            myTasks.map((task) => (
+          {tasks ? (
+            tasks.map((task) => (
               <TaskCard
                 key={task.id}
                 task={task}
                 navigation={navigation}
-                isAssigned={true}
+                isAssigned={false}
               />
             ))
           ) : (
@@ -48,4 +50,4 @@ const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
   );
 };
 
-export default MyTasksScreen;
+export default GroupTasksScreen;

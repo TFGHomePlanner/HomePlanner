@@ -21,14 +21,14 @@ import DetailsListScreen from "./screens/lists/detailsList";
 import { IList } from "./common/validation/list";
 import { INote } from "./common/validation/note";
 import TaskDetailScreen from "./screens/tasks/TaskDetail";
-import { ITask } from "./common/validation/task";
+import { ITask, ITaskGroup } from "./common/validation/task";
 import { MenuProvider } from "react-native-popup-menu";
 import CreateListScreen from "./screens/lists/createList";
-import GroupSelectionScreen from "./screens/groupSelection";
+import GroupSelectionScreen from "./screens/GroupSelection";
 import TabListsScreen from "./screens/(tabs)/lists";
 import UserNoteScreen from "./screens/profile/note";
-import UnassignedTasksSCreen from "./screens/tasks/UnassignedTasks";
-
+import UnassignedTasksScreen from "./screens/tasks/UnassignedTasks";
+import GroupTasksScreen from "./screens/tasks/GroupTasks";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -44,6 +44,7 @@ export type AppStackParamList = {
   MyTasks: undefined;
   UnassignedTasks: undefined;
   TaskDetail: { Task: ITask; isAssigned?: boolean };
+  GroupTasks: { taskGroup: ITaskGroup };
   Modal: undefined;
   CreateList: { List?: IList; Edit: boolean };
   Profile: undefined;
@@ -60,7 +61,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.144:4000/trpc",
+          url: "http://192.168.1.38:4000/trpc",
         }),
       ],
     })
@@ -95,11 +96,15 @@ export function App() {
                   <Stack.Screen name="MyTasks" component={MyTasksScreen} />
                   <Stack.Screen
                     name="UnassignedTasks"
-                    component={UnassignedTasksSCreen}
+                    component={UnassignedTasksScreen}
                   />
                   <Stack.Screen
                     name="TaskDetail"
                     component={TaskDetailScreen}
+                  />
+                  <Stack.Screen
+                    name="GroupTasks"
+                    component={GroupTasksScreen}
                   />
                   <Stack.Screen
                     name="CreateList"
