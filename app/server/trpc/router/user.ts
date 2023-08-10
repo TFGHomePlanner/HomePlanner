@@ -201,6 +201,26 @@ export const userRouter = router({
       };
     }),
 
+    
+  updateUserImage: publicProcedure
+    .input(z.object({ id: z.string(), imageprofile: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.user.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          imageprofile: input.imageprofile,
+        },
+      });
+      return {
+        status: 200,
+        message: "User updated successfully",
+      };
+    }),
+
+    
+
   getUserByID: publicProcedure
     .input(z.object({ id: z.string() }))
     .output(userProfileSchema)
