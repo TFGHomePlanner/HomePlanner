@@ -111,6 +111,7 @@ async function main() {
       description: "Limpieza a fondo.",
       frequency: "never",
       groupId: minigrupo.id,
+      createdBy: marta.id,
     },
   });
 
@@ -121,6 +122,7 @@ async function main() {
       groupId: minigrupo.id,
       isDone: true,
       userId: marta.id,
+      createdBy: marta.id,
     },
   });
 
@@ -130,6 +132,7 @@ async function main() {
       name: "Limpiar cristales",
       frequency: "oncePerWeek",
       groupId: minigrupo.id,
+      createdBy: marta.id,
     },
   });
 
@@ -139,6 +142,7 @@ async function main() {
       description: "Pliz!!",
       frequency: "oncePerDay",
       groupId: minigrupo.id,
+      createdBy: a.id,
     },
   });
 

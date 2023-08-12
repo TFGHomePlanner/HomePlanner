@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Platform,
   Pressable,
@@ -19,12 +19,17 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { Divider } from "@ui-kitten/components";
 import CreateTaskGroupScreen from "../../../components/tasks/CreateTaskGroup";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { RouteProp } from "@react-navigation/native";
 
 type CreateTaskScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateTask">;
+  route: RouteProp<AppStackParamList, "CreateTask">;
 };
 
-const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
+const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const inputStyle =
     "mb-4 bg-white rounded-lg space-y-3 text-base border-light p-4 text-dark";
 
@@ -83,8 +88,24 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({ navigation }) => {
       groupId: User.groupId!,
       userId: selectedUser,
       taskGroupId: selectedGroup,
+      createdBy: User.id,
     });
   };
+  const edit = route.params.edit;
+  const taskToEdit = route.params.Task;
+  function loadTask() {
+    setName(taskToEdit?.name ?? "");
+    setDescription(taskToEdit?.description ?? "");
+    setSelectedFrequency(taskToEdit?.frequency ?? "never");
+    setSelectedGroup(taskToEdit?.taskGroupId ?? "");
+    setSelectedUser(taskToEdit?.assignedTo?.id ?? "");
+    // Falta el check de añadir al calendario
+    // Falta la fecha de inicio
+    console.log("loaded");
+  }
+  {
+    edit && useEffect(() => loadTask());
+  }
 
   return (
     <ScrollView
