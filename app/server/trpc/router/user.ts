@@ -111,6 +111,8 @@ export const userRouter = router({
           assignedTo: true,
           frequency: true,
           isDone: true,
+          createdBy: true,
+          taskGroupId: true,
         },
         where: {
           userId: input?.userId,
@@ -201,7 +203,6 @@ export const userRouter = router({
       };
     }),
 
-    
   updateUserImage: publicProcedure
     .input(z.object({ id: z.string(), imageprofile: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -218,8 +219,6 @@ export const userRouter = router({
         message: "User updated successfully",
       };
     }),
-
-    
 
   getUserByID: publicProcedure
     .input(z.object({ id: z.string() }))

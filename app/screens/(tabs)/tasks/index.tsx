@@ -25,7 +25,7 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
   });
 
   function goToCreateTask() {
-    navigation.navigate("CreateTask");
+    navigation.navigate("CreateTask", { edit: false });
   }
 
   function goToMyTasks() {
@@ -84,7 +84,7 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
               key={task.id}
               task={task}
               navigation={navigation}
-              isAssigned={task.assignedTo == null}
+              isAssigned={task.assignedTo != null}
             />
           ))
         ) : (

@@ -8,9 +8,8 @@ import { trpc } from "../trpc";
 import GroupCard from "../components/groups/GroupCard";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-// Define el tipo de props para el componente LoginScreen
 type GroupSelectionScreenProps = {
-  navigation: NativeStackNavigationProp<AppStackParamList, "Login">;
+  navigation: NativeStackNavigationProp<AppStackParamList, "GroupSelection">;
 };
 
 const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
@@ -58,7 +57,7 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
       </ScrollView>
       <View className="flex-row items-center">
         <Text className="flex-1 text-center">{myGroups?.length} grupos</Text>
-        <Pressable>
+        <Pressable onPress={() => navigation.navigate("CreateGroup")}>
           <Icon name="shape-square-rounded-plus" size={24} color={"#1E88E5"} />
         </Pressable>
       </View>

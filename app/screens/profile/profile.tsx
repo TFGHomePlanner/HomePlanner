@@ -1,7 +1,7 @@
-import { Pressable, Text, TextInput, View, TouchableOpacity, ScrollView } from "react-native";
+import { Pressable, Text, TextInput, View, ScrollView } from "react-native";
 import React, { useContext, useState } from "react";
 import { trpc } from "../../trpc";
-import UserProvider, { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
@@ -16,7 +16,6 @@ type ProfileScreenProps = {
 };
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
-
   const utils = trpc.useContext();
   const [edit, setEdit] = useState(false);
   const { User } = useContext(UserContext) as UserContextType;
@@ -24,14 +23,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
     userId: User.id,
   });
 
-  const {data: UserProfile} = trpc.user.getUserByID.useQuery({id: User.id});
-
-
+  const { data: UserProfile } = trpc.user.getUserByID.useQuery({ id: User.id });
 
   const joingroup = trpc.group.joinGroup.useMutation({
     onSuccess() {
       utils.user.getUserGroups.invalidate();
-    }
+    },
   });
 
   const [codeGroup, setCodeGroup] = useState("");
@@ -46,69 +43,72 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
       codeGroup: codeGroup,
     });
   }
-  const {data: userNotes} = trpc.user.getNotes.useQuery({
+  const { data: userNotes } = trpc.user.getNotes.useQuery({
     userId: User.id,
   });
 
   console.log(userNotes);
   return (
-    <ScrollView> 
-      <View className="h-full bg-light px-6 pt-16">
-        <View className="mb-8 mt-4">
-          <ImagePickerC id={User.id} table="users" />   
-          <Profileinformation />
+    <ScrollView className="h-full bg-light px-6 pt-16">
+      <Pressable onPress={navigation.goBack}>
+        <Icon name="chevron-left" size={16} color={"#1E88E5"} />
+      </Pressable>
+      <View className="mb-4 mt-4">
+        <ImagePickerC id={User.id} table="users" />
+        <Profileinformation />
+      </View>
+      <Pressable
+        onPress={goToCreateGroup}
+        className="my-4 flex-row space-x-2 rounded-lg bg-white p-4"
+      >
+        <Icon name="edit" size={16} color={"#1E88E5"} />
+        <Text className="self-center text-blue">Nuevo grupo</Text>
+      </Pressable>
+      {userGroups ? (
+        userGroups.map((group) => <GroupCard key={group.id} group={group} />)
+      ) : (
+        <View className="my-2">
+          <Text>Todavía no tienes grupos</Text>
         </View>
-        <Pressable onPress={navigation.goBack}>
-          <Icon name="left" size={16} color={"#7B61FF"} />
+      )}
+      <View className="flex-row items-center space-x-2">
+        <Text>Unirse a un grupo</Text>
+        <TextInput
+          className={"my-2 rounded-lg bg-white px-4 py-2 text-dark"}
+          placeholderTextColor="#95999C"
+          value={codeGroup}
+          onChangeText={setCodeGroup}
+          placeholder="Código de invitación"
+        />
+        <Pressable onPress={joinGroup} className="bg-gray rounded-full">
+          <Icon name="paper-plane" size={20} />
         </Pressable>
-        <Pressable
-          onPress={goToCreateGroup}
-          className="mt-4 flex-row space-x-2 rounded-lg bg-white p-4"
-        >
-          <Icon name="PEN" size={20} color={"#7B61FF"} />
-          <Text className="self-center text-purple">Nuevo grupo</Text>
-        </Pressable>
-        <View className="my-6">
-          {userGroups ? (
-            userGroups.map((group) => <GroupCard key={group.id} group={group} />)
+      </View>
+      <View className="mb-8 mt-4 flex justify-between">
+        <Text className="text-lg font-bold">Notas privadas</Text>
+        <View className="grid grid-cols-2">
+          {userNotes ? (
+            userNotes.map((note) => {
+              return (
+                <View className="mr-2" key={note.id}>
+                  <NoteCard key={note.id} Note={note} navigation={navigation} />
+                </View>
+              );
+            })
           ) : (
-            <Text>Todavía no tienes grupos</Text>
+            <Text className="font-bold">No tienes notas</Text>
           )}
         </View>
-        <View className="flex flex-row items-center justify-center">
-          <Text>Unirse a un grupo</Text>
-          <TextInput
-            className={
-              "my-2 rounded-lg border-b-[1px] border-light bg-white px-4 py-2 text-dark"
-            }
-            placeholderTextColor="#95999C"
-            value={codeGroup}
-            onChangeText={setCodeGroup}
-            placeholder="Código de invitación"
-          />
-          <Pressable onPress={joinGroup} className="p-2 rounded-full bg-gray">
-            <Icon name="paper-plane" size={24} color="black" />
-          </Pressable>
-        </View>
-        <View className="flex justify-between mb-8 mt-4">
-          <Text className="font-bold text-lg">Notas Privadas </Text>
-          <View className="grid grid-cols-2">
-            {
-              userNotes ? (
-                userNotes.map((note) =>  { return (
-                  <View className="mr-2" key={note.id}>
-                    <NoteCard key={note.id} Note={note} navigation={navigation} />
-                  </View>
-                );
-                })
-              ): 
-                <Text className="font-bold">No tienes notas</Text>
-            }
-          </View>
-          <Pressable onPress={() => navigation.navigate("UserNote", {Note: undefined, Edit: Edit})} className="p-2 rounded-full bg-gray">
-            <Text className="text-blue font-light text-md text-center">Añadir nueva nota</Text>
-          </Pressable>
-        </View>
+        <Pressable
+          onPress={() =>
+            navigation.navigate("UserNote", { Note: undefined, Edit: Edit })
+          }
+          className="bg-gray rounded-full p-2"
+        >
+          <Text className="text-md text-center font-light text-blue">
+            Añadir nueva nota
+          </Text>
+        </Pressable>
       </View>
     </ScrollView>
   );

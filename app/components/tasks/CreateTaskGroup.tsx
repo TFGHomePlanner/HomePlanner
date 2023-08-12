@@ -9,6 +9,7 @@ const CreateTaskGroupScreen = () => {
   const [visible, setVisible] = useState(false);
   function openCreateTaskGroup() {
     setVisible(!visible);
+    !visible && setInfo("");
   }
 
   const [info, setInfo] = useState("");
@@ -33,14 +34,14 @@ const CreateTaskGroupScreen = () => {
 
   return (
     <View className="mb-2">
-      <Pressable onPress={openCreateTaskGroup} className="items-end">
-        <Text className="text-purple">
+      <Pressable className="items-end">
+        <Text onPress={openCreateTaskGroup} className="text-purple">
           {visible ? "Cancelar" : "Crear grupo"}
         </Text>
       </Pressable>
       {visible && (
         <View>
-          <View className="flex-row items-center justify-between space-x-2">
+          <View className="mt-2 flex-row items-center justify-between space-x-2">
             <TextInput
               className="flex-1 rounded-lg bg-white px-4 py-3"
               placeholderTextColor="#95999C"

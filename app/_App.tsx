@@ -40,10 +40,10 @@ export type AppStackParamList = {
   TabTasks: undefined;
   TabLists: undefined;
   Chat: undefined;
-  CreateTask: undefined;
+  CreateTask: { Task?: ITask; edit: boolean };
   MyTasks: undefined;
   UnassignedTasks: undefined;
-  TaskDetail: { Task: ITask; isAssigned?: boolean };
+  TaskDetail: { Task: ITask; isAssigned: boolean };
   GroupTasks: { taskGroup: ITaskGroup };
   Modal: undefined;
   CreateList: { List?: IList; Edit: boolean };

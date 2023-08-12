@@ -120,13 +120,14 @@ model Task {
   isDone      Boolean    @default(false)
   createdAt   DateTime   @default(now())
   assignedTo  User?      @relation(fields: [userId], references: [id])
+  createdBy   String
   group       Group      @relation(fields: [groupId], references: [id])
   groupId     String
   userId      String?
   TaskGroup   TaskGroup? @relation(fields: [taskGroupId], references: [id])
   taskGroupId String?
 
-  @@index([groupId])
+  @@index([groupId, userId, createdBy])
 }
 
 model TaskGroup {
