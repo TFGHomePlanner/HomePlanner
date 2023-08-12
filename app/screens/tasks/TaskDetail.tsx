@@ -10,11 +10,14 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type TaskDetailScreenProps = {
-  route: RouteProp<AppStackParamList, "TaskDetail">;
   navigation: NativeStackNavigationProp<AppStackParamList, "TaskDetail">;
+  route: RouteProp<AppStackParamList, "TaskDetail">;
 };
 
-const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({ route }) => {
+const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const Task = route.params.Task;
   const isAssigned = route.params.isAssigned;
 
@@ -30,12 +33,20 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({ route }) => {
     mutation.mutateAsync({ taskId: Task.id });
   }
 
+  function goToCreateTask() {
+    navigation.navigate("CreateTask", { Task: Task, edit: true });
+  }
+
   return (
     <View className="h-full bg-light">
       <Header />
       <View className="flex-1 px-6 pb-10">
         <View className="flex-1 space-y-4">
-          {canEdit && <Text className="self-end text-purple">Editar</Text>}
+          {canEdit && (
+            <Text onPress={goToCreateTask} className="self-end text-purple">
+              Editar
+            </Text>
+          )}
           <Text className="text-xl font-bold">{Task.name}</Text>
           {Task.description && <Text>{Task.description}</Text>}
           {Task.assignedTo && <Text>Asignada a {Task.assignedTo.name}</Text>}
