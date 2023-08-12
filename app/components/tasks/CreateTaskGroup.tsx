@@ -34,8 +34,8 @@ const CreateTaskGroupScreen = () => {
 
   return (
     <View className="mb-2">
-      <Pressable onPress={openCreateTaskGroup} className="items-end">
-        <Text className="text-purple">
+      <Pressable className="items-end">
+        <Text onPress={openCreateTaskGroup} className="text-purple">
           {visible ? "Cancelar" : "Crear grupo"}
         </Text>
       </Pressable>

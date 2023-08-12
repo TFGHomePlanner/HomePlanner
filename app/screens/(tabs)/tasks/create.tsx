@@ -79,7 +79,6 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
       navigation.navigate("Tabs");
     },
   });
-
   const createTask = () => {
     mutation.mutateAsync({
       name,
@@ -91,6 +90,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
       createdBy: User.id,
     });
   };
+
   const edit = route.params.edit;
   const taskToEdit = route.params.Task;
   function loadTask() {
@@ -104,8 +104,21 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
     console.log("loaded");
   }
   {
-    edit && useEffect(() => loadTask());
+    edit && useEffect(() => loadTask(), []);
   }
+
+  const updateTask = () => {
+    /*mutation.mutateAsync({
+      name,
+      description,
+      frequency: selectedFrequency,
+      groupId: User.groupId!,
+      userId: selectedUser,
+      taskGroupId: selectedGroup,
+      createdBy: User.id,
+    });*/
+    setDescription("patatas");
+  };
 
   return (
     <ScrollView
@@ -120,8 +133,13 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             <Text className="text-purple">Cancelar</Text>
           </Pressable>
           <Text className="mr-4 self-center">Nueva tarea</Text>
-          <Pressable className="self-end" onPress={createTask}>
-            <Text className="font-semibold text-purple">Añadir</Text>
+          <Pressable
+            className="self-end"
+            onPress={edit ? updateTask : createTask}
+          >
+            <Text className="font-semibold text-purple">
+              {edit ? "       OK" : "Añadir"}
+            </Text>
           </Pressable>
         </View>
         <View className={`my-6 ${inputStyle}`}>
@@ -141,12 +159,23 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
           />
         </View>
         <CreateTaskGroupScreen />
-        <View className="mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
+        <View className="z-20 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
           <Text>Grupo de tareas</Text>
           {groupOptions ? (
             <SelectList
               data={groupOptions}
               setSelected={setSelectedGroup}
+              dropdownStyles={{
+                borderColor: "#3A3A3C",
+                backgroundColor: "#3A3A3C",
+                opacity: 0.85,
+                position: "absolute",
+                right: 14,
+                top: 24,
+                width: 180,
+                borderRadius: 12,
+              }}
+              dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
               save="key"
               search={false}
               boxStyles={{
@@ -161,7 +190,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             <Text>Cargando...</Text>
           )}
         </View>
-        <View className="mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
+        <View className="z-10 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
           <Text>Repetir tarea</Text>
           <SelectList
             data={frequencyOptions}
@@ -169,6 +198,17 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             save="key"
             defaultOption={{ value: "Nunca", key: Frequency.never }}
             search={false}
+            dropdownStyles={{
+              borderColor: "#3A3A3C",
+              backgroundColor: "#3A3A3C",
+              opacity: 0.85,
+              position: "absolute",
+              right: 14,
+              top: 24,
+              width: 180,
+              borderRadius: 12,
+            }}
+            dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
             boxStyles={{
               height: 42,
               width: 140,
@@ -214,7 +254,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             )}
           </View>
           <Divider />
-          <View className="flex-row items-center justify-between rounded-lg bg-white pl-4">
+          <View className="z-10 flex-row items-center justify-between rounded-lg bg-white pl-4">
             <Text>Asignar encargado</Text>
             {userOptions ? (
               <SelectList
@@ -222,6 +262,17 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
                 setSelected={setSelectedUser}
                 save="key"
                 search={false}
+                dropdownStyles={{
+                  borderColor: "#3A3A3C",
+                  backgroundColor: "#3A3A3C",
+                  opacity: 0.85,
+                  position: "absolute",
+                  right: 14,
+                  top: 24,
+                  width: 180,
+                  borderRadius: 12,
+                }}
+                dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
                 boxStyles={{
                   height: 42,
                   width: 140,
