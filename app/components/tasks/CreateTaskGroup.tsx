@@ -9,6 +9,7 @@ const CreateTaskGroupScreen = () => {
   const [visible, setVisible] = useState(false);
   function openCreateTaskGroup() {
     setVisible(!visible);
+    !visible && setInfo("");
   }
 
   const [info, setInfo] = useState("");
@@ -40,7 +41,7 @@ const CreateTaskGroupScreen = () => {
       </Pressable>
       {visible && (
         <View>
-          <View className="flex-row items-center justify-between space-x-2">
+          <View className="mt-2 flex-row items-center justify-between space-x-2">
             <TextInput
               className="flex-1 rounded-lg bg-white px-4 py-3"
               placeholderTextColor="#95999C"
