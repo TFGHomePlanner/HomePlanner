@@ -11,7 +11,7 @@ test("renders correctly", () => {
 	const trpcClient = trpc.createClient({
 		links: [
 			httpBatchLink({
-				url: "http://192.168.1.38:4000/trpc",
+				url: "http://192.168.1.46:4000/trpc",
 			}),
 		],
 	});
