@@ -4,3 +4,4 @@ assets
 seed.ts
 .eslintrc.js
 *config.js
+*test.js
