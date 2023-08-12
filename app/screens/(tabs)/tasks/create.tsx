@@ -73,14 +73,14 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
 
-  const mutation = trpc.task.create.useMutation({
+  const createMutation = trpc.task.create.useMutation({
     onSuccess() {
       utils.task.getAllTasks.invalidate();
       navigation.navigate("Tabs");
     },
   });
   const createTask = () => {
-    mutation.mutateAsync({
+    createMutation.mutateAsync({
       name,
       description,
       frequency: selectedFrequency,
@@ -94,6 +94,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
   const edit = route.params.edit;
   const taskToEdit = route.params.Task;
   function loadTask() {
+    console.log(taskToEdit?.taskGroupId);
     setName(taskToEdit?.name ?? "");
     setDescription(taskToEdit?.description ?? "");
     setSelectedFrequency(taskToEdit?.frequency ?? "never");
@@ -101,23 +102,28 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
     setSelectedUser(taskToEdit?.assignedTo?.id ?? "");
     // Falta el check de añadir al calendario
     // Falta la fecha de inicio
-    console.log("loaded");
   }
   {
     edit && useEffect(() => loadTask(), []);
   }
 
+  const updateMutation = trpc.task.update.useMutation({
+    onSuccess() {
+      utils.task.getAllTasks.invalidate();
+      navigation.navigate("Tabs");
+    },
+  });
   const updateTask = () => {
-    /*mutation.mutateAsync({
+    updateMutation.mutateAsync({
+      id: taskToEdit?.id ?? "",
       name,
       description,
       frequency: selectedFrequency,
       groupId: User.groupId!,
       userId: selectedUser,
       taskGroupId: selectedGroup,
-      createdBy: User.id,
-    });*/
-    setDescription("patatas");
+      createdBy: taskToEdit?.createdBy ?? User.id,
+    });
   };
 
   return (

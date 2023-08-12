@@ -24,6 +24,7 @@ export const taskRouter = router({
               name: true,
             },
           },
+          taskGroupId: true,
           createdBy: true,
         },
         where: {
@@ -115,6 +116,7 @@ export const taskRouter = router({
           assignedTo: true,
           createdAt: true,
           createdBy: true,
+          taskGroupId: true,
         },
         where: {
           groupId: input.groupId,
@@ -166,6 +168,7 @@ export const taskRouter = router({
             },
           },
           createdBy: true,
+          taskGroupId: true,
         },
         where: {
           groupId: input.groupId,
