@@ -18,6 +18,7 @@ export const taskRouter = router({
           frequency: true,
           isDone: true,
           createdAt: true,
+          startsAt: true,
           assignedTo: {
             select: {
               id: true,
@@ -43,6 +44,7 @@ export const taskRouter = router({
           name,
           description,
           frequency,
+          startsAt,
           groupId,
           userId,
           taskGroupId,
@@ -54,6 +56,7 @@ export const taskRouter = router({
             name,
             description,
             frequency,
+            startsAt,
             groupId,
             userId,
             taskGroupId,
@@ -73,6 +76,7 @@ export const taskRouter = router({
           name,
           description,
           frequency,
+          startsAt,
           groupId,
           userId,
           taskGroupId,
@@ -84,6 +88,7 @@ export const taskRouter = router({
             name,
             description,
             frequency,
+            startsAt,
             groupId,
             userId,
             taskGroupId,
@@ -115,6 +120,7 @@ export const taskRouter = router({
           isDone: true,
           assignedTo: true,
           createdAt: true,
+          startsAt: true,
           createdBy: true,
           taskGroupId: true,
         },
@@ -161,6 +167,7 @@ export const taskRouter = router({
           frequency: true,
           isDone: true,
           createdAt: true,
+          startsAt: true,
           assignedTo: {
             select: {
               id: true,

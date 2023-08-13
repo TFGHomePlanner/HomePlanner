@@ -7,6 +7,7 @@ export const TaskSchema = z.object({
   description: z.string().optional().nullable(),
   frequency: z.nativeEnum(Frequency),
   isDone: z.boolean(),
+  startsAt: z.date().optional().nullable(),
   assignedTo: z
     .object({
       id: z.string(),
@@ -26,6 +27,7 @@ export const CreateTaskSchema = z.object({
     })
     .nullable(),
   frequency: z.nativeEnum(Frequency),
+  startsAt: z.date().optional().nullable(),
   groupId: z.string(),
   userId: z.string().optional().nullable(),
   taskGroupId: z.string().optional().nullable(),

@@ -1,6 +1,6 @@
 datasource db {
   provider = "mysql"
-  url      = "mysql://HomePlannerDB:HomePlanner_RDS@homeplannerdb.cwnyeyokykn2.eu-north-1.rds.amazonaws.com:3306/homeplannerdb"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -119,6 +119,7 @@ model Task {
   frequency   Frequency
   isDone      Boolean    @default(false)
   createdAt   DateTime   @default(now())
+  startsAt    DateTime?
   assignedTo  User?      @relation(fields: [userId], references: [id])
   createdBy   String
   group       Group      @relation(fields: [groupId], references: [id])

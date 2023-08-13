@@ -110,6 +110,7 @@ export const userRouter = router({
           description: true,
           assignedTo: true,
           frequency: true,
+          startsAt: true,
           isDone: true,
           createdBy: true,
           taskGroupId: true,
