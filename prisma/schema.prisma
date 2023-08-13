@@ -34,19 +34,20 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   name          String
-  email         String    @unique
+  email         String       @unique
   emailVerified DateTime?
   passwordHash  String
   accounts      Account[]
   sessions      Session[]
-  adminGroup    Group[]   @relation("UserAdmin")
-  groups        Group[]   @relation("Users")
+  adminGroup    Group[]      @relation("UserAdmin")
+  groups        Group[]      @relation("Users")
   message       Message[]
   imageprofile  String?
   Task          Task[]
   Notes         Note[]
+  SharedNote    SharedNote[]
 }
 
 model Group {
@@ -62,6 +63,7 @@ model Group {
   Task               Task[]
   favouritesProducts FavouritesProducts[]
   TaskGroup          TaskGroup[]
+  SharedNote         SharedNote[]
 
   @@index([adminId])
 }
@@ -148,6 +150,19 @@ model Note {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
   userId    String
+
+  @@index([userId])
+}
+
+model SharedNote {
+  id        String   @id @default(cuid())
+  title     String
+  text      String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  group     Group    @relation(fields: [groupId], references: [id])
+  groupId   String
 
   @@index([userId])
 }

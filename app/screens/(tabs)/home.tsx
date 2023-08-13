@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import NoteCard from "../../components/sharedNotes/NoteCard";
 
 export default function TabHomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inicio</Text>
-      <View style={styles.separator} />
+      <Text>NOTAS COMPARTIDAS</Text>
+      <NoteCard />
     </View>
   );
 }
