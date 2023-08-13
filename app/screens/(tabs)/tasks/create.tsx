@@ -84,6 +84,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
       name,
       description,
       frequency: selectedFrequency,
+      startsAt: date,
       groupId: User.groupId!,
       userId: selectedUser,
       taskGroupId: selectedGroup,
@@ -94,17 +95,16 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
   const edit = route.params.edit;
   const taskToEdit = route.params.Task;
   function loadTask() {
-    console.log(taskToEdit?.taskGroupId);
     setName(taskToEdit?.name ?? "");
     setDescription(taskToEdit?.description ?? "");
     setSelectedFrequency(taskToEdit?.frequency ?? "never");
     setSelectedGroup(taskToEdit?.taskGroupId ?? "");
     setSelectedUser(taskToEdit?.assignedTo?.id ?? "");
+    setDate(taskToEdit?.startsAt ? new Date(taskToEdit?.startsAt) : new Date());
     // Falta el check de añadir al calendario
-    // Falta la fecha de inicio
   }
   {
-    edit && useEffect(() => loadTask(), []);
+    edit && useEffect(() => loadTask(), [edit]);
   }
 
   const updateMutation = trpc.task.update.useMutation({
@@ -119,6 +119,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
       name,
       description,
       frequency: selectedFrequency,
+      startsAt: date,
       groupId: User.groupId!,
       userId: selectedUser,
       taskGroupId: selectedGroup,
@@ -133,7 +134,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
       className="bg-light"
     >
       <Header />
-      <View className="h-full px-6">
+      <View className="h-screen px-6">
         <View className="flex flex-row justify-between">
           <Pressable onPress={navigation.goBack}>
             <Text className="text-purple">Cancelar</Text>
