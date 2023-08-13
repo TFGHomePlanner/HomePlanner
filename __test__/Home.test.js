@@ -6,12 +6,14 @@ import TabHomeScreen from "../app/screens/(tabs)/home";
 import { httpBatchLink } from "@trpc/client";
 import { create } from "react-test-renderer";
 
+jest.mock("react-native-vector-icons/MaterialCommunityIcons", () => "MaterialCommunityIcons");
+
 test("renders correctly", () => {
 	const queryClient = new QueryClient();
 	const trpcClient = trpc.createClient({
 		links: [
 			httpBatchLink({
-				url: "http://192.168.1.46:4000/trpc",
+				url: "http://192.168.1.38:4000/trpc",
 			}),
 		],
 	});

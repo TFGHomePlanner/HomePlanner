@@ -1,35 +1,40 @@
-import {View, Text, TextInput, ScrollView, TouchableOpacity,} from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import { Header } from "../../components/Header";
 import { SelectList } from "react-native-dropdown-select-list";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import DeleteIcon from "react-native-vector-icons/FontAwesome5";
 import { trpc } from "../../server/utils/trpc";
 import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
 import { RouteProp } from "@react-navigation/native";
 type CreateListScreenProps = {
-    route: RouteProp<AppStackParamList, "CreateList">;
-    navigation: NativeStackNavigationProp<AppStackParamList, "CreateList">;
-  };
+  route: RouteProp<AppStackParamList, "CreateList">;
+  navigation: NativeStackNavigationProp<AppStackParamList, "CreateList">;
+};
 
-
-const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }) => {
-
+const CreateListScreen: React.FC<CreateListScreenProps> = ({
+  navigation,
+  route,
+}) => {
   // TRPC
   const utils = trpc.useContext();
 
-
-  const  updateListMutation = trpc.list.updateList.useMutation({
+  const updateListMutation = trpc.list.updateList.useMutation({
     onSuccess() {
       utils.list.getAllLists.invalidate();
       navigation.navigate("TabLists");
     },
   });
-    
-  const createListMutation  = trpc.list.createList.useMutation({
+
+  const createListMutation = trpc.list.createList.useMutation({
     onSuccess() {
       utils.list.getAllLists.invalidate();
       navigation.goBack();
@@ -37,10 +42,11 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
   });
   const List = route.params.List;
   const Edit = route.params.Edit;
-  const {User} = React.useContext (UserContext) as UserContextType;
-  const {data: favouriteProducts} = trpc.list.getAllFavouritesProducts.useQuery({
-    groupId: User.groupId,
-  });
+  const { User } = React.useContext(UserContext) as UserContextType;
+  const { data: favouriteProducts } =
+    trpc.list.getAllFavouritesProducts.useQuery({
+      groupId: User.groupId,
+    });
   function CreateList() {
     createListMutation.mutateAsync({
       description: description,
@@ -51,7 +57,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
       isPublic: true,
     });
   }
-  function EditList() { 
+  function EditList() {
     updateListMutation.mutateAsync({
       description: description,
       groupId: User.groupId,
@@ -64,8 +70,6 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
     });
   }
 
-
-
   //VAL
   const [isPublic, setIsPublic] = useState(true);
   const [newItem, setNewItem] = useState("");
@@ -74,97 +78,124 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
   const [listItemes, setListItems] = useState<string[]>([]);
   const [selected, setSelected] = React.useState("");
   const frequency = [
-    {key:"1", value:"Nunca"},
-    {key:"2", value:"Cada dia"},
-    {key:"3", value:"Cada semana"},
-    {key:"4", value: "Cada mes"},
+    { key: "1", value: "Nunca" },
+    { key: "2", value: "Cada dia" },
+    { key: "3", value: "Cada semana" },
+    { key: "4", value: "Cada mes" },
   ];
   const addItemToList = (newItem: string) => {
     if (!listItemes.includes(newItem)) {
       setListItems((prevList) => [...prevList, newItem]);
     }
     setNewItem("");
-    if(newItem in checkedItems) {
+    if (newItem in checkedItems) {
       console.log("entro");
       setCheckedItems((prevCheckedItems) => ({
         ...prevCheckedItems,
         [newItem]: true,
-      })); 
+      }));
       console.log("entro");
     }
   };
-  
+
   const removeItemFromList = (itemToRemove: string) => {
-    setListItems((prevList) => prevList.filter((item) => item !== itemToRemove));
-    if(itemToRemove in checkedItems) {
+    setListItems((prevList) =>
+      prevList.filter((item) => item !== itemToRemove)
+    );
+    if (itemToRemove in checkedItems) {
       console.log("salgo");
       setCheckedItems((prevCheckedItems) => ({
         ...prevCheckedItems,
         [itemToRemove]: false,
-      })
-      ); 
+      }));
     }
   };
-  const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(() => {
-    const initialCheckedItems: { [key: string]: boolean } = {};
-    favouriteProducts?.forEach((item) => {
-      initialCheckedItems[item.name] = false;
-    });
-    return initialCheckedItems;
-  });
+  const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
+    () => {
+      const initialCheckedItems: { [key: string]: boolean } = {};
+      favouriteProducts?.forEach((item) => {
+        initialCheckedItems[item.name] = false;
+      });
+      return initialCheckedItems;
+    }
+  );
 
   const iseditable = () => {
-    if(Edit){
+    if (Edit) {
       setIsPublic(List?.isPublic || true);
       settitle(List?.name || ""),
-      setdescrpition(List?.description || ""),
-      List?.items?.map((item) => addItemToList(item.name));
+        setdescrpition(List?.description || ""),
+        List?.items?.map((item) => addItemToList(item.name));
     }
   };
-  useEffect(() => {iseditable();}, []);
+  useEffect(() => {
+    iseditable();
+  }, []);
 
   return (
-    <View className="h-full flex flex-col w-full bg-light">
-      <Header/> 
-      <ScrollView className = "flex-1 w-full">
-        <View className = "p-4 justify-center items-center">
-          <View className = "bg-light  w-full p-4 mb-4">
-            <Text className = "text-xl font-bold text-gray-700 mb-2">Titulo <Text className="text-pink">*</Text></Text>
+    <View className="flex h-full w-full flex-col bg-light">
+      <Header />
+      <ScrollView className="w-full flex-1">
+        <View className="items-center justify-center p-4">
+          <View className="mb-4  w-full bg-light p-4">
+            <Text className="text-gray-700 mb-2 text-xl font-bold">
+              Titulo <Text className="text-pink">*</Text>
+            </Text>
             <TextInput
-              value = {title}
-              className = "bg-[#ffff] shadow-md  rounded-md px-4 py-2"
+              value={title}
+              className="rounded-md bg-[#ffff]  px-4 py-2 shadow-md"
               placeholderTextColor="#F1999F"
               placeholder="Escribe el título aquí"
               onChangeText={(text) => settitle(text)}
             />
-            <Text className = "mt-3 text-xl font-bold text-gray-700 mb-2">Descripción:</Text>
+            <Text className="text-gray-700 mb-2 mt-3 text-xl font-bold">
+              Descripción:
+            </Text>
             <TextInput
-              value = {description}
-              className ="bg-[#ffff] shadow-md  rounded-md px-4 py-2"
+              value={description}
+              className="rounded-md bg-[#ffff]  px-4 py-2 shadow-md"
               placeholderTextColor="#F1999F"
               placeholder="Escribe una descripción aquí"
               maxLength={80}
               onChangeText={(text) => setdescrpition(text)}
             />
           </View>
-          <View className = "bg-light w-full px-4 pt-2 mb-4">
-            <Text className = "text-start text-xl font-bold text-gray-700 mb-2">Permisos de edición:</Text>
-            <View className = "bg-[#ffff] shadow-md  rounded-md p-2 pt-4 mb-2">
+          <View className="mb-4 w-full bg-light px-4 pt-2">
+            <Text className="text-gray-700 mb-2 text-start text-xl font-bold">
+              Permisos de edición:
+            </Text>
+            <View className="mb-2 rounded-md  bg-[#ffff] p-2 pt-4 shadow-md">
               <View>
-                <TouchableOpacity className="flex flex-row aling-items-center pb-3" onPress={() => setIsPublic(true)}>
-                  <View className= {`w-6 h-6 rounded-full border-2 border-gray mr-4 ${isPublic ? "bg-pink" : "bg-grey"}`}/>
+                <TouchableOpacity
+                  className="aling-items-center flex flex-row pb-3"
+                  onPress={() => setIsPublic(true)}
+                >
+                  <View
+                    className={`border-gray mr-4 h-6 w-6 rounded-full border-2 ${
+                      isPublic ? "bg-pink" : "bg-grey"
+                    }`}
+                  />
                   <Text className="text-md">Permitir</Text>
                 </TouchableOpacity>
-                <TouchableOpacity className="flex flex-row aling-items-center" onPress={() => setIsPublic(false)}>
-                  <View className= {`w-6 h-6 rounded-full border-2 border-gray mr-4  ${isPublic ? "bg-gray" : "bg-pink"}`}/>
+                <TouchableOpacity
+                  className="aling-items-center flex flex-row"
+                  onPress={() => setIsPublic(false)}
+                >
+                  <View
+                    className={`border-gray mr-4 h-6 w-6 rounded-full border-2  ${
+                      isPublic ? "bg-gray" : "bg-pink"
+                    }`}
+                  />
                   <Text className="text-md pt-1">No permitir</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
-          <View className = "bg-light w-full px-4 pt-2 mb-4">
-            <Text className = "text-start text-xl font-bold text-gray-700 mb-2">Productos favoritos:</Text>
-            <View className="bg-[#ffff] shadow-md  rounded-md p-2 pt-4 mb-2">
+          <View className="mb-4 w-full bg-light px-4 pt-2">
+            <Text className="text-gray-700 mb-2 text-start text-xl font-bold">
+              Productos favoritos:
+            </Text>
+            <View className="mb-2 rounded-md  bg-[#ffff] p-2 pt-4 shadow-md">
               <ScrollView>
                 <View>
                   {favouriteProducts?.map((item) => (
@@ -179,10 +210,17 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
                       }}
                     >
                       <View className="flex flex-row pt-2">
-                        <View className = "bg-pink border-[1px] border-black h-5 w-5 flex-row rounded-full items-center">
-                          {checkedItems[item.name] && <Icon name="check" className="px-1" size={15} color="black" />}
+                        <View className="border-black h-5 w-5 flex-row items-center rounded-full border-[1px] bg-pink">
+                          {checkedItems[item.name] && (
+                            <Icon
+                              name="check"
+                              className="px-1"
+                              size={15}
+                              color="black"
+                            />
+                          )}
                         </View>
-                        <Text className = "px-2">{item.name}</Text>
+                        <Text className="px-2">{item.name}</Text>
                       </View>
                     </TouchableOpacity>
                   ))}
@@ -190,10 +228,10 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
               </ScrollView>
             </View>
           </View>
-          <View className="flex-row items-center w-full px-4 pt-2 mb-4">
+          <View className="mb-4 w-full flex-row items-center px-4 pt-2">
             {/* Input para el nuevo ítem */}
             <TextInput
-              className="bg-[#ffff] shadow-md rounded-md px-4 py-2 mr-2 flex-1"
+              className="mr-2 flex-1 rounded-md bg-[#ffff] px-4 py-2 shadow-md"
               placeholderTextColor="#F1999F"
               placeholder="Agregar nuevo ítem"
               value={newItem}
@@ -206,28 +244,40 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
           </View>
           <View className="flex-row flex-wrap">
             {listItemes.map((item) => (
-              <TouchableOpacity key={item} onPress={() => removeItemFromList(item)}>
-                <View className="bg-pink rounded-full px-3 py-2 m-2 flex flex-row justify-between items-center">
-                  <Text className="text-white font-bold px-1">{item}</Text>
-                  <DeleteIcon name="times" size={12} color="white" />
+              <TouchableOpacity
+                key={item}
+                onPress={() => removeItemFromList(item)}
+              >
+                <View className="m-2 flex flex-row items-center justify-between rounded-full bg-pink px-3 py-2">
+                  <Text className="px-1 font-bold text-white">{item}</Text>
+                  <Icon name="times" size={12} color="white" />
                 </View>
               </TouchableOpacity>
             ))}
           </View>
         </View>
-        <View className = "bg-light w-full px-4 pt-2 mb-4">
-          <Text className = "text-start text-xl font-bold text-gray-700 mb-2">Lista Recurrente:</Text>
-          <SelectList 
-            setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
-            data={frequency} 
+        <View className="mb-4 w-full bg-light px-4 pt-2">
+          <Text className="text-gray-700 mb-2 text-start text-xl font-bold">
+            Lista Recurrente:
+          </Text>
+          <SelectList
+            setSelected={(val: React.SetStateAction<string>) =>
+              setSelected(val)
+            }
+            data={frequency}
             save="value"
           />
         </View>
-        <View className="flex-row w-full px-4 pt-2 mb-4">
-          <TouchableOpacity onPress={Edit ? EditList : CreateList} className="w-full">
-            <View className="bg-[#F1999F] p-3 rounded-xl flex flex-row items-center justify-start w-full">
+        <View className="mb-4 w-full flex-row px-4 pt-2">
+          <TouchableOpacity
+            onPress={Edit ? EditList : CreateList}
+            className="w-full"
+          >
+            <View className="flex w-full flex-row items-center justify-start rounded-xl bg-[#F1999F] p-3">
               <Icon name="plus" size={20} color="white" className="mr-2" />
-              <Text className="text-lg font-bold ml-2 text-white pl-4">{Edit ? "Editar Lsita" :"Crear lista"}</Text>
+              <Text className="ml-2 pl-4 text-lg font-bold text-white">
+                {Edit ? "Editar Lsita" : "Crear lista"}
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -235,7 +285,5 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({ navigation, route }
     </View>
   );
 };
-  
-  
+
 export default CreateListScreen;
-  

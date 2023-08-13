@@ -4,8 +4,10 @@ import { httpBatchLink } from "@trpc/client";
 import { create } from "react-test-renderer";
 import CreateListScreen from "../app/screens/lists/createList";
 import UserProvider from "../app/context/userContext";
-import TabListsScreen from "../app/screens/(tabs)/lists";
 
+jest.mock("react-native-vector-icons/FontAwesome5", () => ({
+  ...jest.requireActual("react-native-vector-icons/FontAwesome5"),
+}));
 
 test("Interfaz crear lista de la compra renderizada correctamente", () => {
   const queryClient = new QueryClient();
@@ -21,7 +23,7 @@ test("Interfaz crear lista de la compra renderizada correctamente", () => {
     <QueryClientProvider client={queryClient}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <UserProvider>
-            <CreateListScreen navigation={ {navigate: jest.fn()} } route={ {params: {Edit: false}} }/>
+          <CreateListScreen navigation={{ navigate: jest.fn(() => { }) }} route={{ params: { Edit: false } }} />
         </UserProvider>
       </trpc.Provider>
     </QueryClientProvider>

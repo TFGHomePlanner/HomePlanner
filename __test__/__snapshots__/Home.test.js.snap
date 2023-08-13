@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "backgroundColor": "#F8F3ED",
+      "flex": 1,
+      "justifyContent": "center",
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "fontSize": 20,
+        "fontWeight": "bold",
+      }
+    }
+  >
+    Inicio
+  </Text>
+  <Text>
+    NOTAS COMPARTIDAS
+  </Text>
+  <View
+    style={
+      [
+        {
+          "marginBottom": 16,
+        },
+        {
+          "width": "100%",
+        },
+        {
+          "borderBottomLeftRadius": 8,
+          "borderBottomRightRadius": 8,
+          "borderTopLeftRadius": 8,
+          "borderTopRightRadius": 8,
+        },
+        {
+          "backgroundColor": "#FFFFFF",
+        },
+        {
+          "paddingLeft": 16,
+          "paddingRight": 16,
+        },
+        {
+          "paddingBottom": 12,
+          "paddingTop": 12,
+        },
+        {
+          "shadowColor": "rgba(0, 0, 0, 0.1)",
+          "shadowOffset": {
+            "height": 1,
+            "width": 0,
+          },
+          "shadowOpacity": 1,
+          "shadowRadius": 2,
+        },
+        {
+          "shadowColor": "#E5E5E5",
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        [
+          {
+            "flexDirection": "row",
+          },
+          {
+            "justifyContent": "space-between",
+          },
+        ]
+      }
+    >
+      <Text
+        style={
+          [
+            {
+              "fontSize": 16,
+              "lineHeight": 24,
+            },
+            {
+              "fontWeight": "600",
+            },
+            {
+              "color": "#212529",
+            },
+          ]
+        }
+      >
+        Nota para miniflusi
+      </Text>
+      <MaterialCommunityIcons
+        color="#212529"
+        name="chevron-right"
+        size={24}
+      />
+    </View>
+  </View>
+</View>
+`;
