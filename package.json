@@ -24,7 +24,6 @@
   "dependencies": {
     "@eva-design/eva": "^2.2.0",
     "@expo/vector-icons": "^13.0.0",
-    "@gorhom/bottom-sheet": "^4.4.7",
     "@prisma/client": "^4.16.1",
     "@react-native-community/datetimepicker": "6.7.3",
     "@react-navigation/bottom-tabs": "^6.5.8",
