@@ -17,7 +17,7 @@ type TabTasksScreenProps = {
 const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
   const { User } = useContext(UserContext) as UserContextType;
   const { data: allTasks } = trpc.task.getAllTasks.useQuery({
-    groupId: User.groupId!,
+    groupId: User.groupId || "",
   });
 
   const { data: groups } = trpc.task.getAllTaskGroups.useQuery({
@@ -82,7 +82,10 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
           allTasks.map((task) => (
             <TaskCard
               key={task.id}
-              task={task}
+              task={{
+                ...task,
+                startsAt: task.startsAt ? new Date(task.startsAt) : null,
+              }}
               navigation={navigation}
               isAssigned={task.assignedTo != null}
             />

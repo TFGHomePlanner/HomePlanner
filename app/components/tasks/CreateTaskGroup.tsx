@@ -26,7 +26,7 @@ const CreateTaskGroupScreen = () => {
     name &&
       mutation.mutateAsync({
         name,
-        groupId: User.groupId!,
+        groupId: User.groupId || "",
       });
     name && openCreateTaskGroup();
     !name && setInfo("Debes introducir el nombre del grupo.");

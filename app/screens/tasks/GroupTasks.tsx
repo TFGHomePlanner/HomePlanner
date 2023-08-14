@@ -21,7 +21,7 @@ const GroupTasksScreen: React.FC<GroupTasksScreenProps> = ({
 }) => {
   const { User } = useContext(UserContext) as UserContextType;
   const { data: tasks } = trpc.task.getAllGroupTasks.useQuery({
-    groupId: User.groupId!,
+    groupId: User.groupId || "",
     taskGroupId: route.params.taskGroup.id,
   });
   return (
@@ -36,7 +36,10 @@ const GroupTasksScreen: React.FC<GroupTasksScreenProps> = ({
             tasks.map((task) => (
               <TaskCard
                 key={task.id}
-                task={task}
+                task={{
+                  ...task,
+                  startsAt: task.startsAt ? new Date(task.startsAt) : null,
+                }}
                 navigation={navigation}
                 isAssigned={false}
               />

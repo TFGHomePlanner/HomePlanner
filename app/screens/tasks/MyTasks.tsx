@@ -17,7 +17,7 @@ const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
   const { User } = useContext(UserContext) as UserContextType;
   const { data: myTasks } = trpc.user.getUserTasks.useQuery({
     userId: User.id,
-    groupId: User.groupId!,
+    groupId: User.groupId || "",
   });
   return (
     <View className="h-full bg-light">
@@ -34,7 +34,10 @@ const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
             myTasks.map((task) => (
               <TaskCard
                 key={task.id}
-                task={task}
+                task={{
+                  ...task,
+                  startsAt: task.startsAt ? new Date(task.startsAt) : null,
+                }}
                 navigation={navigation}
                 isAssigned={true}
               />
