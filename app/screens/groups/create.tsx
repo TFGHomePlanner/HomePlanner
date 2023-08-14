@@ -9,30 +9,67 @@ import { UserContextType } from "../../context/types";
 import Icon from "react-native-vector-icons/Feather";
 import * as Clipboard from "expo-clipboard";
 
+/**
+ * Propiedades para la pantalla de creación de grupos.
+ */
 type CreateGroupScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateGroup">;
 };
 
+/**
+ * Pantalla de creación de grupos.
+ */
 const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
   navigation,
 }) => {
+  /**
+   * Estilo de los campos de entrada.
+   */
   const inputStyle =
     "mb-4 text-base py-2 px-4 bg-white rounded-lg border-b-[1px] border-light text-dark";
 
+  /**
+   * Contexto del usuario actual.
+   */
   const { User } = useContext(UserContext) as UserContextType;
+  /**
+   * Utilidades de trpc para gestionar grupos y usuarios.
+   */
   const utils = trpc.useContext();
 
+  /**
+   * Estado local para el nombre del grupo.
+   */
   const [name, setName] = useState("");
+
+  /**
+   * Estado local para la descripción del grupo.
+   */
   const [description, setDescription] = useState("");
+
+  /**
+   * Estado local para el código del grupo generado.
+   */
   const [codeGroup, setCodeGroup] = useState("");
+
+  /**
+   * Estado local para la lista de usuarios.
+   */
   const [users, setUsers] = useState([]);
 
+  /**
+   * Mutación para crear un grupo.
+   */
   const mutation = trpc.group.create.useMutation({
     onSuccess() {
       utils.user.getUserGroups.invalidate();
       navigation.navigate("Tabs");
     },
   });
+
+  /**
+   * Crea un nuevo grupo utilizando los datos proporcionados.
+   */
   function createGroup() {
     mutation.mutateAsync({
       name,
@@ -43,6 +80,9 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
     });
   }
 
+  /**
+   * Genera un código de grupo aleatorio.
+   */
   function generateCode() {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     const codeLength = 6;
@@ -54,6 +94,9 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
     setCodeGroup(code);
   }
 
+  /**
+   * Copia el código de grupo al portapapeles.
+   */
   const copyToClipboard = async () => {
     await Clipboard.setStringAsync(codeGroup);
   };

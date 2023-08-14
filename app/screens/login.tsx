@@ -14,7 +14,6 @@ import { AppStackParamList } from "../_App";
 import { UserContext } from "../context/userContext";
 import { IUser, UserContextType } from "../context/types";
 
-// Define el tipo de props para el componente LoginScreen
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "Login">;
 };
@@ -42,6 +41,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       console.log("Error during login:", error);
     },
   });
+
   const handleLogin = () => {
     mutate({ email, password });
   };

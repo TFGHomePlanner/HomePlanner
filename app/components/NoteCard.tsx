@@ -1,6 +1,5 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome5";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { INote } from "../common/validation/note";
 

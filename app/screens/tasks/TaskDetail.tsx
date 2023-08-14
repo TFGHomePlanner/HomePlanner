@@ -13,26 +13,52 @@ type TaskDetailScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TaskDetail">;
   route: RouteProp<AppStackParamList, "TaskDetail">;
 };
-
+/**
+ * Pantalla que muestra los detalles de una tarea.
+ */
 const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
   navigation,
   route,
 }) => {
+  /**
+   * Objeto que representa los detalles de la tarea.
+   */
   const Task = route.params.Task;
+
+  /**
+   * Indica si la tarea está asignada a un usuario.
+   */
   const isAssigned = route.params.isAssigned;
 
+  /**
+   * Contexto del usuario actual.
+   */
   const { User } = useContext(UserContext) as UserContextType;
+
+  /**
+   * Indica si el usuario actual tiene permiso para editar la tarea.
+   */
   const canEdit = User.id === Task.createdBy || User.isAdmin;
   const utils = trpc.useContext();
+
+  /**
+   * Mutación para marcar una tarea como completada.
+   */
   const mutation = trpc.task.checkTask.useMutation({
     onSuccess() {
       utils.task.getAllTasks.invalidate();
     },
   });
+  /**
+   * Marca la tarea actual como completada.
+   */
   function checkTask() {
     mutation.mutateAsync({ taskId: Task.id });
   }
 
+  /**
+   * Navega a la pantalla de edición de tareas.
+   */
   function goToCreateTask() {
     navigation.navigate("CreateTask", { Task: Task, edit: true });
   }
@@ -50,6 +76,9 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
           <Text className="text-xl font-bold">{Task.name}</Text>
           {Task.description && <Text>{Task.description}</Text>}
           {Task.assignedTo && <Text>Asignada a {Task.assignedTo.name}</Text>}
+          {Task.startsAt instanceof Date && (
+            <Text>Empieza el {Task.startsAt.toLocaleDateString()}</Text>
+          )}
           <View className="flex-row space-x-4">
             {isAssigned && (
               <Pressable
