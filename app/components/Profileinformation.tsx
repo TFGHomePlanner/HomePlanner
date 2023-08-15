@@ -5,8 +5,14 @@ import { UserContext } from "../context/userContext";
 import { UserContextType } from "../context/types";
 import { trpc } from "../server/utils/trpc";
 
+/**
+ * 
+ * @returns {JSX.Element} Profileinformation componente de la información del perfil
+ */
 export function Profileinformation() {
+  // Hook para obtener el contexto de usuario
   const { User } = useContext(UserContext) as UserContextType;
+  //Varialbes de estado
   const [edit, setEdit] = useState(false);
   const [newPassword, setnewPassword] = useState("");
   const [PasswordV, setnewPasswordVi] = useState(false);
@@ -14,7 +20,9 @@ export function Profileinformation() {
   const [OldPasswordV, setnewOldPasswordVi] = useState(false);
   const [textInfo, settextInfo] = useState("");
 
+  // Hook para obtener el perfil del usuario
   const { data: UserProfile } = trpc.user.getUserByID.useQuery({ id: User.id });
+  //Mutation para actualizar la contraseña
   const mutation = trpc.user.updateUserPassword.useMutation({
     onSuccess() {
       settextInfo("Contraseña actualizada");
@@ -23,7 +31,7 @@ export function Profileinformation() {
       setoldPassword("");
     },
   });
-
+  //Método para cambiar la contraseña
   function changePassword() {
     settextInfo("");
     if (newPassword.length < 8) settextInfo("Mínimo 8 caracteres");

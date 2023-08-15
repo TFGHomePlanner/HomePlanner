@@ -1,6 +1,6 @@
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = "mysql://HomePlannerDB:HomePlanner_RDS@homeplannerdb.cwnyeyokykn2.eu-north-1.rds.amazonaws.com:3306/homeplannerdb"
 }
 
 generator client {

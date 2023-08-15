@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, Image} from "react-native";
 import { format } from "date-fns";
+
 function Message({
   text,
   day,
@@ -14,6 +15,7 @@ function Message({
     imageProfile: string;
     isMyMessage: boolean
   }) {
+  // Formatear la fecha en un formato legible
   const DayFormat = format(new Date(day), "MMM d, yyyy HH:mm");
   return (
     <View className={`flex ${isMyMessage ? "flex-row-reverse" : "flex-row"} mb-4 items-start`}>
