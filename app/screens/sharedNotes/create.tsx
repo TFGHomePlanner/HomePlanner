@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { Header } from "../../components/Header";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
@@ -72,7 +72,11 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
   }
 
   return (
-    <View className="h-full bg-light">
+    <ScrollView
+      keyboardShouldPersistTaps="always"
+      keyboardDismissMode="on-drag"
+      className="h-full bg-light"
+    >
       <Header />
       <View className="px-6">
         <View className="mb-4 flex flex-row justify-between">
@@ -89,26 +93,23 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
             <Text className="font-semibold text-blue">OK</Text>
           </Pressable>
         </View>
-
-        <View>
-          <TextInput
-            className={`${inputStyle} text-lg font-bold`}
-            placeholder="Título *"
-            placeholderTextColor="#95999C"
-            value={title}
-            onChangeText={setTitle}
-          />
-          <TextInput
-            className={`${inputStyle}`}
-            placeholder="¿Qué quieres compartir...?"
-            placeholderTextColor="#95999C"
-            value={text}
-            onChangeText={setText}
-            multiline={true}
-          />
-        </View>
+        <TextInput
+          className={`${inputStyle} text-lg font-bold`}
+          placeholder="Título *"
+          placeholderTextColor="#95999C"
+          value={title}
+          onChangeText={setTitle}
+        />
+        <TextInput
+          className={`${inputStyle}`}
+          placeholder="¿Qué quieres compartir...?"
+          placeholderTextColor="#95999C"
+          value={text}
+          onChangeText={setText}
+          multiline={true}
+        />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

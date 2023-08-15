@@ -17,7 +17,9 @@ const NoteCard: React.FC<NoteCardProps> = ({
   isLastNote,
 }) => {
   function gotNoteDetail() {
-    navigation.navigate("NoteDetail", { Note: note });
+    navigation.navigate("NoteDetail", {
+      Note: { ...note, createdAt: note.createdAt.toISOString() },
+    });
   }
   const formattedDate = format(note.createdAt, "dd/M/yy");
   return (

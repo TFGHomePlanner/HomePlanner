@@ -9,8 +9,8 @@ export const SharedNoteSchema = z.object({
   groupId: z.string(),
 });
 
-export const CreatedSharedNoteSchema = z.object({
-  title: z.string(),
+export const CreateSharedNoteSchema = z.object({
+  title: z.string().min(1, { message: "Escribe un título." }),
   text: z
     .string()
     .max(600, {
@@ -22,4 +22,4 @@ export const CreatedSharedNoteSchema = z.object({
 });
 
 export type ISharedNote = z.infer<typeof SharedNoteSchema>;
-export type ICreateSharedNote = z.infer<typeof CreatedSharedNoteSchema>;
+export type ICreateSharedNote = z.infer<typeof CreateSharedNoteSchema>;
