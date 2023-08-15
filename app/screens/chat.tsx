@@ -67,26 +67,21 @@ const ChatScreen = () => {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex h-full flex-col"
-    >
-      {/* Header */}
+    >    
       <View className="flex w-full flex-row items-center bg-[#f1889f] pt-6">
-        {/* Back navigation */}
         <Pressable onPress={goBack} className="pl-3 pt-5">
           <Icon name="chevron-left" size={16} color="white" />
-        </Pressable>
-        {/* Header text */}
+        </Pressable>   
         <Text className="mr-4 flex-1 p-4 pt-8 text-center text-[18px] font-semibold text-white">
           Chat {namegroup}
         </Text>
-      </View>
-      {/* Scrollable messages */}
+      </View>  
       <ScrollView
         showsVerticalScrollIndicator={false}
         className="bg-[#F8F3ED] px-4"
         contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
         keyboardShouldPersistTaps="handled"
-      >
-        {/* Display messages */}
+      >  
         {groupmessages?.map((c) => (
           <Message
             key={c.id}
@@ -98,7 +93,6 @@ const ChatScreen = () => {
           />
         ))}
       </ScrollView>
-      {/* Message input and send button */}
       <View className="bg-gray flex flex-row items-center p-4">
         <TextInput
           className={`${inputStyle} mr-2 flex-1`}

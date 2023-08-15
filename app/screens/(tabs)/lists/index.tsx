@@ -8,22 +8,38 @@ import { UserContextType } from "../../../context/types";
 import ListCard from "../../../components/lists/Listcard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../../_App";
-
+/**
+ * @typedef {object} TabsListcreenProps Props necesarios para el componente TabsListcreen
+ * @property {NativeStackNavigationProp<AppStackParamList, "TabLists">} navigation Permite la navegación entre pantallas
+ * @property {boolean} Edit Indica si se está editando la lista
+ * @property {List} List Lista que se está editando
+ */
 type TabsListcreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TabLists">;
 };
-
+/**
+ * Interfaz que muestra un listado de todas las listas de la compra del grupo
+ * @param {TabsListcreenProps} props Propiedades del componente
+ * @returns {JSX.Element} TabListsScreen comppoenete de la pantalla de listas
+ */
 const TabListsScreen : React.FC<TabsListcreenProps> = ({ navigation }) =>  {
+  // Hook para obtener el contexto del usuario
   const {User} = React.useContext (UserContext) as UserContextType;
+  //Método para obtener todas las listas del grupo que estan activas
   const {data: activelist} = trpc.list.getAllLists.useQuery ({
     groupId: User.groupId || "",
     isClosed: false,
   });
+  //Método para obtener todas las listas del grupo que estan cerradas
   const {data: closedlist} = trpc.list.getAllLists.useQuery ({
     groupId: User.groupId || "",
     isClosed: true,
   });
 
+  /** 
+   * Función que se encarga de navegar a la pantalla de creación de listas.
+   * @returns {void}
+   * */
   function goToCreateList() {
     navigation.navigate("CreateList", {Edit: false});
   }

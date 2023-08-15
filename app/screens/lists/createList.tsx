@@ -15,18 +15,29 @@ import { trpc } from "../../server/utils/trpc";
 import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
 import { RouteProp } from "@react-navigation/native";
+
+/**
+ * @typedef {object} CreateListScreenProps Props necesarios para el componente CreateListScreen
+ * @property {RouteProp<AppStackParamList, "CreateList">} route Contiene los parametros que se le pasan a la ruta
+ * @property {NativeStackNavigationProp<AppStackParamList, "CreateList">} navigation Permite la navegación entre pantallas
+ */
 type CreateListScreenProps = {
   route: RouteProp<AppStackParamList, "CreateList">;
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateList">;
 };
-
+/**
+ * Pantalla para crear o editar una lista.
+ * @param {CreateListScreenProps} props - Propiedades para el componente CreateListScreen.
+ * @return {JSX.Element} Elemento JSX que representa la pantalla.
+ */
 const CreateListScreen: React.FC<CreateListScreenProps> = ({
   navigation,
   route,
 }) => {
-  // TRPC
+  // Constate para invalidar queries.
   const utils = trpc.useContext();
 
+  // Mutación para actualizar una lista
   const updateListMutation = trpc.list.updateList.useMutation({
     onSuccess() {
       utils.list.getAllLists.invalidate();
@@ -34,12 +45,15 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
     },
   });
 
+  // Mutación para crear una lista
   const createListMutation = trpc.list.createList.useMutation({
     onSuccess() {
       utils.list.getAllLists.invalidate();
       navigation.goBack();
     },
   });
+
+  // Obtener parametros de la pantalla anterior
   const List = route.params.List;
   const Edit = route.params.Edit;
   const { User } = React.useContext(UserContext) as UserContextType;
@@ -47,6 +61,11 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
     trpc.list.getAllFavouritesProducts.useQuery({
       groupId: User.groupId,
     });
+
+  /**
+   * Crea una nueva lista.
+   * @return {void}
+   */
   function CreateList() {
     createListMutation.mutateAsync({
       description: description,
@@ -57,6 +76,10 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
       isPublic: true,
     });
   }
+  /**
+   *Edita la lista pasada por parámetoes
+   * @return {void}
+   */
   function EditList() {
     updateListMutation.mutateAsync({
       description: description,
@@ -70,7 +93,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
     });
   }
 
-  //VAL
+  //variables de estado
   const [isPublic, setIsPublic] = useState(true);
   const [newItem, setNewItem] = useState("");
   const [title, settitle] = useState("");
@@ -83,6 +106,11 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
     { key: "3", value: "Cada semana" },
     { key: "4", value: "Cada mes" },
   ];
+
+  /**
+   * Método para añadir un nuevo producto a la lista.
+   * @param newItem nombre del producto a añdir a la lista
+   */
   const addItemToList = (newItem: string) => {
     if (!listItemes.includes(newItem)) {
       setListItems((prevList) => [...prevList, newItem]);
@@ -97,6 +125,10 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
       console.log("entro");
     }
   };
+  /**
+   * metodo para eliminar un producto de la lista
+   * @param itemToRemove nombre del producto a eliminar de la lista
+   */
 
   const removeItemFromList = (itemToRemove: string) => {
     setListItems((prevList) =>
@@ -119,15 +151,18 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
       return initialCheckedItems;
     }
   );
-
+  /**
+   * Metodo para saber si la lista es editable o no y setear los valores de los inputs
+   */
   const iseditable = () => {
     if (Edit) {
       setIsPublic(List?.isPublic || true);
       settitle(List?.name || ""),
-        setdescrpition(List?.description || ""),
-        List?.items?.map((item) => addItemToList(item.name));
+      setdescrpition(List?.description || ""),
+      List?.items?.map((item) => addItemToList(item.name));
     }
   };
+  //useEffect para setear los valores de los inputs
   useEffect(() => {
     iseditable();
   }, []);

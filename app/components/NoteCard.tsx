@@ -3,13 +3,23 @@ import { Pressable, Text, View } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { INote } from "../common/validation/note";
 
+/**
+ * @typedef {object} NoteCardProps Props necesarios para el componente NoteCard
+ * @property {NativeStackNavigationProp<any>} navigation Permite la navegación entre pantallas
+ * @property {INote} Note Nota que se está editando
+ */
 type NoteCardProps = {
   navigation: NativeStackNavigationProp<any>;
   Note: INote;
 };
-
+/**
+ * Componente que muestra una nota
+ * @param {NoteCardProps} props Propiedades del componente
+ * @returns {JSX.Element} NoteCard componente de la nota 
+ */
 const NoteCard: React.FC<NoteCardProps> = ({ navigation, Note }) => {
   function move() {
+    // Navegar a la pantalla de edición de notas
     navigation.navigate("UserNote", { Note: Note, Edit: true });
   }
   return (

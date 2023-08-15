@@ -6,18 +6,26 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import {AppStackParamList} from "../../_App";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-
+/**
+ * @typedef {object} ListCardProps Props necesarios para el componente ListCard
+ * @property {NativeStackNavigationProp<AppStackParamList, "DetailsList">} navigation Permite la navegación entre pantallas
+ * @property {IList} list Lista que se está editando
+ * 
+ */
 type ListCardProps = {
    navigation: NativeStackNavigationProp<any>;
   list: IList;
 };
 
-
+/**
+ * Componente que muestra una list en formato de tarjeta
+ * @param {ListCardProps} props Propiedades del componente
+ * @returns  {JSX.Element} ListCard componente de la lista
+ */
 const ListCard: React.FC< ListCardProps> = ({ navigation, list }) => {
   const firstFiveItems = list.items.slice(0, 4);
-
+  //Función que se encarga de navegar a la pantalla de Detalles de lista.
   function move() {
-    
     navigation.navigate("DetailsList", {List: list});
   }
   return (

@@ -11,13 +11,25 @@ import NoteCard from "../../components/NoteCard";
 import { Profileinformation } from "../../components/Profileinformation";
 import ImagePickerC from "../../components/ImagePickerC";
 
+/**
+ * @typedef {object} ProfileScreenProps
+ * @property {NativeStackNavigationProp<AppStackParamList, "Profile">} navigation
+ *
+ */
 type ProfileScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "Profile">;
 };
-
+/**
+ * Interraz del perfil de usuario
+ * @param {ProfileScreenProps} props
+ * @param {NativeStackNavigationProp<AppStackParamList, "Profile">} props.navigation
+ * @returns {JSX.Element} Interfaz de usuario del perfil
+ */
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
+  //contexto de TRPC
   const utils = trpc.useContext();
   const [edit, setEdit] = useState(false);
+  //contexto de usuario
   const { User } = useContext(UserContext) as UserContextType;
   const { data: userGroups } = trpc.user.getUserGroups.useQuery({
     userId: User.id,
@@ -25,6 +37,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
 
   const { data: UserProfile } = trpc.user.getUserByID.useQuery({ id: User.id });
 
+  //Mutación de TRPC para unirse a un grupo
   const joingroup = trpc.group.joinGroup.useMutation({
     onSuccess() {
       utils.user.getUserGroups.invalidate();
@@ -33,21 +46,29 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
 
   const [codeGroup, setCodeGroup] = useState("");
   const Edit = false;
+
+  /**
+   * Función que se encarga de navegar a la pantalla de creación de grupos.
+   * @returns {void}
+   */
   function goToCreateGroup() {
     navigation.navigate("CreateGroup");
   }
-
+  /**
+   * Función que se encarga de unirse a un grupo.
+   * @returns {void}
+   */
   function joinGroup() {
+    //Llama mutación de TRPC para unirse a un grupo
     joingroup.mutateAsync({
       userId: User.id,
       codeGroup: codeGroup,
     });
   }
+  //Método para obtener todas las notas del usuario
   const { data: userNotes } = trpc.user.getNotes.useQuery({
     userId: User.id,
   });
-
-  console.log(userNotes);
   return (
     <ScrollView className="h-full bg-light px-6 pt-16">
       <Pressable onPress={navigation.goBack}>

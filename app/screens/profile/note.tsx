@@ -15,19 +15,38 @@ import { RouteProp } from "@react-navigation/native";
 import { Header } from "../../components/Header";
 import { UserContextType } from "../../context/types";
 import { UserContext } from "../../context/userContext";
-
+/**
+ * @typedef {object} NotesScreenProps
+ * @property {RouteProp<AppStackParamList, "UserNote">} route
+ * @property {NativeStackNavigationProp<AppStackParamList, "UserNote">} navigation
+ * @property {boolean} Edit
+ * @property {Note} Note
+ *  
+ */
 type NotesScreenProps = {
   route: RouteProp<AppStackParamList, "UserNote">;
   navigation: NativeStackNavigationProp<AppStackParamList, "UserNote">;
 };
-
+/**
+ * Interfaz de usuario que permite crear o editar una nota
+ * @param {NotesScreenProps} props
+ * @param {RouteProp<AppStackParamList, "UserNote">} props.route
+ * @param {NativeStackNavigationProp<AppStackParamList, "UserNote">} props.navigation
+ * @param {boolean} props.Edit
+ * @param {Note} props.Note
+ * @returns {JSX.Element} Interfaz de usuario que permite crear o editar una nota 
+ */
 const UserNoteScreen: React.FC<NotesScreenProps> = ({ route, navigation }) => {
+  //contexto de TRPC
   const utils = trpc.useContext();
+  //contexto de usuario
   const { User } = useContext(UserContext) as UserContextType;
+
   const Note = route.params.Note;
   const Edit = route.params.Edit;
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  //Mutaciones de TRRPC para actualizar o crear una nota
   const createMutation = trpc.user.createNote.useMutation({
     onSuccess() {
       utils.user.getNotes.invalidate();
@@ -40,13 +59,20 @@ const UserNoteScreen: React.FC<NotesScreenProps> = ({ route, navigation }) => {
       navigation.goBack();
     },
   });
-
+  /**
+   * Función que indica si la nota es editable y actuliza variables de estado
+   * @returns {void}
+   */
   function iseditable() {
     if (Edit) {
       setTitle(Note?.title || "");
       setText(Note?.text || "");
     }
   }
+  /**
+   * Función que permite crear una nota
+   * @returns {void}
+   */
   function createNote() {
     createMutation.mutateAsync({
       userId: User.id,
@@ -54,6 +80,10 @@ const UserNoteScreen: React.FC<NotesScreenProps> = ({ route, navigation }) => {
       text: text,
     });
   }
+  /**
+   * Función que permite editar una nota
+   * @returns {void}
+   */
   function EditNote() {
     if (Note) {
       updateMutation.mutateAsync({
@@ -63,7 +93,7 @@ const UserNoteScreen: React.FC<NotesScreenProps> = ({ route, navigation }) => {
       });
     }
   }
-
+  //Efecto que se ejecuta al renderizar el componente
   useEffect(() => {
     iseditable();
   }, []);
