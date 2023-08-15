@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc";
-import { CreatedSharedNoteSchema } from "../../../common/validation/sharedNote";
+import { CreateSharedNoteSchema } from "../../../common/validation/sharedNote";
 
 export const sharedNoteRouter = router({
   getAllNotes: publicProcedure
@@ -19,7 +19,7 @@ export const sharedNoteRouter = router({
       });
     }),
   createNote: publicProcedure
-    .input(CreatedSharedNoteSchema)
+    .input(CreateSharedNoteSchema)
     .mutation(async ({ ctx, input: { title, text, userId, groupId } }) => {
       await ctx.prisma.sharedNote.create({
         data: {

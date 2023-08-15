@@ -8,6 +8,12 @@ import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
 import { RouteProp } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/AntDesign";
+import {
+  CreateSharedNoteSchema,
+  ICreateSharedNote,
+} from "../../common/validation/sharedNote";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 /**
  * Propiedades para la pantalla de creación de notas compartidas.
@@ -22,10 +28,8 @@ type CreateSharedNoteScreenProps = {
  */
 const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
   navigation,
+  route,
 }) => {
-  /**
-   * Estilo de los campos de entrada.
-   */
   const inputStyle =
     "mb-2 py-2 px-4 rounded-lg border-b-[1px] border-light text-dark";
 
@@ -59,17 +63,25 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
     },
   });
 
-  /**
-   * Crea una nota compartida utilizando los datos proporcionados.
-   */
-  function createSharedNote() {
+  const Note = route.params.Note;
+
+  const {
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ICreateSharedNote>({
+    resolver: zodResolver(CreateSharedNoteSchema),
+    criteriaMode: "all",
+    defaultValues: Note,
+  });
+
+  const onSubmit = (data: ICreateSharedNote) => {
+    CreateSharedNoteSchema.parse(data);
     mutation.mutateAsync({
-      title,
-      text,
+      ...data,
       userId: User.id,
       groupId: User.groupId || "",
     });
-  }
+  };
 
   return (
     <ScrollView
@@ -89,7 +101,7 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
             </Pressable>
             <Text className="text-blue">Notas</Text>
           </Pressable>
-          <Pressable className="self-end" onPress={createSharedNote}>
+          <Pressable className="self-end" onPress={handleSubmit(onSubmit)}>
             <Text className="font-semibold text-blue">OK</Text>
           </Pressable>
         </View>
@@ -100,6 +112,7 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
           value={title}
           onChangeText={setTitle}
         />
+        {errors.title && <Text>{errors.title.message}</Text>}
         <TextInput
           className={`${inputStyle}`}
           placeholder="¿Qué quieres compartir...?"
@@ -108,6 +121,7 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
           onChangeText={setText}
           multiline={true}
         />
+        {errors.text && <Text>{errors.text.message}</Text>}
       </View>
     </ScrollView>
   );
