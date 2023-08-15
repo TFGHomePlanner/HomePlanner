@@ -6,11 +6,10 @@ import { UserContext } from "../../context/userContext";
 import { trpc } from "../../trpc";
 import { UserContextType } from "../../context/types";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Divider } from "@ui-kitten/components";
 import NoteCard from "../../components/sharedNotes/NoteCard";
 
 type HomeScreenProps = {
-  navigation: NativeStackNavigationProp<AppStackParamList, "TabTasks">;
+  navigation: NativeStackNavigationProp<AppStackParamList, "TabHome">;
 };
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
@@ -23,24 +22,32 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     navigation.navigate("CreateSharedNote", { edit: false });
   }
 
-  function gotNoteDetail() {
-    //navigation.navigate("NoteDetail", { edit: false });
-  }
-
   return (
     <ScrollView
       className="h-full bg-light px-6"
       showsVerticalScrollIndicator={false}
     >
-      <View className="mb-4 items-end">
+      <View className="my-4 flex-row items-center justify-between">
+        <Text className="text-lg font-semibold">NOTAS COMPARTIDAS</Text>
         <Pressable onPress={goToCreateNote}>
           <Icon name="shape-square-rounded-plus" size={24} color={"#1E88E5"} />
         </Pressable>
       </View>
-      <View className="mb-2 flex flex-row flex-wrap justify-between">
-        {sharedNotes &&
-          sharedNotes.map((note) => <NoteCard key={note.id} note={note} />)}
-      </View>
+      {sharedNotes && (
+        <View className="w-full rounded-xl bg-white p-4">
+          {sharedNotes.map((note, index) => (
+            <NoteCard
+              key={note.id}
+              navigation={navigation}
+              note={{
+                ...note,
+                createdAt: new Date(note.createdAt),
+              }}
+              isLastNote={index === sharedNotes.length - 1}
+            />
+          ))}
+        </View>
+      )}
     </ScrollView>
   );
 };

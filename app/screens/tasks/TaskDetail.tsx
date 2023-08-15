@@ -57,7 +57,7 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
   }
 
   /**
-   * Navega a la pantalla de edición de tareas.
+   * Navega a la pantalla de creación/edición de tareas.
    */
   function goToCreateTask() {
     navigation.navigate("CreateTask", { Task: Task, edit: true });

@@ -4,6 +4,7 @@ export const SharedNoteSchema = z.object({
   id: z.string(),
   title: z.string(),
   text: z.string().optional().nullable(),
+  createdAt: z.coerce.date(),
   userId: z.string(),
   groupId: z.string(),
 });
