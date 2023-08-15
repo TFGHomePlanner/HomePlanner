@@ -12,8 +12,6 @@ import {
   CreateSharedNoteSchema,
   ICreateSharedNote,
 } from "../../common/validation/sharedNote";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 
 /**
  * Propiedades para la pantalla de creación de notas compartidas.
@@ -30,8 +28,7 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
   navigation,
   route,
 }) => {
-  const inputStyle =
-    "mb-2 py-2 px-4 rounded-lg border-b-[1px] border-light text-dark";
+  const inputStyle = "mb-2 rounded-lg text-dark";
 
   /**
    * Contexto del usuario actual.
@@ -63,24 +60,23 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
     },
   });
 
-  const Note = route.params.Note;
+  //const Note = route.params.Note;
 
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ICreateSharedNote>({
-    resolver: zodResolver(CreateSharedNoteSchema),
-    criteriaMode: "all",
-    defaultValues: Note,
-  });
-
-  const onSubmit = (data: ICreateSharedNote) => {
-    CreateSharedNoteSchema.parse(data);
-    mutation.mutateAsync({
-      ...data,
-      userId: User.id,
-      groupId: User.groupId || "",
-    });
+  const onSubmit = async (data: ICreateSharedNote) => {
+    const validationResult = CreateSharedNoteSchema.safeParse(data);
+    if (validationResult.success) {
+      try {
+        mutation.mutateAsync({
+          ...data,
+          userId: User.id,
+          groupId: User.groupId || "",
+        });
+      } catch (error) {
+        console.error("Error en la creación:", error);
+      }
+    } else {
+      navigation.navigate("Tabs");
+    }
   };
 
   return (
@@ -91,28 +87,35 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
     >
       <Header />
       <View className="px-6">
-        <View className="mb-4 flex flex-row justify-between">
+        <View className="mb-2 flex flex-row justify-between">
           <Pressable
             onPress={navigation.goBack}
             className="flex-row items-center"
           >
-            <Pressable onPress={navigation.goBack}>
-              <Icon name="left" size={16} color={"#1E88E5"} />
-            </Pressable>
+            <Icon name="left" size={16} color={"#1E88E5"} />
             <Text className="text-blue">Notas</Text>
           </Pressable>
-          <Pressable className="self-end" onPress={handleSubmit(onSubmit)}>
+          <Pressable
+            className="self-end"
+            onPress={() =>
+              onSubmit({
+                title,
+                text,
+                userId: User.id,
+                groupId: User.groupId || "",
+              })
+            }
+          >
             <Text className="font-semibold text-blue">OK</Text>
           </Pressable>
         </View>
         <TextInput
-          className={`${inputStyle} text-lg font-bold`}
+          className={`${inputStyle} h-12 text-lg font-bold`}
           placeholder="Título *"
           placeholderTextColor="#95999C"
           value={title}
           onChangeText={setTitle}
         />
-        {errors.title && <Text>{errors.title.message}</Text>}
         <TextInput
           className={`${inputStyle}`}
           placeholder="¿Qué quieres compartir...?"
@@ -121,7 +124,6 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
           onChangeText={setText}
           multiline={true}
         />
-        {errors.text && <Text>{errors.text.message}</Text>}
       </View>
     </ScrollView>
   );
