@@ -10,10 +10,15 @@ export const SharedNoteSchema = z.object({
 });
 
 export const CreateSharedNoteSchema = z.object({
-  title: z.string().min(1, { message: "Escribe un título." }),
+  title: z
+    .string()
+    .min(1)
+    .refine((value) => value.trim() !== "", {
+      message: "Escribe un título.",
+    }),
   text: z
     .string()
-    .max(600, {
+    .max(100, {
       message: "Máximo 600 caracteres.",
     })
     .nullable(),

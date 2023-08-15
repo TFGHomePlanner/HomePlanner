@@ -26,11 +26,6 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
   const Task = route.params.Task;
 
   /**
-   * Indica si la tarea está asignada a un usuario.
-   */
-  const isAssigned = route.params.isAssigned;
-
-  /**
    * Contexto del usuario actual.
    */
   const { User } = useContext(UserContext) as UserContextType;

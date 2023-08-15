@@ -120,7 +120,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
       description,
       frequency: selectedFrequency,
       startsAt: date,
-      groupId: User.groupId!,
+      groupId: User.groupId || "",
       userId: selectedUser,
       taskGroupId: selectedGroup,
       createdBy: taskToEdit?.createdBy ?? User.id,
