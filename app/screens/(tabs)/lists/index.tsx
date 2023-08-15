@@ -36,7 +36,10 @@ const TabListsScreen : React.FC<TabsListcreenProps> = ({ navigation }) =>  {
     isClosed: true,
   });
 
-  // Función que se encarga de navegar a la pantalla de creación de listas.
+  /** 
+   * Función que se encarga de navegar a la pantalla de creación de listas.
+   * @returns {void}
+   * */
   function goToCreateList() {
     navigation.navigate("CreateList", {Edit: false});
   }
