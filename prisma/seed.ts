@@ -298,6 +298,15 @@ async function main() {
       },
     },
   });
+
+  const notaCompartida = await prisma.sharedNote.create({
+    data: {
+      title: "Arreglar tapa del váter",
+      text: "Baño pequeño.",
+      userId: marta.id,
+      groupId: minigrupo.id,
+    },
+  });
 }
 
 main()

@@ -29,6 +29,8 @@ import TabListsScreen from "./screens/(tabs)/lists";
 import UserNoteScreen from "./screens/profile/note";
 import UnassignedTasksScreen from "./screens/tasks/UnassignedTasks";
 import GroupTasksScreen from "./screens/tasks/GroupTasks";
+import { ISharedNote } from "./common/validation/sharedNote";
+import CreateSharedNoteScreen from "./screens/sharedNotes/create";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -51,6 +53,7 @@ export type AppStackParamList = {
   CreateGroup: undefined;
   DetailsList: { List: IList };
   UserNote: { Note?: INote; Edit: boolean };
+  CreateSharedNote: { Note?: ISharedNote; edit: boolean };
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -117,6 +120,10 @@ export function App() {
                   />
                   <Stack.Screen name="TabLists" component={TabListsScreen} />
                   <Stack.Screen name="UserNote" component={UserNoteScreen} />
+                  <Stack.Screen
+                    name="CreateSharedNote"
+                    component={CreateSharedNoteScreen}
+                  />
                 </Stack.Navigator>
               </NavigationContainer>
             </ApplicationProvider>
