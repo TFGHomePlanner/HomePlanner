@@ -28,14 +28,12 @@ type ProfileScreenProps = {
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
   //contexto de TRPC
   const utils = trpc.useContext();
-  const [edit, setEdit] = useState(false);
   //contexto de usuario
   const { User } = useContext(UserContext) as UserContextType;
   const { data: userGroups } = trpc.user.getUserGroups.useQuery({
     userId: User.id,
   });
 
-  const { data: UserProfile } = trpc.user.getUserByID.useQuery({ id: User.id });
 
   //Mutación de TRPC para unirse a un grupo
   const joingroup = trpc.group.joinGroup.useMutation({
