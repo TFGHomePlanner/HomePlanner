@@ -307,7 +307,63 @@ async function main() {
       groupId: minigrupo.id,
     },
   });
+  
+  const paymentSection1 = await prisma.paymentSection.create({
+    data: {
+      group: { connect: { id: minigrupo.id } },
+      title: "Section 1",
+      totalAmount: 100.0,
+      description: "Payment Section 1 Description",
+      payments: {
+        create: {
+          payingUser: { connect: { id: marta.id } },
+          amount: 50.0,
+          debtorUsers: {
+            create: [
+              {
+                debtor: { connect: { id: marta.id } },
+                amount: 25.0, 
+              },
+              {
+                debtor: { connect: { id: juan.id } },
+                amount: 25.0, 
+              },
+            ],
+          },
+        },
+      },
+    },
+  });
+
+  const paymentSection2 = await prisma.paymentSection.create({
+    data: {
+      group: { connect: { id: minigrupo.id } },
+      title: "Section 2",
+      totalAmount: 150.0, // Set the total amount for this section
+      description: "Payment Section 2 Description",
+      payments: {
+        create: {
+          payingUser: { connect: { id: juan.id } },
+          amount: 150.0, 
+          debtorUsers: {
+            create: [
+              {
+                debtor: { connect: { id: marta.id } },
+                amount: 75.0, 
+              },
+              {
+                debtor: { connect: { id: a.id } },
+                amount: 75.0,
+              },
+            ],
+          },
+        },
+      },
+    },
+  });
 }
+
+
 
 main()
   .then(async () => {
