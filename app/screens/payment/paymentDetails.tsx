@@ -7,19 +7,15 @@ import { Header } from "../../components/Header";
 import { Divider } from "@ui-kitten/components";
 
 
-/**
- * @typedef {object} DetailsScreenProps Props necesarios para el componente DetailsScreen
- * @property {RouteProp<AppStackParamList, "DetailsList">} route Contiene los parametros que se le pasan a la ruta
- * @property {NativeStackNavigationProp<AppStackParamList, "DetailsList">} navigation Permite la navegación entre pantallas
- */
-type PaymentScreenProps = {
-  route: RouteProp<AppStackParamList, "Payment">;
-  navigation: NativeStackNavigationProp<AppStackParamList, "Payment">;
+
+type PaymentDetailsScreenProps = {
+  route: RouteProp<AppStackParamList, "PaymentDetails">;
+  
 };
 
-const PaymentScreen: React.FC<PaymentScreenProps> = ({
+const PaymentDetailScreen: React.FC<PaymentDetailsScreenProps> = ({
   route,
-  navigation,
+
 }) => {
   const PaymentDetail = route.params.Payment;
   return (
@@ -64,4 +60,4 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
   );
 };
 
-export default PaymentScreen;
+export default PaymentDetailScreen;

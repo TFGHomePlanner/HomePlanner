@@ -33,9 +33,8 @@ import GroupTasksScreen from "./screens/tasks/GroupTasks";
 import { ISharedNote } from "./common/validation/sharedNote";
 import CreateSharedNoteScreen from "./screens/sharedNotes/create";
 import NoteDetailScreen from "./screens/sharedNotes/NoteDetail";
-import PaymentListScreen from "./screens/payment/paymentlist";
 import PaymentDetailScreen from "./screens/payment/paymentDetails";
-import PaymentScreen from "./screens/payment/paymenst";
+import PaymentScreen from "./screens/payment/payments";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -64,6 +63,7 @@ export type AppStackParamList = {
   UserNote: { Note?: INote; Edit: boolean };
   CreateSharedNote: { Note?: ISharedNote; edit: boolean };
   NoteDetail: { Note: ISharedNote };
+  PaymentList: { Payments: IPaymentSection };
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
