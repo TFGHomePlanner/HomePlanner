@@ -28,7 +28,7 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
   navigation,
   route,
 }) => {
-  const inputStyle = "mb-2 rounded-lg text-dark";
+  const inputStyle = "mb-2 rounded-lg px-3 text-dark";
 
   /**
    * Contexto del usuario actual.
@@ -83,48 +83,45 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
     <ScrollView
       keyboardShouldPersistTaps="always"
       keyboardDismissMode="on-drag"
-      className="h-full bg-light"
+      className="h-full bg-light px-3 py-14"
     >
-      <Header />
-      <View className="px-6">
-        <View className="mb-2 flex flex-row justify-between">
-          <Pressable
-            onPress={navigation.goBack}
-            className="flex-row items-center"
-          >
-            <Icon name="left" size={16} color={"#1E88E5"} />
-            <Text className="text-blue">Notas</Text>
-          </Pressable>
-          <Pressable
-            className="self-end"
-            onPress={() =>
-              onSubmit({
-                title,
-                text,
-                userId: User.id,
-                groupId: User.groupId || "",
-              })
-            }
-          >
-            <Text className="font-semibold text-blue">OK</Text>
-          </Pressable>
-        </View>
-        <TextInput
-          className={`${inputStyle} h-12 text-lg font-bold`}
-          placeholder="Título *"
-          placeholderTextColor="#95999C"
-          value={title}
-          onChangeText={setTitle}
-        />
-        <TextInput
-          className={`${inputStyle}`}
-          placeholder="¿Qué quieres compartir...?"
-          placeholderTextColor="#95999C"
-          value={text}
-          onChangeText={setText}
-          multiline={true}
-        />
+      <View className="mb-2 flex flex-row justify-between">
+        <Pressable
+          onPress={navigation.goBack}
+          className="flex-row items-center"
+        >
+          <Icon name="left" size={16} color={"#1E88E5"} />
+          <Text className="text-base text-blue">Notas</Text>
+        </Pressable>
+        <Pressable
+          className="self-end"
+          onPress={() =>
+            onSubmit({
+              title,
+              text,
+              userId: User.id,
+              groupId: User.groupId || "",
+            })
+          }
+        >
+          <Text className="text-base font-semibold text-blue">OK</Text>
+        </Pressable>
       </View>
+      <TextInput
+        className={`${inputStyle} h-12 text-lg font-bold`}
+        placeholder="Título *"
+        placeholderTextColor="#95999C"
+        value={title}
+        onChangeText={setTitle}
+      />
+      <TextInput
+        className={`${inputStyle}`}
+        placeholder="¿Qué quieres compartir...?"
+        placeholderTextColor="#95999C"
+        value={text}
+        onChangeText={setText}
+        multiline={true}
+      />
     </ScrollView>
   );
 };
