@@ -58,9 +58,8 @@ export type AppStackParamList = {
   Profile: undefined;
   CreateGroup: undefined;
   DetailsList: { List: IList };
-  PaymentList: {Payment: IPaymentSection}
-  Payment: {Payment?: IPayment}
-
+  PaymentList: { Payment: IPaymentSection };
+  Payment: { Payment: IPayment };
   UserNote: { Note?: INote; Edit: boolean };
   CreateSharedNote: { Note?: ISharedNote; edit: boolean };
   NoteDetail: { Note: ISharedNote };
@@ -74,7 +73,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.46:4000/trpc",
+          url: "http://192.168.1.48:4000/trpc",
         }),
       ],
     })
@@ -129,8 +128,8 @@ export function App() {
                     component={DetailsListScreen}
                   />
                   <Stack.Screen name="Payment" component={PaymentScreen} />
-                  <Stack.Screen 
-                    name = "PaymentList"
+                  <Stack.Screen
+                    name="PaymentList"
                     component={PaymentListScreen}
                   />
 

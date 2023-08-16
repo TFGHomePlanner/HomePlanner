@@ -1,5 +1,12 @@
-import React, { useContext } from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
+import React, { useContext, useState } from "react";
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { UserContext } from "../context/userContext";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../_App";
@@ -19,6 +26,19 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
   const { data: myGroups } = trpc.user.getUserGroups.useQuery({
     userId: User.id,
   });
+
+  const utils = trpc.useContext();
+  const joinMutation = trpc.group.joinGroup.useMutation({
+    onSuccess() {
+      utils.user.getUserGroups.invalidate();
+    },
+  });
+
+  function joinGroup() {
+    joinMutation.mutateAsync({ userId: User.id, codeGroup: codeGroup });
+  }
+
+  const [codeGroup, setCodeGroup] = useState("");
 
   const mutation = trpc.group.getAdminId.useMutation({
     onSuccess(output) {
@@ -42,9 +62,24 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
   }
 
   return (
-    <View className="h-full bg-light p-6 pt-16">
+    <View className="h-full bg-light p-6 pb-10 pt-16">
+      <Text className="mb-2 text-lg font-bold text-dark">
+        <Text className="text-blue">ÚNETE</Text> A UN GRUPO
+      </Text>
+      <View className="mb-6 w-full flex-row items-center space-x-3">
+        <TextInput
+          className={"flex-1 rounded-lg bg-white px-4 py-3 text-dark"}
+          placeholderTextColor="#95999C"
+          value={codeGroup}
+          onChangeText={setCodeGroup}
+          placeholder="Código de invitación"
+        />
+        <Text className="text-base font-semibold text-blue">OK</Text>
+      </View>
       <ScrollView>
-        <Text className="mb-4">Elige un grupo para empezar</Text>
+        <Text className="mb-2 text-lg font-bold text-dark">
+          O ELIGE UNO DE TUS GRUPOS
+        </Text>
         {myGroups ? (
           myGroups.map((group) => (
             <Pressable onPress={() => selectGroup(group.id)} key={group.id}>
@@ -57,9 +92,9 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
       </ScrollView>
       <View className="flex-row items-center">
         <Text className="flex-1 text-center">{myGroups?.length} grupos</Text>
-        <Pressable onPress={() => navigation.navigate("CreateGroup")}>
-          <Icon name="shape-square-rounded-plus" size={24} color={"#1E88E5"} />
-        </Pressable>
+        <TouchableOpacity onPress={() => navigation.navigate("CreateGroup")}>
+          <Icon name="shape-square-rounded-plus" size={30} color={"#1E88E5"} />
+        </TouchableOpacity>
       </View>
     </View>
   );

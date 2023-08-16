@@ -1,15 +1,20 @@
-import { Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import React from "react";
 import { IGroup } from "../../common/validation/group";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function GroupCard({ group }: { group: IGroup }) {
   return (
-    <View className="mb-4 w-full rounded-lg bg-white px-4 py-3 shadow-sm shadow-lightGray">
-      <View className="flex-row justify-between">
-        <Text className="text-base font-semibold text-dark">{group.name}</Text>
-        <Icon name="chevron-right" size={24} color={"#212529"} />
+    <View className="mb-4 w-full flex-row justify-between rounded-lg bg-white p-6 shadow-sm shadow-lightGray">
+      <View className="space-y-4">
+        <Image
+          source={require("../../../assets/images/grupo.png")}
+          className="h-12 w-12"
+        />
+        <Text className="text-lg font-medium text-placeholderGray">
+          {group.name}
+        </Text>
       </View>
+      <Text className="text-4xl font-bold text-dark">{group.users.length}</Text>
     </View>
   );
 }
