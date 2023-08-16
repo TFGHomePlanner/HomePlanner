@@ -1,10 +1,8 @@
 import React from "react";
-import { useNavigation } from "expo-router";
 import { Pressable, Text, View} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import {AppStackParamList} from "../../_App";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { IPayment } from "../../common/validation/payment";
+import { IPaymentSection } from "../../common/validation/payment";
 
 /**
  * @typedef {object} ListCardProps Props necesarios para el componente ListCard
@@ -14,7 +12,7 @@ import { IPayment } from "../../common/validation/payment";
  */
 type PaymentSectionCardProps = {
    navigation: NativeStackNavigationProp<any>;
-  paymentSection: IPayment;
+  paymentSection: IPaymentSection;
 };
 
 
@@ -22,7 +20,7 @@ const PaymentSectionCard: React.FC< PaymentSectionCardProps> = ({ navigation, pa
 
   
   function move() {
-    navigation.navigate("PaymentList", {Paymnet: paymentSection});
+    navigation.navigate("PaymentList", {Payment: paymentSection});
   }
   return (
     <Pressable onPress={move}>

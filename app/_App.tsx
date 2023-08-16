@@ -20,6 +20,7 @@ import CreateGroupScreen from "./screens/groups/create";
 import DetailsListScreen from "./screens/lists/detailsList";
 import { IList } from "./common/validation/list";
 import { INote } from "./common/validation/note";
+import { IPaymentSection, IPayment } from "./common/validation/payment";
 import TaskDetailScreen from "./screens/tasks/TaskDetail";
 import { ITask, ITaskGroup } from "./common/validation/task";
 import { MenuProvider } from "react-native-popup-menu";
@@ -32,6 +33,8 @@ import GroupTasksScreen from "./screens/tasks/GroupTasks";
 import { ISharedNote } from "./common/validation/sharedNote";
 import CreateSharedNoteScreen from "./screens/sharedNotes/create";
 import NoteDetailScreen from "./screens/sharedNotes/NoteDetail";
+import PaymentListScreen from "./screens/payment/paymentlist";
+import PaymentScreen from "./screens/payment/payment";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -43,6 +46,7 @@ export type AppStackParamList = {
   TabHome: undefined;
   TabTasks: undefined;
   TabLists: undefined;
+  TabPayments: undefined;
   Chat: undefined;
   CreateTask: { Task?: ITask; edit: boolean };
   MyTasks: undefined;
@@ -54,6 +58,9 @@ export type AppStackParamList = {
   Profile: undefined;
   CreateGroup: undefined;
   DetailsList: { List: IList };
+  PaymentList: {Payment: IPaymentSection}
+  Payment: {Payment?: IPayment}
+
   UserNote: { Note?: INote; Edit: boolean };
   CreateSharedNote: { Note?: ISharedNote; edit: boolean };
   NoteDetail: { Note: ISharedNote };
@@ -67,7 +74,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.48:4000/trpc",
+          url: "http://192.168.1.46:4000/trpc",
         }),
       ],
     })
@@ -121,6 +128,12 @@ export function App() {
                     name="DetailsList"
                     component={DetailsListScreen}
                   />
+                  <Stack.Screen name="Payment" component={PaymentScreen} />
+                  <Stack.Screen 
+                    name = "PaymentList"
+                    component={PaymentListScreen}
+                  />
+
                   <Stack.Screen name="TabLists" component={TabListsScreen} />
                   <Stack.Screen name="UserNote" component={UserNoteScreen} />
                   <Stack.Screen

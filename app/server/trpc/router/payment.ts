@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc";
-import { PayMentSchema } from "../../../common/validation/payment";
+import { SectionPayMentSchema, createPaymentSchema } from "../../../common/validation/payment";
 
 
 export const paymentRouter = router({
   getAllPaymentsSections: publicProcedure
     .input(z.object({ groupId: z.string() }))
-    .output(z.array(PayMentSchema))
+    .output(z.array(SectionPayMentSchema))
     .query(async ({ ctx, input }) => {
       const paymentSection =  await ctx.prisma.paymentSection.findMany({
         select : {
@@ -20,9 +20,11 @@ export const paymentRouter = router({
               payingUser: {
                 select: {
                   name: true,
+                  id: true,
                 }
               },
               createdAt: true,
+              amount: true,
               debtorUsers:
                     {
                       select: {
@@ -42,7 +44,7 @@ export const paymentRouter = router({
           groupId: input.groupId,
         },       
       });
-      return z.array(PayMentSchema).parse(paymentSection);
+      return z.array(SectionPayMentSchema).parse(paymentSection);
     }),
   createPaymentSection: publicProcedure
     .input(z.object({ groupId: z.string(), title: z.string(), description: z.string()}))
@@ -56,5 +58,23 @@ export const paymentRouter = router({
         },
       });
       return paymentSection;
+    }),
+  createPayment: publicProcedure
+    .input(createPaymentSchema)
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.payment.create({
+        data: {
+          paymentSectionId: input.paymentSectionId,
+          payingUserId: input.payingUserId,
+          amount: input.amount,
+          debtorUsers: {
+            create: input.debtorUsers.map((debtorUser) => ({
+              amount: debtorUser.amount,
+              debtorId: debtorUser.debtorId,
+            })),
+          },
+        },  
+      });
     })
+
 });
