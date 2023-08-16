@@ -7,6 +7,7 @@ export const PaymentSchema =
       name: z.string(),
       id: z.string(),
     }),
+    title: z.string(),
     createdAt: z.coerce.date(),
     amount: z.number(),
     debtorUsers: z.array(z.object({

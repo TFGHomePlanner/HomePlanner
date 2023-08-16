@@ -316,6 +316,7 @@ async function main() {
       description: "Payment Section 1 Description",
       payments: {
         create: {
+          title: "Payment 1",
           payingUser: { connect: { id: marta.id } },
           amount: 50.0,
           debtorUsers: {
@@ -343,6 +344,7 @@ async function main() {
       description: "Payment Section 2 Description",
       payments: {
         create: {
+          title: "Payment 1",
           payingUser: { connect: { id: juan.id } },
           amount: 150.0, 
           debtorUsers: {
