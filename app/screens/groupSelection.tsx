@@ -27,10 +27,22 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
     userId: User.id,
   });
 
+  const [error, setError] = useState("");
+
   const utils = trpc.useContext();
   const joinMutation = trpc.group.joinGroup.useMutation({
-    onSuccess() {
-      utils.user.getUserGroups.invalidate();
+    onSuccess(data) {
+      if (data.status === 200 && data.groupId !== null) {
+        utils.user.getUserGroups.invalidate();
+        navigation.navigate("Tabs");
+        selectGroup(data.groupId);
+      } else if (data.status === 404) {
+        setError("No se ha encontrado un grupo con este código.");
+      } else if (data.status === 400) {
+        setError("Ya estás en el grupo.");
+      } else {
+        setError("Ha ocurrido un error desconocido.");
+      }
     },
   });
 
@@ -39,6 +51,7 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
   }
 
   const [codeGroup, setCodeGroup] = useState("");
+  const [enabled, setEnabled] = useState(false);
 
   const mutation = trpc.group.getAdminId.useMutation({
     onSuccess(output) {
@@ -66,18 +79,32 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
       <Text className="mb-2 text-lg font-bold text-dark">
         <Text className="text-blue">ÚNETE</Text> A UN GRUPO
       </Text>
-      <View className="mb-6 w-full flex-row items-center space-x-3">
+      <View className="mb-2 w-full flex-row items-center space-x-3">
         <TextInput
           className={"flex-1 rounded-lg bg-white px-4 py-3 text-dark"}
           placeholderTextColor="#95999C"
           value={codeGroup}
-          onChangeText={setCodeGroup}
+          onChangeText={(code) => {
+            setCodeGroup(code);
+            setEnabled(
+              code.trim() !== "" && code.replace(/\s/g, "").length === 6
+            );
+            setError("");
+          }}
           placeholder="Código de invitación"
         />
-        <Text className="text-base font-semibold text-blue">OK</Text>
+        <Text
+          className={`${
+            enabled ? "text-blue" : "text-darkGray"
+          } text-base font-semibold`}
+          onPress={joinGroup}
+        >
+          OK
+        </Text>
       </View>
+      {error && <Text className="mb-2">{error}</Text>}
       <ScrollView>
-        <Text className="mb-2 text-lg font-bold text-dark">
+        <Text className="mb-2 mt-4 text-lg font-bold text-dark">
           O ELIGE UNO DE TUS GRUPOS
         </Text>
         {myGroups ? (

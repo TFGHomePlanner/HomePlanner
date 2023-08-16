@@ -1,5 +1,11 @@
 import React, { useContext, useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import {
+  Pressable,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Header } from "../../components/Header";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
@@ -8,6 +14,7 @@ import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
 import Icon from "react-native-vector-icons/Feather";
 import * as Clipboard from "expo-clipboard";
+import { Divider } from "@ui-kitten/components";
 
 /**
  * Propiedades para la pantalla de creación de grupos.
@@ -23,12 +30,6 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
   navigation,
 }) => {
   /**
-   * Estilo de los campos de entrada.
-   */
-  const inputStyle =
-    "mb-4 text-base py-2 px-4 bg-white rounded-lg border-b-[1px] border-light text-dark";
-
-  /**
    * Contexto del usuario actual.
    */
   const { User } = useContext(UserContext) as UserContextType;
@@ -41,7 +42,7 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
    * Estado local para el nombre del grupo.
    */
   const [name, setName] = useState("");
-
+  const [enabled, setEnabled] = useState(false);
   /**
    * Estado local para la descripción del grupo.
    */
@@ -92,6 +93,9 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
       code += characters.charAt(randomIndex);
     }
     setCodeGroup(code);
+
+    setName(name);
+    setEnabled(name.trim() !== "" && code !== "");
   }
 
   /**
@@ -100,6 +104,12 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
   const copyToClipboard = async () => {
     await Clipboard.setStringAsync(codeGroup);
   };
+
+  /**
+   * Estilo de los campos de entrada.
+   */
+  const inputStyle =
+    "mb-4 bg-white rounded-lg space-y-3 text-base border-light p-4 text-dark";
 
   return (
     <View className="h-full bg-light">
@@ -110,21 +120,28 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
             <Text className="text-blue">Cancelar</Text>
           </Pressable>
           <Text className="mr-10 self-center text-dark">Nuevo grupo</Text>
-          <Pressable className="self-end" onPress={createGroup}>
-            <Text className="font-semibold text-blue">OK</Text>
-          </Pressable>
+          <TouchableOpacity className="self-end" onPress={createGroup}>
+            <Text
+              className={`${
+                enabled ? "text-blue" : "text-darkGray"
+              } font-semibold`}
+            >
+              OK
+            </Text>
+          </TouchableOpacity>
         </View>
-
-        <View>
+        <View className={`my-6 ${inputStyle}`}>
           <TextInput
-            className={`${inputStyle}`}
             placeholderTextColor="#95999C"
             value={name}
-            onChangeText={setName}
+            onChangeText={(newName) => {
+              setName(newName);
+              setEnabled(newName.trim() !== "" && codeGroup !== "");
+            }}
             placeholder="Nombre del grupo *"
           />
+          <Divider />
           <TextInput
-            className={`${inputStyle} h-20`}
             placeholderTextColor="#95999C"
             value={description}
             onChangeText={setDescription}
@@ -132,7 +149,6 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
             multiline={true}
           />
         </View>
-
         <Pressable
           onPress={generateCode}
           className="mb-4 flex-row space-x-2 rounded-lg bg-white p-4"
