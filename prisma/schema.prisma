@@ -66,7 +66,7 @@ model Group {
   favouritesProducts FavouritesProducts[]
   TaskGroup          TaskGroup[]
   SharedNote         SharedNote[]
-  PaymentSetion     PaymentSection[]
+  PaymentSetion      PaymentSection[]
 
   @@index([adminId])
 }
@@ -133,7 +133,7 @@ model Task {
   TaskGroup   TaskGroup? @relation(fields: [taskGroupId], references: [id])
   taskGroupId String?
 
-  @@index([groupId, userId, createdBy])
+  @@index([groupId, userId])
 }
 
 model TaskGroup {
@@ -171,42 +171,41 @@ model SharedNote {
 }
 
 model PaymentSection {
-  id              String @id @default(cuid())
-  group           Group @relation(fields: [groupId], references: [id])
-  groupId         String
-  title           String
-  totalAmount     Float
-  description     String
-  payments        Payment[]
-  createdAt       DateTime @default(now())
+  id          String    @id @default(cuid())
+  group       Group     @relation(fields: [groupId], references: [id])
+  groupId     String
+  title       String
+  totalAmount Float
+  description String
+  payments    Payment[]
+  createdAt   DateTime  @default(now())
 
   @@index([groupId])
 }
 
 model Payment {
-  id                String       @id @default(cuid())
-  section           PaymentSection  @relation(fields: [paymentSectionId], references: [id])
-  paymentSectionId  String
-  payingUser          User      @relation(fields: [payingUserId], references: [id])
-  payingUserId        String
-  amount            Float
-  debtorUsers       DebtorUser[]
-  createdAt          DateTime     @default(now())
+  id               String         @id @default(cuid())
+  section          PaymentSection @relation(fields: [paymentSectionId], references: [id])
+  paymentSectionId String
+  payingUser       User           @relation(fields: [payingUserId], references: [id])
+  payingUserId     String
+  amount           Float
+  debtorUsers      DebtorUser[]
+  createdAt        DateTime       @default(now())
 
   @@index([paymentSectionId, payingUserId])
 }
 
 model DebtorUser {
-  id             String  @id @default(cuid())
-  payment        Payment    @relation(fields: [paymentId], references: [id])
-  paymentId      String
-  debtor         User @relation(fields: [debtorId], references: [id])
-  debtorId         String
-  amount          Float
+  id        String  @id @default(cuid())
+  payment   Payment @relation(fields: [paymentId], references: [id])
+  paymentId String
+  debtor    User    @relation(fields: [debtorId], references: [id])
+  debtorId  String
+  amount    Float
 
   @@index([paymentId, debtorId])
 }
-
 
 model VerificationToken {
   identifier String
