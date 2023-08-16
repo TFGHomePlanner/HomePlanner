@@ -28,7 +28,7 @@ const PaymentCard: React.FC< PaymentCardProps> = ({ navigation, payment }) => {
         <View className="flex justify-between w-full flex-row">
           <View className = "flex flex-row">
             <Icon name="dollar-sign" size={20} color="#21CF84" /> 
-            <Text className="ml-2 -mt-1 text-lg font-bold text-white">Titulo</Text>
+            <Text className="ml-2 -mt-1 text-lg font-bold text-white">{payment.title}</Text>
           </View>
           <Text className="font-bold text-lg text-white">{payment.amount.toString() + "€"}</Text>
         </View>

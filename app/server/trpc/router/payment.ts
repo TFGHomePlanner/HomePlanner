@@ -23,8 +23,10 @@ export const paymentRouter = router({
                   id: true,
                 }
               },
+              title: true,
               createdAt: true,
               amount: true,
+              
               debtorUsers:
                     {
                       select: {
