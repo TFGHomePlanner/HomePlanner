@@ -34,7 +34,8 @@ import { ISharedNote } from "./common/validation/sharedNote";
 import CreateSharedNoteScreen from "./screens/sharedNotes/create";
 import NoteDetailScreen from "./screens/sharedNotes/NoteDetail";
 import PaymentListScreen from "./screens/payment/paymentlist";
-import PaymentScreen from "./screens/payment/payment";
+import PaymentDetailScreen from "./screens/payment/paymentDetails";
+import PaymentScreen from "./screens/payment/paymenst";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -58,8 +59,8 @@ export type AppStackParamList = {
   Profile: undefined;
   CreateGroup: undefined;
   DetailsList: { List: IList };
-  PaymentList: { Payment: IPaymentSection };
-  Payment: { Payment: IPayment };
+  Payments: { Payments: IPaymentSection}
+  PaymentDetails: { Payment: IPayment };
   UserNote: { Note?: INote; Edit: boolean };
   CreateSharedNote: { Note?: ISharedNote; edit: boolean };
   NoteDetail: { Note: ISharedNote };
@@ -73,7 +74,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.48:4000/trpc",
+          url: "http://192.168.1.46:4000/trpc",
         }),
       ],
     })
@@ -127,12 +128,12 @@ export function App() {
                     name="DetailsList"
                     component={DetailsListScreen}
                   />
-                  <Stack.Screen name="Payment" component={PaymentScreen} />
+                  <Stack.Screen name="PaymentDetails" component={PaymentDetailScreen} />
+                 
                   <Stack.Screen
-                    name="PaymentList"
-                    component={PaymentListScreen}
+                    name="Payments"
+                    component={PaymentScreen}
                   />
-
                   <Stack.Screen name="TabLists" component={TabListsScreen} />
                   <Stack.Screen name="UserNote" component={UserNoteScreen} />
                   <Stack.Screen
