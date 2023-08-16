@@ -42,8 +42,13 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
     { key: Frequency.oncePerWeek, value: "Cada semana" },
     { key: Frequency.oncePerMonth, value: "Cada mes" },
   ];
+  const edit = route.params.edit;
+  const taskToEdit = route.params.Task;
 
   const [name, setName] = useState("");
+  const [enabled, setEnabled] = useState(
+    taskToEdit?.name ? taskToEdit?.name !== "" : false
+  );
   const [description, setDescription] = useState("");
   const [selectedFrequency, setSelectedFrequency] = useState<Frequency>(
     Frequency.never
@@ -80,20 +85,19 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
     },
   });
   const createTask = () => {
-    createMutation.mutateAsync({
-      name,
-      description,
-      frequency: selectedFrequency,
-      startsAt: date,
-      groupId: User.groupId || "",
-      userId: selectedUser,
-      taskGroupId: selectedGroup,
-      createdBy: User.id,
-    });
+    enabled &&
+      createMutation.mutateAsync({
+        name,
+        description,
+        frequency: selectedFrequency,
+        startsAt: date,
+        groupId: User.groupId || "",
+        userId: selectedUser == "" ? undefined : selectedUser,
+        taskGroupId: selectedGroup == "" ? undefined : selectedGroup,
+        createdBy: User.id,
+      });
   };
 
-  const edit = route.params.edit;
-  const taskToEdit = route.params.Task;
   function loadTask() {
     setName(taskToEdit?.name ?? "");
     setDescription(taskToEdit?.description ?? "");
@@ -114,17 +118,18 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
     },
   });
   const updateTask = () => {
-    updateMutation.mutateAsync({
-      id: taskToEdit?.id ?? "",
-      name,
-      description,
-      frequency: selectedFrequency,
-      startsAt: date,
-      groupId: User.groupId || "",
-      userId: selectedUser,
-      taskGroupId: selectedGroup,
-      createdBy: taskToEdit?.createdBy ?? User.id,
-    });
+    enabled &&
+      updateMutation.mutateAsync({
+        id: taskToEdit?.id ?? "",
+        name,
+        description,
+        frequency: selectedFrequency,
+        startsAt: date,
+        groupId: User.groupId || "",
+        userId: selectedUser,
+        taskGroupId: selectedGroup,
+        createdBy: taskToEdit?.createdBy ?? User.id,
+      });
   };
 
   return (
@@ -141,10 +146,15 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
           </Pressable>
           <Text className="mr-4 self-center">Nueva tarea</Text>
           <Pressable
+            disabled={!enabled}
             className="self-end"
             onPress={edit ? updateTask : createTask}
           >
-            <Text className="font-semibold text-purple">
+            <Text
+              className={`${
+                enabled ? "text-purple" : "text-darkGray"
+              } font-semibold`}
+            >
               {edit ? "       OK" : "Añadir"}
             </Text>
           </Pressable>
@@ -153,8 +163,11 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
           <TextInput
             placeholderTextColor="#95999C"
             value={name}
-            onChangeText={setName}
-            placeholder="Título"
+            onChangeText={(newName) => {
+              setName(newName);
+              setEnabled(newName.trim() !== "");
+            }}
+            placeholder="Título *"
           />
           <Divider />
           <TextInput
