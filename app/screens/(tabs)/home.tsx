@@ -27,7 +27,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       className="h-full bg-light px-6"
       showsVerticalScrollIndicator={false}
     >
-      <View className="my-4 flex-row items-center justify-between">
+      <View className="my-3 flex-row items-center justify-between">
         <Text className="text-lg font-semibold">NOTAS COMPARTIDAS</Text>
         <Pressable onPress={goToCreateNote}>
           <Icon name="shape-square-rounded-plus" size={24} color={"#1E88E5"} />

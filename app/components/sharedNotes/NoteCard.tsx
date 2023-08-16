@@ -30,7 +30,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
         {note.text && <Text className="text-placeholderGray">{note.text}</Text>}
       </View>
       {isLastNote ? null : (
-        <View className="my-4">
+        <View className="my-3">
           <Divider />
         </View>
       )}
