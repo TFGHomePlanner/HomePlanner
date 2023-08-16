@@ -146,6 +146,16 @@ async function main() {
     },
   });
 
+  const grupoTareas = await prisma.taskGroup.create({
+    data: {
+      name: "Flusis",
+      groupId: minigrupo.id,
+      Tasks: {
+        connect: [{ id: tarea1.id }, { id: tarea2.id }, { id: tarea3.id }],
+      },
+    },
+  });
+
   const lista1 = await prisma.list.create({
     data: {
       name: "Lista de la compra1",
@@ -307,7 +317,7 @@ async function main() {
       groupId: minigrupo.id,
     },
   });
-  
+
   const paymentSection1 = await prisma.paymentSection.create({
     data: {
       group: { connect: { id: minigrupo.id } },
@@ -322,11 +332,11 @@ async function main() {
             create: [
               {
                 debtor: { connect: { id: marta.id } },
-                amount: 25.0, 
+                amount: 25.0,
               },
               {
                 debtor: { connect: { id: juan.id } },
-                amount: 25.0, 
+                amount: 25.0,
               },
             ],
           },
@@ -344,12 +354,12 @@ async function main() {
       payments: {
         create: {
           payingUser: { connect: { id: juan.id } },
-          amount: 150.0, 
+          amount: 150.0,
           debtorUsers: {
             create: [
               {
                 debtor: { connect: { id: marta.id } },
-                amount: 75.0, 
+                amount: 75.0,
               },
               {
                 debtor: { connect: { id: a.id } },
@@ -362,8 +372,6 @@ async function main() {
     },
   });
 }
-
-
 
 main()
   .then(async () => {
