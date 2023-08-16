@@ -97,6 +97,18 @@ export const taskRouter = router({
       }
     ),
 
+  delete: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.task.delete({
+        where: { id: input.id },
+      });
+      return {
+        status: 201,
+        message: "Task deleted successfully",
+      };
+    }),
+
   checkTask: publicProcedure
     .input(z.object({ taskId: z.string() }))
     .mutation(async ({ ctx, input: { taskId } }) => {

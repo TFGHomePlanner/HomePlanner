@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from "react-native";
+import { Alert, Pressable, Text, TouchableOpacity, View } from "react-native";
 import React, { useContext } from "react";
 import { RouteProp } from "@react-navigation/native";
 import { AppStackParamList } from "../../_App";
@@ -39,16 +39,17 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
   /**
    * Mutación para marcar una tarea como completada.
    */
-  const mutation = trpc.task.checkTask.useMutation({
+  const checkMutation = trpc.task.checkTask.useMutation({
     onSuccess() {
       utils.task.getAllTasks.invalidate();
+      navigation.navigate("Tabs");
     },
   });
   /**
    * Marca la tarea actual como completada.
    */
   function checkTask() {
-    mutation.mutateAsync({ taskId: Task.id });
+    checkMutation.mutateAsync({ taskId: Task.id });
   }
 
   /**
@@ -56,6 +57,29 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
    */
   function goToCreateTask() {
     navigation.navigate("CreateTask", { Task: Task, edit: true });
+  }
+
+  const deleteMutation = trpc.task.delete.useMutation({
+    onSuccess() {
+      utils.task.getAllTasks.invalidate();
+      utils.task.getAllGroupTasks.invalidate();
+      utils.task.getUnassignedTasks.invalidate();
+      navigation.navigate("Tabs");
+    },
+  });
+
+  function deleteTask() {
+    deleteMutation.mutateAsync({ id: Task.id });
+  }
+
+  function handleDelete() {
+    Alert.alert("Eliminar tarea", "", [
+      {
+        text: "Cancelar",
+        style: "cancel",
+      },
+      { text: "Eliminar", style: "destructive", onPress: () => deleteTask() },
+    ]);
   }
 
   return (
@@ -75,21 +99,21 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
             <Text>Empieza el {Task.startsAt.toLocaleDateString()}</Text>
           )}
           <View className="flex-row space-x-4">
-            <Pressable
+            <TouchableOpacity
               onPress={checkTask}
               className="w-36 rounded-full border-[1px] border-light bg-purple p-1"
             >
               <Text className="text-center text-light">marcar hecha</Text>
-            </Pressable>
+            </TouchableOpacity>
             <Pressable className="w-36 rounded-full border-[1px] border-purple p-1">
               <Text className="text-center text-purple">reasignar tarea</Text>
             </Pressable>
           </View>
         </View>
         {canEdit && (
-          <Pressable className="self-end">
+          <TouchableOpacity onPress={handleDelete} className="self-end">
             <Icon name="trash-outline" color={"#7B61FF"} size={24} />
-          </Pressable>
+          </TouchableOpacity>
         )}
       </View>
     </View>
