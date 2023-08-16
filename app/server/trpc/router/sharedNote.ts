@@ -34,4 +34,15 @@ export const sharedNoteRouter = router({
         message: "Note created successfully",
       };
     }),
+  deleteNote: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.sharedNote.delete({
+        where: { id: input.id },
+      });
+      return {
+        status: 201,
+        message: "Note deleted successfully",
+      };
+    }),
 });

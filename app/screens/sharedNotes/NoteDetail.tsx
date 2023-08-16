@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from "react-native";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 import React, { useContext } from "react";
 import { RouteProp } from "@react-navigation/native";
 import { AppStackParamList } from "../../_App";
@@ -7,6 +7,7 @@ import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
 import Icon from "react-native-vector-icons/Ionicons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { trpc } from "../../trpc";
 
 type NoteDetailScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "NoteDetail">;
@@ -41,6 +42,28 @@ const NoteDetailScreen: React.FC<NoteDetailScreenProps> = ({
     navigation.navigate("CreateSharedNote", { Note: Note, edit: true });
   }
 
+  const utils = trpc.useContext();
+  const deleteMutation = trpc.sharedNote.deleteNote.useMutation({
+    onSuccess() {
+      utils.sharedNote.getAllNotes.invalidate();
+      navigation.navigate("Tabs");
+    },
+  });
+
+  function deleteNote() {
+    deleteMutation.mutateAsync({ id: Note.id });
+  }
+
+  function handleDelete() {
+    Alert.alert("Eliminar nota", "", [
+      {
+        text: "Cancelar",
+        style: "cancel",
+      },
+      { text: "Eliminar", style: "destructive", onPress: () => deleteNote() },
+    ]);
+  }
+
   return (
     <View className="h-full bg-light">
       <Header />
@@ -60,9 +83,9 @@ const NoteDetailScreen: React.FC<NoteDetailScreenProps> = ({
           )}
         </View>
         {canEdit && (
-          <Pressable className="self-end">
+          <TouchableOpacity onPress={handleDelete} className="self-end">
             <Icon name="trash-outline" color={"#1E88E5"} size={24} />
-          </Pressable>
+          </TouchableOpacity>
         )}
       </View>
     </View>

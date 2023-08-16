@@ -76,7 +76,7 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
             />
           ))}
       </View>
-      <Text className="mb-2 text-lg">Otras tareas</Text>
+      <Text className="mb-2 text-lg">TODAS LAS TAREAS</Text>
       <View>
         {allTasks ? (
           allTasks.map((task) => (
