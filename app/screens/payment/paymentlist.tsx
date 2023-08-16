@@ -1,7 +1,7 @@
 import React from "react";
 import { AppStackParamList } from "../../_App";
 import { RouteProp } from "@react-navigation/native";
-import { View, Text, ScrollView, useWindowDimensions  } from "react-native";
+import { View, Text, ScrollView} from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Header } from "../../components/Header";
 import Icon from "react-native-vector-icons/FontAwesome5";
