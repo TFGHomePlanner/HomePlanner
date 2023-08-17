@@ -175,6 +175,7 @@ model PaymentSection {
   id           String    @id @default(cuid())
   group        Group     @relation(fields: [groupId], references: [id])
   groupId      String
+  isClosed     Boolean   @default(false)
   title        String
   totalAmount  Float
   description  String

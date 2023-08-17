@@ -33,22 +33,25 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
   const Users = PaymentSection.participants;
   const [participantsAmounts, setParticipantsAmounts] = useState<{[userId: string]: string }>({});
 
-  const handleParticipantAmountChange = (userId: string, amount: string) => {
+  const [title, setTitle] = useState<string>("");
+  const [price, setprice] = useState<string>("0");
+  const [total, settotal] = useState<number>(0);
+  const handleParticipantAmountChange = async (userId: string, amount: string) => {
+    console.log("userId: " + userId + " amount: " + amount);
     setParticipantsAmounts((prevAmounts) => ({
       ...prevAmounts,
       [userId]: amount,
     }));
+    console.log("participantsAmounts: " + participantsAmounts[userId]);
+    total1();
 
-    settotal((prevTotal) => {
-      const newTotal = Object.values(participantsAmounts).filter((amt) => amt !== "").map((amt) => parseFloat(amt)).reduce((acc, amt) => acc + amt, 0);
-      return Math.round(newTotal * 100) / 100;
-    });
-      
   };
-
-  const [title, setTitle] = useState<string>("");
-  const [price, setprice] = useState<string>("0");
-  const [total, settotal] = useState<number>(0);
+  function total1() {
+    const newTotal = Object.values(participantsAmounts).filter((amt) => amt !== "").map((amt) => parseFloat(amt)).reduce((acc, amt) => acc + amt, 0);
+    console.log("newTotal: " + newTotal);
+    settotal(newTotal);
+    console.log("total: " + total);
+  }
 
   const [selectedUser, setSelectedUser] = useState(User.id);
   const userOptions = PaymentSection.participants.map((user) => ({

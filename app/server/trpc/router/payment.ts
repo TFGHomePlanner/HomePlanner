@@ -15,6 +15,7 @@ export const paymentRouter = router({
           description: true,
           totalAmount: true, 
           createdAt: true, 
+          isClosed: true,
           participants: {
             select: {
               name: true,
@@ -42,6 +43,7 @@ export const paymentRouter = router({
               id: true,
             }    
           },
+          
           title: true,
           createdAt: true,
           amount: true,
