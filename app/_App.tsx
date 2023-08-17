@@ -38,6 +38,7 @@ import PaymentScreen from "./screens/payment/payments";
 import CreatePaymentScreen from "./screens/payment/Createpayment";
 import PaymentListScreen from "./screens/payment/paymentlist";
 import ResumePaymentScreenScreen from "./screens/payment/resumepayment";
+import CreateEventScreen from "./screens/(tabs)/calendar/create";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -48,6 +49,7 @@ export type AppStackParamList = {
   Tabs: undefined;
   TabHome: undefined;
   TabTasks: undefined;
+  TabCalendar: undefined;
   TabLists: undefined;
   TabPayments: undefined;
   Chat: undefined;
@@ -56,6 +58,7 @@ export type AppStackParamList = {
   UnassignedTasks: undefined;
   TaskDetail: { Task: ITask; isAssigned: boolean };
   GroupTasks: { taskGroup: ITaskGroup };
+  CreateEvent: { edit: boolean }; // pasar { Event?: IEvent, edit: boolean }
   Modal: undefined;
   CreateList: { List?: IList; Edit: boolean };
   Profile: undefined;
@@ -69,7 +72,6 @@ export type AppStackParamList = {
   PaymentList: { Payments: IPaymentSection };
   CreatePayment: { Payments: IPaymentSection };
   ResumePayments: { Payments: IPaymentSection };
-
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -155,10 +157,19 @@ export function App() {
                     name="CreatePayment"
                     component={CreatePaymentScreen}
                   />
-                  <Stack.Screen name="PaymentList" component={PaymentListScreen} />
-                  <Stack.Screen name="ResumePayments" component={ResumePaymentScreenScreen} />
+                  <Stack.Screen
+                    name="PaymentList"
+                    component={PaymentListScreen}
+                  />
+                  <Stack.Screen
+                    name="ResumePayments"
+                    component={ResumePaymentScreenScreen}
+                  />
+                  <Stack.Screen
+                    name="CreateEvent"
+                    component={CreateEventScreen}
+                  />
                 </Stack.Navigator>
-              
               </NavigationContainer>
             </ApplicationProvider>
           </UserProvider>

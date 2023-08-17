@@ -22,8 +22,8 @@ export const CreateTaskSchema = z.object({
   name: z.string(),
   description: z
     .string()
-    .max(600, {
-      message: "La descripción no puede tener más de 600 caracteres.",
+    .max(200, {
+      message: "La descripción no puede tener más de 200 caracteres.",
     })
     .nullable(),
   frequency: z.nativeEnum(Frequency),

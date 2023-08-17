@@ -1,10 +1,19 @@
-import React, { useMemo, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useContext, useMemo, useState } from "react";
+import { TouchableOpacity, View } from "react-native";
 import { Calendar } from "react-native-calendars";
 import Icon from "react-native-vector-icons/AntDesign";
 import { LocaleConfig } from "react-native-calendars";
+import { AppStackParamList } from "../../../_App";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UserContext } from "../../../context/userContext";
+import { UserContextType } from "../../../context/types";
 
-export default function Calen0darScreen() {
+type TabCalendarScreenProps = {
+  navigation: NativeStackNavigationProp<AppStackParamList, "TabCalendar">;
+};
+
+const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
+  const { User } = useContext(UserContext) as UserContextType;
   LocaleConfig.locales["es"] = {
     monthNames: [
       "Enero",
@@ -35,20 +44,20 @@ export default function Calen0darScreen() {
       "Dic.",
     ],
     dayNames: [
-      "Domingo",
       "Lunes",
       "Martes",
       "Miércoles",
       "Jueves",
       "Viernes",
       "Sábado",
+      "Domingo",
     ],
-    dayNamesShort: ["Dom.", "Lun.", "Mar.", "Mié.", "Jue.", "Vie.", "Sáb."],
+    dayNamesShort: ["Lun.", "Mar.", "Mié.", "Jue.", "Vie.", "Sáb.", "Dom."],
   };
   LocaleConfig.defaultLocale = "es";
 
-  const [date, setDate] = useState<any>();
   const today = new Date().toISOString().split("T")[0];
+  const [date, setDate] = useState<any>(today);
   const marked = useMemo(
     () => ({
       [date]: {
@@ -57,20 +66,29 @@ export default function Calen0darScreen() {
         selectedTextColor: "white",
       },
       [today]: {
+        customStyles: {
+          text: {
+            fontWeight: "bold",
+            color: date === today ? "white" : "#FFA755",
+          },
+        },
         selected: date === today,
         selectedColor: "#FFA755",
-        selectedTextColor: "white",
       },
     }),
     [date, today]
   );
 
+  function goToCreateEvent() {
+    navigation.navigate("CreateEvent", { edit: false });
+  }
+
   return (
-    <ScrollView
-      className="h-full bg-light"
-      showsVerticalScrollIndicator={false}
-    >
-      <TouchableOpacity className="mb-4 mr-4 items-end">
+    <View className="h-full bg-light">
+      <TouchableOpacity
+        onPress={goToCreateEvent}
+        className="mb-4 mr-4 items-end"
+      >
         <Icon name="plus" size={24} color={"#FFA755"} />
       </TouchableOpacity>
       <Calendar
@@ -88,6 +106,8 @@ export default function Calen0darScreen() {
         maxDate="2030-12-31"
         firstDay={1}
       />
-    </ScrollView>
+    </View>
   );
-}
+};
+
+export default CalendarScreen;
