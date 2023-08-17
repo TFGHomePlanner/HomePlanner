@@ -14,7 +14,13 @@ export const paymentRouter = router({
           title: true,
           description: true,
           totalAmount: true, 
-          createdAt: true,    
+          createdAt: true, 
+          participants: {
+            select: {
+              name: true,
+              id: true,
+            }
+          },
           payments: {
             select: {
               payingUser: {

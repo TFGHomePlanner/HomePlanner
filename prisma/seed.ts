@@ -324,6 +324,9 @@ async function main() {
       title: "Section 1",
       totalAmount: 100.0,
       description: "Payment Section 1 Description",
+      participants: {
+        connect: [{ id: marta.id }, { id: juan.id }, { id: a.id }],
+      },
       payments: {
         create: {
           title: "Payment 1",
@@ -352,6 +355,9 @@ async function main() {
       title: "Section 2",
       totalAmount: 150.0, // Set the total amount for this section
       description: "Payment Section 2 Description",
+      participants: {
+        connect: [{ id: marta.id }, { id: juan.id }, { id: a.id }],
+      },
       payments: {
         create: {
           title: "Payment 1",

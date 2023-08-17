@@ -25,6 +25,10 @@ export const SectionPayMentSchema= z.object({
   description: z.string().optional().nullable(),
   totalAmount: z.number(),
   createdAt: z.coerce.date(),
+  participants: z.array(z.object({
+    name: z.string(),
+    id: z.string(),
+  })),
   payments: z.array(PaymentSchema),
 });
 

@@ -64,6 +64,7 @@ export type AppStackParamList = {
   CreateSharedNote: { Note?: ISharedNote; edit: boolean };
   NoteDetail: { Note: ISharedNote };
   PaymentList: { Payments: IPaymentSection };
+  CreatePayment: { Payments: IPaymentSection }
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -100,6 +101,7 @@ export function App() {
                     name="CreateGroup"
                     component={CreateGroupScreen}
                   />
+
                   <Stack.Screen name="Chat" component={ChatScreen} />
                   <Stack.Screen name="Tabs" component={AppLayout} />
                   <Stack.Screen

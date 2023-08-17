@@ -50,6 +50,7 @@ model User {
   SharedNote    SharedNote[]
   Payment       Payment[]
   DebtorUser    DebtorUser[]
+  paymentSectionsAsParticipant PaymentSection[] @relation("PaymentSectionParticipants")
 }
 
 model Group {
@@ -179,7 +180,7 @@ model PaymentSection {
   description String
   payments    Payment[]
   createdAt   DateTime  @default(now())
-
+  participants  User[]      @relation("PaymentSectionParticipants")
   @@index([groupId])
 }
 
