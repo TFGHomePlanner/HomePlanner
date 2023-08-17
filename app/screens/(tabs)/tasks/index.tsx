@@ -1,5 +1,11 @@
 import React, { useContext } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { trpc } from "../../../trpc";
 import TaskCard from "../../../components/tasks/TaskCard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -42,9 +48,9 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
       showsVerticalScrollIndicator={false}
     >
       <View className="mb-4 items-end">
-        <Pressable onPress={goToCreateTask}>
+        <TouchableOpacity onPress={goToCreateTask}>
           <Icon name="shape-square-rounded-plus" size={24} color={"#7B61FF"} />
-        </Pressable>
+        </TouchableOpacity>
       </View>
       <View className="mb-4 h-24 w-full justify-center space-y-3 rounded-xl bg-white px-4 shadow-sm">
         <Pressable onPress={goToMyTasks} className="flex-row justify-between">
@@ -76,7 +82,7 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
             />
           ))}
       </View>
-      <Text className="mb-2 text-lg">TODAS LAS TAREAS</Text>
+      <Text className="mb-2 text-lg font-medium">TODAS LAS TAREAS</Text>
       <View>
         {allTasks ? (
           allTasks.map((task) => (

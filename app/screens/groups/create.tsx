@@ -126,7 +126,11 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
             <Text className="text-blue">Cancelar</Text>
           </Pressable>
           <Text className="mr-10 self-center text-dark">Nuevo grupo</Text>
-          <TouchableOpacity className="self-end" onPress={createGroup}>
+          <TouchableOpacity
+            disabled={!enabled}
+            className="self-end"
+            onPress={createGroup}
+          >
             <Text
               className={`${
                 enabled ? "text-blue" : "text-darkGray"

@@ -6,9 +6,9 @@ import {
   Switch,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
-import { Header } from "../../../components/Header";
 import { trpc } from "../../../trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../../_App";
@@ -133,32 +133,30 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
   };
 
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="always"
-      keyboardDismissMode="on-drag"
-      className="bg-light"
-    >
-      <Header />
-      <View className="h-screen px-6">
-        <View className="flex flex-row justify-between">
-          <Pressable onPress={navigation.goBack}>
-            <Text className="text-purple">Cancelar</Text>
-          </Pressable>
-          <Text className="mr-4 self-center">Nueva tarea</Text>
-          <Pressable
-            disabled={!enabled}
-            className="self-end"
-            onPress={edit ? updateTask : createTask}
+    <View className="h-screen bg-light px-6 py-16">
+      <View className="flex flex-row justify-between">
+        <Pressable onPress={navigation.goBack}>
+          <Text className="text-purple">Cancelar</Text>
+        </Pressable>
+        <Text className="mr-4 self-center">Nueva tarea</Text>
+        <TouchableOpacity
+          disabled={!enabled}
+          className="self-end"
+          onPress={edit ? updateTask : createTask}
+        >
+          <Text
+            className={`${
+              enabled ? "text-purple" : "text-darkGray"
+            } font-semibold`}
           >
-            <Text
-              className={`${
-                enabled ? "text-purple" : "text-darkGray"
-              } font-semibold`}
-            >
-              {edit ? "       OK" : "Añadir"}
-            </Text>
-          </Pressable>
-        </View>
+            {edit ? "       OK" : "Añadir"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <ScrollView
+        keyboardShouldPersistTaps="always"
+        keyboardDismissMode="on-drag"
+      >
         <View className={`my-6 ${inputStyle}`}>
           <TextInput
             placeholderTextColor="#95999C"
@@ -316,8 +314,8 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             />
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 

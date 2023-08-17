@@ -1,18 +1,16 @@
 import React, { useContext, useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { trpc } from "../../trpc";
 import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
 
 const CreateTaskGroupScreen = () => {
   const [name, setName] = useState("");
+  const [enabled, setEnabled] = useState(false);
   const [visible, setVisible] = useState(false);
   function openCreateTaskGroup() {
     setVisible(!visible);
-    !visible && setInfo("");
   }
-
-  const [info, setInfo] = useState("");
 
   const { User } = useContext(UserContext) as UserContextType;
   const utils = trpc.useContext();
@@ -29,34 +27,38 @@ const CreateTaskGroupScreen = () => {
         groupId: User.groupId || "",
       });
     name && openCreateTaskGroup();
-    !name && setInfo("Debes introducir el nombre del grupo.");
+    setName("");
   };
 
   return (
     <View className="mb-2">
-      <Pressable className="items-end">
+      <TouchableOpacity className="items-end">
         <Text onPress={openCreateTaskGroup} className="text-purple">
           {visible ? "Cancelar" : "Crear grupo"}
         </Text>
-      </Pressable>
+      </TouchableOpacity>
       {visible && (
-        <View>
-          <View className="mt-2 flex-row items-center justify-between space-x-2">
-            <TextInput
-              className="flex-1 rounded-lg bg-white px-4 py-3"
-              placeholderTextColor="#95999C"
-              value={name}
-              onChangeText={setName}
-              placeholder="Nombre del grupo"
-            />
-            <Text
-              onPress={createTaskGroup}
-              className="font-semibold text-purple"
-            >
-              OK
-            </Text>
-          </View>
-          {!name && <Text className="mb-2 ml-1 text-purple">{info}</Text>}
+        <View className="mt-2 flex-row items-center justify-between space-x-2">
+          <TextInput
+            className="flex-1 rounded-lg bg-white px-4 py-3"
+            placeholderTextColor="#95999C"
+            value={name}
+            onChangeText={(newName) => {
+              setName(newName);
+              setEnabled(newName.trim() !== "");
+            }}
+            placeholder="Nombre del grupo *"
+            maxLength={15}
+          />
+          <Text
+            disabled={!enabled}
+            onPress={createTaskGroup}
+            className={`${
+              enabled ? "text-purple" : "text-darkGray"
+            } font-semibold`}
+          >
+            OK
+          </Text>
         </View>
       )}
     </View>
