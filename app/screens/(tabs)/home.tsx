@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useContext } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { AppStackParamList } from "../../_App";
 import { UserContext } from "../../context/userContext";
 import { trpc } from "../../trpc";
@@ -29,9 +29,9 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     >
       <View className="my-3 flex-row items-center justify-between">
         <Text className="text-lg font-semibold">NOTAS COMPARTIDAS</Text>
-        <Pressable onPress={goToCreateNote}>
+        <TouchableOpacity onPress={goToCreateNote}>
           <Icon name="shape-square-rounded-plus" size={24} color={"#1E88E5"} />
-        </Pressable>
+        </TouchableOpacity>
       </View>
       {sharedNotes?.length !== 0 ? (
         <View className="w-full rounded-xl bg-white p-4">

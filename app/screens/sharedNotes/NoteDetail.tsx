@@ -75,9 +75,9 @@ const NoteDetailScreen: React.FC<NoteDetailScreenProps> = ({
             </Text>
           )}
           <Text className="text-xl font-bold">{Note.title}</Text>
-          {Note.text && <Text>{Note.text}</Text>}
-          {Note.createdAt instanceof Date && (
-            <Text>
+          {Note.text && <Text className="text-dark">{Note.text}</Text>}
+          {Note.createdAt && (
+            <Text className="text-placeholderGray">
               Creada el {new Date(Note.createdAt).toLocaleDateString()}
             </Text>
           )}

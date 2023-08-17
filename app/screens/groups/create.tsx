@@ -11,7 +11,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import { trpc } from "../../trpc";
 import { UserContext } from "../../context/userContext";
-import { UserContextType } from "../../context/types";
+import { IUser, UserContextType } from "../../context/types";
 import Icon from "react-native-vector-icons/Feather";
 import * as Clipboard from "expo-clipboard";
 import { Divider } from "@ui-kitten/components";
@@ -32,7 +32,7 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
   /**
    * Contexto del usuario actual.
    */
-  const { User } = useContext(UserContext) as UserContextType;
+  const { User, updateUser } = useContext(UserContext) as UserContextType;
   /**
    * Utilidades de trpc para gestionar grupos y usuarios.
    */
@@ -54,17 +54,18 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
   const [codeGroup, setCodeGroup] = useState("");
 
   /**
-   * Estado local para la lista de usuarios.
-   */
-  const [users, setUsers] = useState([]);
-
-  /**
    * Mutación para crear un grupo.
    */
   const mutation = trpc.group.create.useMutation({
-    onSuccess() {
+    onSuccess(data) {
       utils.user.getUserGroups.invalidate();
       navigation.navigate("Tabs");
+      const user: IUser = {
+        id: User.id,
+        groupId: data.groupId,
+        isAdmin: true,
+      };
+      updateUser(user);
     },
   });
 
@@ -77,7 +78,6 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
       description,
       adminId: User.id,
       codeGroup,
-      users,
     });
   }
 
@@ -120,7 +120,11 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
             <Text className="text-blue">Cancelar</Text>
           </Pressable>
           <Text className="mr-10 self-center text-dark">Nuevo grupo</Text>
-          <TouchableOpacity className="self-end" onPress={createGroup}>
+          <TouchableOpacity
+            disabled={!enabled}
+            className="self-end"
+            onPress={createGroup}
+          >
             <Text
               className={`${
                 enabled ? "text-blue" : "text-darkGray"

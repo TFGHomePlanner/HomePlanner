@@ -18,8 +18,8 @@ export const CreateSharedNoteSchema = z.object({
     }),
   text: z
     .string()
-    .max(100, {
-      message: "Máximo 600 caracteres.",
+    .max(200, {
+      message: "Máximo 200 caracteres.",
     })
     .nullable(),
   userId: z.string(),

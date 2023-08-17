@@ -16,18 +16,25 @@ const NoteCard: React.FC<NoteCardProps> = ({
   note,
   isLastNote,
 }) => {
-  function gotNoteDetail() {
+  function goToNoteDetail() {
     navigation.navigate("NoteDetail", {
       Note: { ...note, createdAt: note.createdAt.toISOString() },
     });
   }
   const formattedDate = format(note.createdAt, "dd/M/yy");
   return (
-    <Pressable onPress={gotNoteDetail}>
+    <Pressable onPress={goToNoteDetail}>
       <Text className="font-semibold">{note.title}</Text>
       <View className="mt-1 flex-row items-center space-x-2">
         <Text className="text-placeholderGray">{formattedDate}</Text>
-        {note.text && <Text className="text-placeholderGray">{note.text}</Text>}
+        {note.text && (
+          <Text
+            numberOfLines={1}
+            className="flex-shrink truncate text-placeholderGray"
+          >
+            {note.text}
+          </Text>
+        )}
       </View>
       {isLastNote ? null : (
         <View className="my-3">
