@@ -14,7 +14,7 @@ export const groupRouter = router({
         const updatedUsers = users
           ? [...users, { id: adminId }]
           : [{ id: adminId }];
-        return await ctx.prisma.group.create({
+        const createdGroup = await ctx.prisma.group.create({
           data: {
             name,
             codeGroup,
@@ -23,6 +23,10 @@ export const groupRouter = router({
             users: { connect: updatedUsers },
           },
         });
+        return {
+          groupId: createdGroup.id,
+          message: "Grupo creado correctamente.",
+        };
       }
     ),
 

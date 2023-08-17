@@ -34,22 +34,22 @@ model Session {
 }
 
 model User {
-  id            String       @id @default(cuid())
-  name          String
-  email         String       @unique
-  emailVerified DateTime?
-  passwordHash  String
-  accounts      Account[]
-  sessions      Session[]
-  adminGroup    Group[]      @relation("UserAdmin")
-  groups        Group[]      @relation("Users")
-  message       Message[]
-  imageprofile  String?
-  Task          Task[]
-  Notes         Note[]
-  SharedNote    SharedNote[]
-  Payment       Payment[]
-  DebtorUser    DebtorUser[]
+  id                           String           @id @default(cuid())
+  name                         String
+  email                        String           @unique
+  emailVerified                DateTime?
+  passwordHash                 String
+  accounts                     Account[]
+  sessions                     Session[]
+  adminGroup                   Group[]          @relation("UserAdmin")
+  groups                       Group[]          @relation("Users")
+  message                      Message[]
+  imageprofile                 String?
+  Task                         Task[]
+  Notes                        Note[]
+  SharedNote                   SharedNote[]
+  Payment                      Payment[]
+  DebtorUser                   DebtorUser[]
   paymentSectionsAsParticipant PaymentSection[] @relation("PaymentSectionParticipants")
 }
 
@@ -172,21 +172,22 @@ model SharedNote {
 }
 
 model PaymentSection {
-  id          String    @id @default(cuid())
-  group       Group     @relation(fields: [groupId], references: [id])
-  groupId     String
-  title       String
-  totalAmount Float
-  description String
-  payments    Payment[]
-  createdAt   DateTime  @default(now())
-  participants  User[]      @relation("PaymentSectionParticipants")
+  id           String    @id @default(cuid())
+  group        Group     @relation(fields: [groupId], references: [id])
+  groupId      String
+  title        String
+  totalAmount  Float
+  description  String
+  payments     Payment[]
+  createdAt    DateTime  @default(now())
+  participants User[]    @relation("PaymentSectionParticipants")
+
   @@index([groupId])
 }
 
 model Payment {
   id               String         @id @default(cuid())
-  title           String?
+  title            String?
   section          PaymentSection @relation(fields: [paymentSectionId], references: [id])
   paymentSectionId String
   payingUser       User           @relation(fields: [payingUserId], references: [id])

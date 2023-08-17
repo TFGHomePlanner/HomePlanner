@@ -58,13 +58,13 @@ export type AppStackParamList = {
   Profile: undefined;
   CreateGroup: undefined;
   DetailsList: { List: IList };
-  Payments: { Payments: IPaymentSection}
+  Payments: { Payments: IPaymentSection };
   PaymentDetails: { Payment: IPayment };
   UserNote: { Note?: INote; Edit: boolean };
   CreateSharedNote: { Note?: ISharedNote; edit: boolean };
   NoteDetail: { Note: ISharedNote };
   PaymentList: { Payments: IPaymentSection };
-  CreatePayment: { Payments: IPaymentSection }
+  CreatePayment: { Payments: IPaymentSection };
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -75,7 +75,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.46:4000/trpc",
+          url: "http://192.168.1.48:4000/trpc",
         }),
       ],
     })
@@ -130,12 +130,12 @@ export function App() {
                     name="DetailsList"
                     component={DetailsListScreen}
                   />
-                  <Stack.Screen name="PaymentDetails" component={PaymentDetailScreen} />
-                 
                   <Stack.Screen
-                    name="Payments"
-                    component={PaymentScreen}
+                    name="PaymentDetails"
+                    component={PaymentDetailScreen}
                   />
+
+                  <Stack.Screen name="Payments" component={PaymentScreen} />
                   <Stack.Screen name="TabLists" component={TabListsScreen} />
                   <Stack.Screen name="UserNote" component={UserNoteScreen} />
                   <Stack.Screen

@@ -1,6 +1,12 @@
 import React, { useContext, useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
-import { Header } from "../../components/Header";
+import {
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import { trpc } from "../../trpc";
@@ -93,7 +99,7 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
           <Icon name="left" size={16} color={"#1E88E5"} />
           <Text className="text-base text-blue">Notas</Text>
         </Pressable>
-        <Pressable
+        <TouchableOpacity
           className="self-end"
           onPress={() =>
             onSubmit({
@@ -105,7 +111,7 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
           }
         >
           <Text className="text-base font-semibold text-blue">OK</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
       <TextInput
         className={`${inputStyle} h-12 text-lg font-bold`}
@@ -121,6 +127,7 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
         value={text}
         onChangeText={setText}
         multiline={true}
+        maxLength={200}
       />
     </ScrollView>
   );
