@@ -1,11 +1,5 @@
 import React, { useContext } from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { trpc } from "../../../trpc";
 import TaskCard from "../../../components/tasks/TaskCard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -47,21 +41,22 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
       className="h-full bg-light px-6"
       showsVerticalScrollIndicator={false}
     >
-      <View className="mb-4 items-end">
-        <TouchableOpacity onPress={goToCreateTask}>
-          <Icon name="shape-square-rounded-plus" size={24} color={"#7B61FF"} />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity className="mb-4 items-end" onPress={goToCreateTask}>
+        <Icon name="shape-square-rounded-plus" size={24} color={"#7B61FF"} />
+      </TouchableOpacity>
       <View className="mb-4 h-24 w-full justify-center space-y-3 rounded-xl bg-white px-4 shadow-sm">
-        <Pressable onPress={goToMyTasks} className="flex-row justify-between">
+        <TouchableOpacity
+          onPress={goToMyTasks}
+          className="flex-row justify-between"
+        >
           <View className="flex-row items-center space-x-2">
             <Icon name="account-details" color={"#7B61FF"} size={20} />
             <Text className="text-base text-dark">Mis tareas</Text>
           </View>
           <Icon name="chevron-right" color={"#212529"} size={20} />
-        </Pressable>
+        </TouchableOpacity>
         <Divider />
-        <Pressable
+        <TouchableOpacity
           onPress={goToUnassignedTasks}
           className="flex-row justify-between"
         >
@@ -70,7 +65,7 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
             <Text className="text-base text-dark">Tareas sin asignar</Text>
           </View>
           <Icon name="chevron-right" color={"#212529"} size={20} />
-        </Pressable>
+        </TouchableOpacity>
       </View>
       <View className="mb-2 flex flex-row flex-wrap justify-between">
         {groups &&

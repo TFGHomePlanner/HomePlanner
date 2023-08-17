@@ -32,7 +32,6 @@ type CreateSharedNoteScreenProps = {
  */
 const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
   navigation,
-  route,
 }) => {
   const inputStyle = "mb-2 rounded-lg px-3 text-dark";
 

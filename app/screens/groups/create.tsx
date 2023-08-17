@@ -54,11 +54,6 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
   const [codeGroup, setCodeGroup] = useState("");
 
   /**
-   * Estado local para la lista de usuarios.
-   */
-  const [users, setUsers] = useState([]);
-
-  /**
    * Mutación para crear un grupo.
    */
   const mutation = trpc.group.create.useMutation({
@@ -83,7 +78,6 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
       description,
       adminId: User.id,
       codeGroup,
-      users,
     });
   }
 
