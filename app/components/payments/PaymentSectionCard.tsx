@@ -12,7 +12,7 @@ import { IPaymentSection } from "../../common/validation/payment";
  */
 type PaymentSectionCardProps = {
    navigation: NativeStackNavigationProp<any>;
-  paymentSection: IPaymentSection;
+   paymentSection: IPaymentSection;
 };
 
 
@@ -20,7 +20,7 @@ const PaymentSectionCard: React.FC< PaymentSectionCardProps> = ({ navigation, pa
 
   
   function move() {
-    navigation.navigate("PaymentList", {Payment: paymentSection});
+    navigation.navigate("PaymentList", {Payments: paymentSection});
   }
   return (
     <Pressable onPress={move}>

@@ -95,10 +95,6 @@ const TabPaymentsScreen : React.FC<TabPaymentsScreenProps> = ({ navigation }) =>
             paymentSection={{
               ...p,
               createdAt: new Date(p.createdAt),
-              payments: p.payments.map((payment) => ({
-                ...payment,
-                createdAt: new Date(payment.createdAt),
-              })),
             }}
             navigation={navigation} />
         )) :<Text className="text-lg font-bold mb-2">No hay ninguna sección de pagos</Text>

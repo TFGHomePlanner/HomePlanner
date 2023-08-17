@@ -3,6 +3,7 @@ import { z } from "zod";
 
 export const PaymentSchema = 
   z.object({
+    id: z.string(),
     payingUser: z.object({
       name: z.string(),
       id: z.string(),
@@ -29,10 +30,10 @@ export const SectionPayMentSchema= z.object({
     name: z.string(),
     id: z.string(),
   })),
-  payments: z.array(PaymentSchema),
 });
 
 export const createPaymentSchema = z.object({ 
+  title: z.string(),
   paymentSectionId: z.string(), 
   payingUserId: z.string(), 
   amount: z.number(),

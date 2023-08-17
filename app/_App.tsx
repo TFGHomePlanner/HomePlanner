@@ -35,6 +35,9 @@ import CreateSharedNoteScreen from "./screens/sharedNotes/create";
 import NoteDetailScreen from "./screens/sharedNotes/NoteDetail";
 import PaymentDetailScreen from "./screens/payment/paymentDetails";
 import PaymentScreen from "./screens/payment/payments";
+import CreatePaymentScreen from "./screens/payment/Createpayment";
+import PaymentListScreen from "./screens/payment/paymentlist";
+import ResumePaymentScreenScreen from "./screens/payment/resumepayment";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -64,7 +67,9 @@ export type AppStackParamList = {
   CreateSharedNote: { Note?: ISharedNote; edit: boolean };
   NoteDetail: { Note: ISharedNote };
   PaymentList: { Payments: IPaymentSection };
-  CreatePayment: { Payments: IPaymentSection }
+  CreatePayment: { Payments: IPaymentSection };
+  ResumePayments: { Payments: IPaymentSection };
+
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -146,7 +151,14 @@ export function App() {
                     name="NoteDetail"
                     component={NoteDetailScreen}
                   />
+                  <Stack.Screen
+                    name="CreatePayment"
+                    component={CreatePaymentScreen}
+                  />
+                  <Stack.Screen name="PaymentList" component={PaymentListScreen} />
+                  <Stack.Screen name="ResumePayments" component={ResumePaymentScreenScreen} />
                 </Stack.Navigator>
+              
               </NavigationContainer>
             </ApplicationProvider>
           </UserProvider>

@@ -3,8 +3,8 @@ import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import PaymentListScreen from "./paymentlist";
-import { AppStackParamList } from "../../_App";
-
+import { App, AppStackParamList } from "../../_App";
+import { IPaymentSection } from "../../common/validation/payment";
 
 
 type PaymentScreenProps = {
@@ -15,15 +15,16 @@ type PaymentScreenProps = {
 const PaymentScreen: React.FC<PaymentScreenProps> = ({
   route,
   navigation,
+
 }) => {
-  const Tab = createMaterialTopTabNavigator();
+  const Tab = createMaterialTopTabNavigator<AppStackParamList>();
   const Payments = route.params.Payments;
   return (
     <Tab.Navigator>
       <Tab.Screen
         name="PaymentList"
         component={PaymentListScreen}
-        initialParams={{ Payments: Payments, navigation: navigation }}
+        initialParams={{ Payments: Payments}}
       />
     </Tab.Navigator>
    

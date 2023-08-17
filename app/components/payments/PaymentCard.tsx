@@ -19,7 +19,7 @@ type PaymentCardProps = {
 const PaymentCard: React.FC< PaymentCardProps> = ({ navigation, payment }) => {
 
   function move() {
-    navigation.navigate("Payment", { Payment: payment });
+    navigation.navigate("PaymentDetails", { Payment: payment });
   }
 
   return (
