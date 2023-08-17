@@ -11,13 +11,16 @@ export const groupRouter = router({
         ctx,
         input: { name, codeGroup, adminId, description, users },
       }) => {
+        const updatedUsers = users
+          ? [...users, { id: adminId }]
+          : [{ id: adminId }];
         return await ctx.prisma.group.create({
           data: {
             name,
             codeGroup,
             adminId,
             description,
-            users: { connect: users },
+            users: { connect: updatedUsers },
           },
         });
       }
@@ -54,19 +57,45 @@ export const groupRouter = router({
     }),
 
   joinGroup: publicProcedure
-    .input(z.object({userId: z.string(), codeGroup: z.string()}))
-    .mutation(async ({ctx, input}) => {
+    .input(z.object({ userId: z.string(), codeGroup: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const group = await ctx.prisma.group.findUnique({
+        where: { codeGroup: input.codeGroup },
+        include: { users: true },
+      });
+
+      if (!group) {
+        return {
+          status: 404,
+          message: "No se ha encontrado el grupo.",
+          groupId: null,
+        };
+      }
+
+      const userIsInGroup = group.users.some(
+        (user) => user.id === input.userId
+      );
+      if (userIsInGroup) {
+        return {
+          status: 400,
+          message: "El usuario ya está en el grupo.",
+          groupId: group.id,
+        };
+      }
+
       await ctx.prisma.group.update({
-        where: {codeGroup: input.codeGroup},
+        where: { codeGroup: input.codeGroup },
         data: {
           users: {
             connect: { id: input.userId },
           },
         },
       });
+
       return {
         status: 200,
-        message: "User joined group successfully",
+        message: "Usuario añadido con éxito.",
+        groupId: group.id,
       };
     }),
 

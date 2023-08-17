@@ -33,9 +33,9 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           <Icon name="shape-square-rounded-plus" size={24} color={"#1E88E5"} />
         </Pressable>
       </View>
-      {sharedNotes && (
+      {sharedNotes?.length !== 0 ? (
         <View className="w-full rounded-xl bg-white p-4">
-          {sharedNotes.map((note, index) => (
+          {sharedNotes?.map((note, index) => (
             <NoteCard
               key={note.id}
               navigation={navigation}
@@ -47,6 +47,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             />
           ))}
         </View>
+      ) : (
+        <Text>Todavía no hay notas compartidas.</Text>
       )}
     </ScrollView>
   );
