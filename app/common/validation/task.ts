@@ -50,14 +50,6 @@ export const TaskGroupSchema = z.object({
 });
 export const CreateTaskGroupSchema = z.object({
   name: z.string().min(1, { message: "El nombre no puede estar vacío." }),
-  tasks: z
-    .array(
-      z.object({
-        TaskSchema,
-      })
-    )
-    .nullable()
-    .optional(),
   groupId: z.string(),
 });
 

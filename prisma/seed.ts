@@ -156,6 +156,35 @@ async function main() {
     },
   });
 
+  const calendario = await prisma.calendar.create({
+    data: {
+      name: "Casa",
+      groupId: minigrupo.id,
+    },
+  });
+
+  const evento1 = await prisma.event.create({
+    data: {
+      name: "Boda Ana y Luis",
+      location: "Masía Venta l’Home, Buñol",
+      allDay: false,
+      startsAt: new Date(2023, 7, 22, 10, 0),
+      calendarId: calendario.id,
+      createdBy: a.id,
+      groupId: minigrupo.id,
+    },
+  });
+
+  const evento2 = await prisma.event.create({
+    data: {
+      name: "Cumpleaños a",
+      allDay: true,
+      calendarId: calendario.id,
+      createdBy: marta.id,
+      groupId: minigrupo.id,
+    },
+  });
+
   const lista1 = await prisma.list.create({
     data: {
       name: "Lista de la compra1",

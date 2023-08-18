@@ -68,6 +68,8 @@ model Group {
   TaskGroup          TaskGroup[]
   SharedNote         SharedNote[]
   PaymentSetion      PaymentSection[]
+  Calendar           Calendar[]
+  Event              Event[]
 
   @@index([adminId])
 }
@@ -119,20 +121,21 @@ model Product {
 }
 
 model Task {
-  id          String     @id @default(cuid())
-  name        String
-  description String?
-  frequency   Frequency
-  isDone      Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  startsAt    DateTime?
-  assignedTo  User?      @relation(fields: [userId], references: [id])
-  createdBy   String
-  group       Group      @relation(fields: [groupId], references: [id])
-  groupId     String
-  userId      String?
-  TaskGroup   TaskGroup? @relation(fields: [taskGroupId], references: [id])
-  taskGroupId String?
+  id            String     @id @default(cuid())
+  name          String
+  description   String?
+  frequency     Frequency
+  isDone        Boolean    @default(false)
+  createdAt     DateTime   @default(now())
+  startsAt      DateTime?
+  assignedTo    User?      @relation(fields: [userId], references: [id])
+  createdBy     String
+  addToCalendar Boolean    @default(false)
+  group         Group      @relation(fields: [groupId], references: [id])
+  groupId       String
+  userId        String?
+  TaskGroup     TaskGroup? @relation(fields: [taskGroupId], references: [id])
+  taskGroupId   String?
 
   @@index([groupId, userId])
 }
@@ -145,6 +148,28 @@ model TaskGroup {
   Tasks   Task[]
 
   @@index([groupId])
+}
+
+model Event {
+  id         String    @id @default(cuid())
+  name       String
+  location   String?
+  allDay     Boolean   @default(false)
+  startsAt   DateTime?
+  endsAt     DateTime?
+  calendar   Calendar  @relation(fields: [calendarId], references: [id])
+  calendarId String
+  group      Group     @relation(fields: [groupId], references: [id])
+  groupId    String
+  createdBy  String
+}
+
+model Calendar {
+  id      String  @id @default(cuid())
+  name    String
+  group   Group   @relation(fields: [groupId], references: [id])
+  groupId String
+  Events  Event[]
 }
 
 model Note {
