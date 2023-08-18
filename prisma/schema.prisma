@@ -153,12 +153,14 @@ model TaskGroup {
 model Event {
   id         String    @id @default(cuid())
   name       String
+  isEvent    Boolean
   location   String?
-  allDay     Boolean   @default(false)
-  startsAt   DateTime?
+  allDay     Boolean   @default(true)
+  startsAt   DateTime
   endsAt     DateTime?
-  calendar   Calendar  @relation(fields: [calendarId], references: [id])
-  calendarId String
+  calendar   Calendar? @relation(fields: [calendarId], references: [id])
+  calendarId String?
+  notes      String?
   group      Group     @relation(fields: [groupId], references: [id])
   groupId    String
   createdBy  String

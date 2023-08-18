@@ -5,7 +5,7 @@ export const EventSchema = z.object({
   name: z.string(),
   location: z.string().optional().nullable(),
   allDay: z.boolean(),
-  startsAt: z.coerce.date().optional().nullable(),
+  startsAt: z.coerce.date(),
   endsAt: z.coerce.date().optional().nullable(),
   calendar: z
     .object({
@@ -25,7 +25,7 @@ export const CreateEventSchema = z.object({
     })
     .nullable(),
   allDay: z.boolean(),
-  startsAt: z.coerce.date().optional().nullable(),
+  startsAt: z.coerce.date(),
   endsAt: z.coerce.date().optional().nullable(),
   calendarId: z.string(),
   groupId: z.string(),

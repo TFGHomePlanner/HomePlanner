@@ -30,7 +30,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   navigation,
 }) => {
   const inputStyle =
-    "mb-4 bg-white rounded-lg space-y-3 text-base border-light p-4 text-dark";
+    "mb-4 bg-white rounded-lg space-y-3 text-base p-4 text-dark";
 
   const { User } = useContext(UserContext) as UserContextType;
   const utils = trpc.useContext();
@@ -170,6 +170,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
             }}
             placeholder="Título *"
             maxLength={40}
+            cursorColor={"#FFA755"}
           />
           <Divider />
           <TextInput
@@ -178,38 +179,8 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
             onChangeText={setLocation}
             placeholder="Ubicación"
             maxLength={40}
+            cursorColor={"#FFA755"}
           />
-        </View>
-        <View className="z-20 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
-          <Text>Grupo de tareas</Text>
-          {groupOptions ? (
-            <SelectList
-              data={groupOptions}
-              setSelected={setSelectedGroup}
-              dropdownStyles={{
-                borderColor: "#3A3A3C",
-                backgroundColor: "#3A3A3C",
-                opacity: 0.85,
-                position: "absolute",
-                right: 14,
-                top: 24,
-                width: 180,
-                borderRadius: 12,
-              }}
-              dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
-              save="key"
-              search={false}
-              boxStyles={{
-                height: 42,
-                width: 140,
-                borderColor: "#FFFF",
-                alignSelf: "flex-end",
-              }}
-              placeholder="Seleccionar"
-            />
-          ) : (
-            <Text>Cargando...</Text>
-          )}
         </View>
         <View className="mb-4 rounded-lg border-light bg-white text-base text-dark">
           <View className="my-3 flex-row items-center justify-between rounded-lg bg-white px-4">
@@ -294,42 +265,51 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
             )}
           </View>
         </View>
-        <View className="z-10 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
-          <Text>Repetir tarea</Text>
-          <SelectList
-            data={frequencyOptions}
-            setSelected={setSelectedFrequency}
-            save="key"
-            defaultOption={{ value: "Nunca", key: Frequency.never }}
-            search={false}
-            dropdownStyles={{
-              borderColor: "#3A3A3C",
-              backgroundColor: "#3A3A3C",
-              opacity: 0.85,
-              position: "absolute",
-              right: 14,
-              top: 24,
-              width: 180,
-              borderRadius: 12,
-            }}
-            dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
-            boxStyles={{
-              height: 42,
-              width: 140,
-              borderColor: "#FFFF",
-              alignSelf: "flex-end",
-            }}
-          />
+        <View className="z-20 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
+          <Text>Grupo de tareas</Text>
+          {groupOptions ? (
+            <SelectList
+              data={groupOptions}
+              setSelected={setSelectedGroup}
+              dropdownStyles={{
+                borderColor: "#3A3A3C",
+                backgroundColor: "#3A3A3C",
+                opacity: 0.85,
+                position: "absolute",
+                right: 14,
+                top: 24,
+                width: 180,
+                borderRadius: 12,
+              }}
+              dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
+              save="key"
+              search={false}
+              boxStyles={{
+                height: 42,
+                width: 140,
+                borderColor: "#FFFF",
+                alignSelf: "flex-end",
+              }}
+              placeholder="Seleccionar"
+            />
+          ) : (
+            <Text>Cargando...</Text>
+          )}
         </View>
-        <TextInput
-          placeholderTextColor="#95999C"
-          value={notes}
-          onChangeText={setNotes}
-          placeholder="Notas"
-          maxLength={200}
-        />
+        <ScrollView className="h-36 rounded-lg bg-white">
+          <TextInput
+            cursorColor={"#FFA755"}
+            className="p-4 text-base text-dark"
+            placeholderTextColor="#95999C"
+            value={notes}
+            onChangeText={setNotes}
+            placeholder="Notas"
+            multiline={true}
+            maxLength={200}
+          />
+        </ScrollView>
       </ScrollView>
-    </View>
+    </View> 
   );
 };
 
