@@ -4,7 +4,7 @@ import { IGroup } from "../../common/validation/group";
 
 export default function GroupCard({ group }: { group: IGroup }) {
   return (
-    <View className="mb-4 w-full flex-row justify-between rounded-lg bg-white p-6 shadow-sm shadow-lightGray">
+    <View className="mb-4 w-full flex-row justify-between rounded-lg bg-white p-5 shadow-sm shadow-lightGray">
       <View className="space-y-4">
         <Image
           source={require("../../../assets/images/grupo.png")}
@@ -14,7 +14,9 @@ export default function GroupCard({ group }: { group: IGroup }) {
           {group.name}
         </Text>
       </View>
-      <Text className="text-4xl font-bold text-dark">{group.users.length}</Text>
+      <Text className="text-4xl font-bold text-dark opacity-70">
+        {group.users.length}
+      </Text>
     </View>
   );
 }

@@ -22,8 +22,8 @@ export const CreateTaskSchema = z.object({
   name: z.string(),
   description: z
     .string()
-    .max(600, {
-      message: "La descripción no puede tener más de 600 caracteres.",
+    .max(200, {
+      message: "La descripción no puede tener más de 200 caracteres.",
     })
     .nullable(),
   frequency: z.nativeEnum(Frequency),
@@ -50,14 +50,6 @@ export const TaskGroupSchema = z.object({
 });
 export const CreateTaskGroupSchema = z.object({
   name: z.string().min(1, { message: "El nombre no puede estar vacío." }),
-  tasks: z
-    .array(
-      z.object({
-        TaskSchema,
-      })
-    )
-    .nullable()
-    .optional(),
   groupId: z.string(),
 });
 

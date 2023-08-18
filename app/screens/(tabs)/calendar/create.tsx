@@ -19,16 +19,15 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { Divider } from "@ui-kitten/components";
 import CreateTaskGroupScreen from "../../../components/tasks/CreateTaskGroup";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { RouteProp } from "@react-navigation/native";
+// import { RouteProp } from "@react-navigation/native";
 
-type CreateTaskScreenProps = {
-  navigation: NativeStackNavigationProp<AppStackParamList, "CreateTask">;
-  route: RouteProp<AppStackParamList, "CreateTask">;
+type CreateEventScreenProps = {
+  navigation: NativeStackNavigationProp<AppStackParamList, "CreateEvent">;
+  //route: RouteProp<AppStackParamList, "CreateEvent">;
 };
 
-const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
+const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   navigation,
-  route,
 }) => {
   const inputStyle =
     "mb-4 bg-white rounded-lg space-y-3 text-base border-light p-4 text-dark";
@@ -42,14 +41,16 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
     { key: Frequency.oncePerWeek, value: "Cada semana" },
     { key: Frequency.oncePerMonth, value: "Cada mes" },
   ];
-  const edit = route.params.edit;
-  const taskToEdit = route.params.Task;
+  //const edit = route.params.edit;
+  const edit = false; // CAMBIAR
+  //const eventToEdit = route.params.Event;
 
   const [name, setName] = useState("");
-  const [enabled, setEnabled] = useState(
-    taskToEdit?.name ? taskToEdit?.name !== "" : false
-  );
-  const [description, setDescription] = useState("");
+  /*const [enabled, setEnabled] = useState(
+    eventToEdit?.name ? eventToEdit?.name !== "" : false
+  );*/
+  const [enabled, setEnabled] = useState(false);
+  const [location, setLocation] = useState("");
   const [selectedFrequency, setSelectedFrequency] = useState<Frequency>(
     Frequency.never
   );
@@ -75,22 +76,26 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
     setChecked(isChecked);
   };
 
-  const [date, setDate] = useState(new Date());
+  const [initialDate, setInitialDate] = useState(new Date());
+  const [finalDate, setFinalDate] = useState(new Date());
   const [show, setShow] = useState(false);
 
+  const [notes, setNotes] = useState("");
+
+  // CAMBIAR
   const createMutation = trpc.task.create.useMutation({
     onSuccess() {
       utils.task.getAllTasks.invalidate();
       navigation.navigate("Tabs");
     },
   });
-  const createTask = () => {
+  const createEvent = () => {
     enabled &&
       createMutation.mutateAsync({
         name,
-        description,
+        description: location,
         frequency: selectedFrequency,
-        startsAt: date,
+        startsAt: initialDate,
         groupId: User.groupId || "",
         userId: selectedUser == "" ? undefined : selectedUser,
         taskGroupId: selectedGroup == "" ? undefined : selectedGroup,
@@ -98,14 +103,13 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
       });
   };
 
-  function loadTask() {
+  /*function loadEvent() {
     setName(taskToEdit?.name ?? "");
     setDescription(taskToEdit?.description ?? "");
     setSelectedFrequency(taskToEdit?.frequency ?? "never");
     setSelectedGroup(taskToEdit?.taskGroupId ?? "");
     setSelectedUser(taskToEdit?.assignedTo?.id ?? "");
     setDate(taskToEdit?.startsAt ? new Date(taskToEdit?.startsAt) : new Date());
-    // Falta el check de añadir al calendario
   }
   {
     edit && useEffect(() => loadTask(), [edit]);
@@ -120,7 +124,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
   const updateTask = () => {
     enabled &&
       updateMutation.mutateAsync({
-        id: taskToEdit?.id ?? "",
+        id: eventToEdit?.id ?? "",
         name,
         description,
         frequency: selectedFrequency,
@@ -128,28 +132,27 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
         groupId: User.groupId || "",
         userId: selectedUser,
         taskGroupId: selectedGroup,
-        createdBy: taskToEdit?.createdBy ?? User.id,
+        createdBy: eventToEdit?.createdBy ?? User.id,
       });
-  };
+  };*/
 
   return (
     <View className="h-screen bg-light px-6 py-16">
       <View className="flex flex-row justify-between">
         <Pressable onPress={navigation.goBack}>
-          <Text className="text-purple">Cancelar</Text>
+          <Text className="text-orange">Cancelar</Text>
         </Pressable>
-        <Text className="mr-4 self-center">Nueva tarea</Text>
         <TouchableOpacity
           disabled={!enabled}
           className="self-end"
-          onPress={edit ? updateTask : createTask}
+          onPress={createEvent} //{edit ? updateEvent : createEvent}
         >
           <Text
             className={`${
-              enabled ? "text-purple" : "text-darkGray"
+              enabled ? "text-orange" : "text-darkGray"
             } font-semibold`}
           >
-            {edit ? "       OK" : "Añadir"}
+            {edit ? "OK" : "Añadir"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -166,19 +169,17 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
               setEnabled(newName.trim() !== "");
             }}
             placeholder="Título *"
-            maxLength={30}
+            maxLength={40}
           />
           <Divider />
           <TextInput
             placeholderTextColor="#95999C"
-            value={description}
-            onChangeText={setDescription}
-            placeholder="Descripción"
-            multiline={true}
-            maxLength={200}
+            value={location}
+            onChangeText={setLocation}
+            placeholder="Ubicación"
+            maxLength={40}
           />
         </View>
-        <CreateTaskGroupScreen />
         <View className="z-20 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
           <Text>Grupo de tareas</Text>
           {groupOptions ? (
@@ -210,6 +211,89 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             <Text>Cargando...</Text>
           )}
         </View>
+        <View className="mb-4 rounded-lg border-light bg-white text-base text-dark">
+          <View className="my-3 flex-row items-center justify-between rounded-lg bg-white px-4">
+            <Text>Todo el día</Text>
+            <Switch
+              className="-mb-1"
+              trackColor={{ false: "#929193", true: "#FFA755" }}
+              onValueChange={onCheckedChange}
+              value={checked}
+            />
+          </View>
+          <Divider />
+          <View className="my-2 flex-row items-center justify-between rounded-lg bg-white px-4">
+            <Text>Empieza</Text>
+            {Platform.OS === "android" && (
+              <Pressable
+                onPress={() => setShow(true)}
+                className="rounded-md bg-lightGray p-2"
+              >
+                <Text>{initialDate.toLocaleDateString()}</Text>
+              </Pressable>
+            )}
+            {Platform.OS === "ios" && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={initialDate}
+                onChange={(event, selectedDate) => {
+                  setInitialDate(selectedDate || new Date());
+                }}
+                accentColor="#FFA755"
+                locale="es-ES"
+                positiveButton={{ label: "OK", textColor: "#FFA755" }}
+              />
+            )}
+            {Platform.OS === "android" && show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={initialDate}
+                positiveButton={{ label: "OK", textColor: "#FFA755" }}
+                negativeButton={{ label: "Cancelar", textColor: "#FFA755" }}
+                onChange={(event, selectedDate) => {
+                  setShow(false);
+                  setInitialDate(selectedDate || new Date());
+                }}
+              />
+            )}
+          </View>
+          <Divider />
+          <View className="my-2 flex-row items-center justify-between rounded-lg bg-white px-4">
+            <Text>Acaba</Text>
+            {Platform.OS === "android" && (
+              <Pressable
+                onPress={() => setShow(true)}
+                className="rounded-md bg-lightGray p-2"
+              >
+                <Text>{finalDate.toLocaleDateString()}</Text>
+              </Pressable>
+            )}
+            {Platform.OS === "ios" && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={finalDate}
+                onChange={(event, selectedDate) => {
+                  setFinalDate(selectedDate || new Date());
+                }}
+                accentColor="#FFA755"
+                locale="es-ES"
+                positiveButton={{ label: "OK", textColor: "#FFA755" }}
+              />
+            )}
+            {Platform.OS === "android" && show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={finalDate}
+                positiveButton={{ label: "OK", textColor: "#FFA755" }}
+                negativeButton={{ label: "Cancelar", textColor: "#FFA755" }}
+                onChange={(event, selectedDate) => {
+                  setShow(false);
+                  setFinalDate(selectedDate || new Date());
+                }}
+              />
+            )}
+          </View>
+        </View>
         <View className="z-10 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
           <Text>Repetir tarea</Text>
           <SelectList
@@ -237,88 +321,16 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             }}
           />
         </View>
-        <View className="mb-4 rounded-lg border-light bg-white text-base text-dark">
-          <View className="my-2 flex-row items-center justify-between rounded-lg bg-white px-4">
-            <Text>Empieza</Text>
-            {Platform.OS === "android" && (
-              <Pressable
-                onPress={() => setShow(true)}
-                className="rounded-md bg-lightGray p-2"
-              >
-                <Text>{date.toLocaleDateString()}</Text>
-              </Pressable>
-            )}
-            {Platform.OS === "ios" && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                onChange={(event, selectedDate) => {
-                  setDate(selectedDate || new Date());
-                }}
-                accentColor="#7B61FF"
-                locale="es-ES"
-                positiveButton={{ label: "OK", textColor: "#7B61FF" }}
-              />
-            )}
-            {Platform.OS === "android" && show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                positiveButton={{ label: "OK", textColor: "#7B61FF" }}
-                negativeButton={{ label: "Cancelar", textColor: "#7B61FF" }}
-                onChange={(event, selectedDate) => {
-                  setShow(false);
-                  setDate(selectedDate || new Date());
-                }}
-              />
-            )}
-          </View>
-          <Divider />
-          <View className="z-10 flex-row items-center justify-between rounded-lg bg-white pl-4">
-            <Text>Asignar encargado</Text>
-            {userOptions ? (
-              <SelectList
-                data={userOptions}
-                setSelected={setSelectedUser}
-                save="key"
-                search={false}
-                dropdownStyles={{
-                  borderColor: "#3A3A3C",
-                  backgroundColor: "#3A3A3C",
-                  opacity: 0.85,
-                  position: "absolute",
-                  right: 14,
-                  top: 24,
-                  width: 180,
-                  borderRadius: 12,
-                }}
-                dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
-                boxStyles={{
-                  height: 42,
-                  width: 140,
-                  borderColor: "#FFFF",
-                  alignSelf: "flex-end",
-                }}
-                placeholder="Seleccionar"
-              />
-            ) : (
-              <Text>Cargando...</Text>
-            )}
-          </View>
-          <Divider />
-          <View className="my-3 flex-row items-center justify-between rounded-lg bg-white px-4">
-            <Text>Añadir al calendario</Text>
-            <Switch
-              className="-mb-1"
-              trackColor={{ false: "#929193", true: "#7B61FF" }}
-              onValueChange={onCheckedChange}
-              value={checked}
-            />
-          </View>
-        </View>
+        <TextInput
+          placeholderTextColor="#95999C"
+          value={notes}
+          onChangeText={setNotes}
+          placeholder="Notas"
+          maxLength={200}
+        />
       </ScrollView>
     </View>
   );
 };
 
-export default CreateTaskScreen;
+export default CreateEventScreen;
