@@ -166,10 +166,12 @@ async function main() {
   const evento1 = await prisma.event.create({
     data: {
       name: "Boda Ana y Luis",
-      location: "Masía Venta l’Home, Buñol",
+      isEvent: true,
+      location: "Masía Venta l'Home, Buñol",
       allDay: false,
       startsAt: new Date(2023, 7, 22, 10, 0),
       calendarId: calendario.id,
+      notes: "Llevar regalos.",
       createdBy: a.id,
       groupId: minigrupo.id,
     },
@@ -177,8 +179,25 @@ async function main() {
 
   const evento2 = await prisma.event.create({
     data: {
-      name: "Cumpleaños a",
+      name: "Musical: El rey león",
+      isEvent: true,
+      location: "Teatro Lope de Vega, Madrid",
+      allDay: false,
+      startsAt: new Date(2023, 7, 24, 10, 0),
+      endsAt: new Date(2023, 7, 24, 12, 30),
+      calendarId: calendario.id,
+      notes: "Llevar entradas.",
+      createdBy: a.id,
+      groupId: minigrupo.id,
+    },
+  });
+
+  const recordatorio1 = await prisma.event.create({
+    data: {
+      name: "Cumpleaños de a",
+      isEvent: false,
       allDay: true,
+      startsAt: new Date(2023, 8, 10, 10, 0),
       calendarId: calendario.id,
       createdBy: marta.id,
       groupId: minigrupo.id,

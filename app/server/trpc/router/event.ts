@@ -14,6 +14,7 @@ export const eventRouter = router({
         select: {
           id: true,
           name: true,
+          isEvent: true,
           location: true,
           allDay: true,
           calendar: {
@@ -38,6 +39,7 @@ export const eventRouter = router({
         ctx,
         input: {
           name,
+          isEvent,
           location,
           allDay,
           startsAt,
@@ -50,6 +52,7 @@ export const eventRouter = router({
         return await ctx.prisma.event.create({
           data: {
             name,
+            isEvent,
             location,
             allDay,
             startsAt,
@@ -136,6 +139,7 @@ export const eventRouter = router({
         select: {
           id: true,
           name: true,
+          isEvent: true,
           location: true,
           allDay: true,
           calendar: {
