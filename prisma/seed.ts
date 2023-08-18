@@ -395,12 +395,16 @@ async function main() {
           debtorUsers: {
             create: [
               {
+                debtor: { connect: { id: juan.id } },
+                amount: 50.0,
+              },
+              {
                 debtor: { connect: { id: marta.id } },
-                amount: 75.0,
+                amount: 50.0,
               },
               {
                 debtor: { connect: { id: a.id } },
-                amount: 75.0,
+                amount: 50.0,
               },
             ],
           },
