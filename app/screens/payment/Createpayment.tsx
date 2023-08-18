@@ -1,4 +1,4 @@
-import React, { useContext, useState} from "react";
+import React, { useContext, useEffect, useState} from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import { View, Text, ScrollView, TextInput, TouchableOpacity} from "react-native";
@@ -29,17 +29,20 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
 
   const utils = trpc.useContext();
   const {User} = useContext(UserContext) as UserContextType;
-  const PaymentSection = route.params.Payments;
-  const Users = PaymentSection.participants;
-  const [participantsAmounts, setParticipantsAmounts] = useState<{[userId: string]: string }>({});
-
   const [title, setTitle] = useState<string>("");
   const [price, setprice] = useState<string>("0");
   const [total, settotal] = useState<number>(0);
+  const PaymentSection = route.params.Payments;
+  const Users = PaymentSection.participants;
+  
+  const [participantsAmounts, setParticipantsAmounts] = useState<{[userId: string]: string }>({});
+
+  
+
   const handleParticipantAmountChange = async (userId: string, amount: string) => {
     console.log("userId: " + userId + " amount: " + amount);
-    setParticipantsAmounts((prevAmounts) => ({
-      ...prevAmounts,
+    setParticipantsAmounts((prevCheckedItems) => ({
+      ...prevCheckedItems,
       [userId]: amount,
     }));
     console.log("participantsAmounts: " + participantsAmounts[userId]);
@@ -53,7 +56,7 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
     console.log("total: " + total);
   }
 
-  const [selectedUser, setSelectedUser] = useState(User.id);
+  const [selectedUser, setSelectedUser] = useState("");
   const userOptions = PaymentSection.participants.map((user) => ({
     key: user.id,
     value: user.name,
@@ -102,6 +105,8 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
     }
     return true;
   }
+
+  
   return (
     <View className="flex flex-col w-full h-full bg-light">
       <Header />
@@ -177,17 +182,9 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
                     let numericValue = text.replace(/[^0-9,.]/g, ""); // Permitir solo números, comas y puntos
                     const parts = numericValue.split(/[,.]/);
             
-                    if (parts.length > 1) {
-                      // Si hay más de un punto o coma, reemplazar solo el último
-                      numericValue = parts.slice(0, -1).join("") + "." + parts[parts.length - 1];
-                    }
-            
-                    // Asegúrate de manejar el caso especial del valor "0"
-                    if (numericValue === "" || numericValue === "0") {
-                      handleParticipantAmountChange(user.id, "");
-                    } else {
-                      handleParticipantAmountChange(user.id, numericValue);
-                    }
+                    if (parts.length > 1) {numericValue = parts.slice(0, -1).join("") + "." + parts[parts.length - 1];}
+
+                    (numericValue === "" || numericValue === "0" ? handleParticipantAmountChange(user.id, ""): handleParticipantAmountChange(user.id, numericValue)); 
                   }}
                   maxLength={20}
                   keyboardType="numeric"

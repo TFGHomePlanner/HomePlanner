@@ -142,9 +142,10 @@ export const paymentRouter = router({
   
         const listaSaldos = Object.keys(saldosUsuarios).map((userId) => {
           const usuario = paymentSection.participants.find((u) => u.id === userId);
+          if(!usuario) throw new Error("No existe el usuario");
           const saldo = saldosUsuarios[userId];
           return {
-            nombre: usuario?.name, // Reemplaza 'nombre' con la propiedad real del nombre del usuario
+            nombre: usuario.name,
             cantidad: saldo,
           };
         });
@@ -152,7 +153,16 @@ export const paymentRouter = router({
         return listaSaldos;
       }
     }),
-  
-        
-    
+
+  closeSection: publicProcedure
+    .input(z.object({ idPaymentSection: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.paymentSection.update({
+        where: { id: input.idPaymentSection },
+        data: {
+          isClosed: true,
+        },
+      });
+    }),
+
 });
