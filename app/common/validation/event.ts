@@ -3,6 +3,7 @@ import { z } from "zod";
 export const EventSchema = z.object({
   id: z.string(),
   name: z.string(),
+  isEvent: z.boolean(),
   location: z.string().optional().nullable(),
   allDay: z.boolean(),
   startsAt: z.coerce.date(),
@@ -18,10 +19,11 @@ export const EventSchema = z.object({
 
 export const CreateEventSchema = z.object({
   name: z.string(),
+  isEvent: z.boolean(),
   location: z
     .string()
     .max(20, {
-      message: "LMáximo 20 caracteres.",
+      message: "Máximo 20 caracteres.",
     })
     .nullable(),
   allDay: z.boolean(),
