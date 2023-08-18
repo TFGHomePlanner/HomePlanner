@@ -97,7 +97,7 @@ export function App() {
               <NavigationContainer>
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
                   {/*gestureEnabled: false*/}
-                  <Stack.Screen name="Login" component={LoginScreen} />
+                  <Stack.Screen  name="Login" component={LoginScreen} />
                   <Stack.Screen name="Register" component={RegisterScreen} />
                   <Stack.Screen
                     name="GroupSelection"
@@ -164,6 +164,7 @@ export function App() {
                   <Stack.Screen
                     name="ResumePayments"
                     component={ResumePaymentScreenScreen}
+                    options={{gestureEnabled: false}}
                   />
                   <Stack.Screen
                     name="CreateEvent"
