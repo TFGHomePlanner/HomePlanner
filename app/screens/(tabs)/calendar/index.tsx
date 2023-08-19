@@ -13,7 +13,7 @@ type TabCalendarScreenProps = {
 };
 
 const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
-  const { User } = useContext(UserContext) as UserContextType;
+  //const { User } = useContext(UserContext) as UserContextType;
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState<any>(today);
   const marked = useMemo(

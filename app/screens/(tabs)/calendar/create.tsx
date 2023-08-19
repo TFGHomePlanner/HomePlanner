@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Platform,
   Pressable,
@@ -17,34 +17,33 @@ import { UserContextType } from "../../../context/types";
 import { SelectList } from "react-native-dropdown-select-list";
 import { Divider } from "@ui-kitten/components";
 import DateTimePicker from "@react-native-community/datetimepicker";
-// import { RouteProp } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
 
 type CreateEventScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateEvent">;
-  //route: RouteProp<AppStackParamList, "CreateEvent">;
+  route: RouteProp<AppStackParamList, "CreateEvent">;
 };
 
 const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   navigation,
+  route,
 }) => {
   const inputStyle = "mb-4 bg-white rounded-lg space-y-3 p-4";
 
   const { User } = useContext(UserContext) as UserContextType;
   const utils = trpc.useContext();
 
-  //const edit = route.params.edit;
-  const edit = false; // CAMBIAR
-  //const eventToEdit = route.params.Event;
+  const edit = route.params.edit;
+  const eventToEdit = route.params.Event;
 
   const [name, setName] = useState("");
-  /*const [enabled, setEnabled] = useState(
+  const [enabled, setEnabled] = useState(
     eventToEdit?.name ? eventToEdit?.name !== "" : false
-  );*/
-  const [enabled, setEnabled] = useState(false);
+  );
   const [location, setLocation] = useState("");
   const [locationVisible, setLocationVisible] = useState(true);
 
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedType, setSelectedType] = useState("Evento");
   const typeOptions = ["Evento", "Recordatorio", "Reserva"];
   function onTypeChange(type: string) {
     setSelectedType(type);
@@ -59,7 +58,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   const { data: calendars } = trpc.event.getAllCalendars.useQuery({
     groupId: User.groupId,
   });
-  const [selectedCalendar, setSelectedCalendar] = useState("Evento");
+  const [selectedCalendar, setSelectedCalendar] = useState("");
   const calendarOptions = calendars?.map((calendar) => ({
     key: calendar.id,
     value: calendar.name,
@@ -68,6 +67,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
 
   const [initialDate, setInitialDate] = useState(new Date());
   const [finalDate, setFinalDate] = useState(new Date());
+  const [mode, setMode] = useState<"date" | "time" | "datetime">("datetime");
 
   const [notes, setNotes] = useState("");
 
@@ -103,49 +103,55 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
       });
   };
 
-  /*function loadEvent() {
-    setName(taskToEdit?.name ?? "");
-    setDescription(taskToEdit?.description ?? "");
-    setSelectedFrequency(taskToEdit?.frequency ?? "never");
-    setSelectedGroup(taskToEdit?.taskGroupId ?? "");
-    setSelectedUser(taskToEdit?.assignedTo?.id ?? "");
-    setDate(taskToEdit?.startsAt ? new Date(taskToEdit?.startsAt) : new Date());
+  function loadEvent() {
+    setName(eventToEdit?.name ?? "");
+    setSelectedType(eventToEdit?.isEvent ? "Evento" : "Recordatorio");
+    setLocation(eventToEdit?.location ?? "");
+    setSelectedCalendar(eventToEdit?.calendar?.id ?? "");
+    setInitialDate(
+      eventToEdit?.startsAt ? new Date(eventToEdit?.startsAt) : new Date()
+    );
+    setFinalDate(
+      eventToEdit?.endsAt ? new Date(eventToEdit?.endsAt) : new Date()
+    );
   }
   {
-    edit && useEffect(() => loadTask(), [edit]);
+    edit && useEffect(() => loadEvent(), [edit]);
   }
 
-  const updateMutation = trpc.task.update.useMutation({
+  const updateMutation = trpc.event.update.useMutation({
     onSuccess() {
-      utils.task.getAllTasks.invalidate();
+      utils.event.getAllEvents.invalidate();
       navigation.navigate("Tabs");
     },
   });
-  const updateTask = () => {
+  const updateEvent = () => {
     enabled &&
       updateMutation.mutateAsync({
         id: eventToEdit?.id ?? "",
         name,
-        description,
-        frequency: selectedFrequency,
-        startsAt: date,
-        groupId: User.groupId || "",
-        userId: selectedUser,
-        taskGroupId: selectedGroup,
+        isEvent: eventToEdit?.isEvent || false,
+        location,
+        allDay: checked,
+        startsAt: initialDate,
+        endsAt: finalDate,
+        calendarId: selectedCalendar,
+        notes,
         createdBy: eventToEdit?.createdBy ?? User.id,
+        groupId: User.groupId || "",
       });
-  };*/
+  };
 
   return (
     <View className="h-screen bg-light px-6 py-16">
-      <View className="flex flex-row justify-between">
+      <View className="mb-4 flex flex-row justify-between">
         <Pressable onPress={navigation.goBack}>
           <Text className="text-orange">Cancelar</Text>
         </Pressable>
         <TouchableOpacity
           disabled={!enabled}
           className="self-end"
-          onPress={createEvent} //{edit ? updateEvent : createEvent}
+          onPress={edit ? updateEvent : createEvent}
         >
           <Text
             className={`${
@@ -156,43 +162,51 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
           </Text>
         </TouchableOpacity>
       </View>
-      <View className="z-20 my-4 flex-row items-center">
-        <Text className="mr-3">Tipo</Text>
-        <SelectList
-          data={typeOptions}
-          setSelected={onTypeChange}
-          dropdownStyles={{
-            borderColor: "#3A3A3C",
-            backgroundColor: "#3A3A3C",
-            opacity: 0.85,
-            position: "absolute",
-            top: 20,
-            width: 180,
-            borderRadius: 15,
-          }}
-          defaultOption={{ key: typeOptions[0], value: "Evento" }}
-          dropdownTextStyles={{
-            color: "#FFFF",
-            fontSize: 14,
-          }}
-          save="key"
-          search={false}
-          boxStyles={{
-            height: 30,
-            width: 140,
-            borderColor: "#FFFF",
-            backgroundColor: "#FFFF",
-            alignSelf: "flex-end",
-            borderRadius: 50,
-            paddingVertical: 6,
-          }}
-        />
-      </View>
+      {!edit && (
+        <View className="z-20 flex-row items-center">
+          <Text className="mr-3">Tipo</Text>
+          <SelectList
+            data={typeOptions}
+            setSelected={onTypeChange}
+            dropdownStyles={{
+              borderColor: "#3A3A3C",
+              backgroundColor: "#3A3A3C",
+              opacity: 0.85,
+              position: "absolute",
+              top: 20,
+              width: 180,
+              borderRadius: 15,
+            }}
+            defaultOption={{ key: typeOptions[0], value: "Evento" }}
+            dropdownTextStyles={{
+              color: "#FFFF",
+              fontSize: 14,
+            }}
+            save="key"
+            search={false}
+            boxStyles={{
+              height: 30,
+              width: 140,
+              borderColor: "#FFFF",
+              backgroundColor: "#FFFF",
+              alignSelf: "flex-end",
+              borderRadius: 50,
+              paddingVertical: 6,
+              shadowColor: "#212529c",
+              shadowOpacity: 0.2,
+              shadowOffset: {
+                width: 0,
+                height: 6,
+              },
+            }}
+          />
+        </View>
+      )}
       <ScrollView
         keyboardShouldPersistTaps="always"
         keyboardDismissMode="on-drag"
       >
-        <View className={`mb-6 ${inputStyle}`}>
+        <View className={`mb-6 ${!edit && "mt-4"} ${inputStyle}`}>
           <TextInput
             placeholderTextColor="#95999C"
             value={name}
@@ -248,19 +262,18 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
                 }}
                 accentColor="#FFA755"
                 locale="es-ES"
-                positiveButton={{ label: "OK", textColor: "#FFA755" }}
+                mode={mode}
               />
             )}
             {Platform.OS === "android" && show && (
               <DateTimePicker
                 testID="dateTimePicker"
                 value={initialDate}
-                positiveButton={{ label: "OK", textColor: "#FFA755" }}
-                negativeButton={{ label: "Cancelar", textColor: "#FFA755" }}
                 onChange={(event, selectedDate) => {
                   setShow(false);
                   setInitialDate(selectedDate || new Date());
                 }}
+                mode={mode}
               />
             )}
           </View>
@@ -284,19 +297,18 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
                 }}
                 accentColor="#FFA755"
                 locale="es-ES"
-                positiveButton={{ label: "OK", textColor: "#FFA755" }}
+                mode={mode}
               />
             )}
             {Platform.OS === "android" && show && (
               <DateTimePicker
                 testID="dateTimePicker"
                 value={finalDate}
-                positiveButton={{ label: "OK", textColor: "#FFA755" }}
-                negativeButton={{ label: "Cancelar", textColor: "#FFA755" }}
                 onChange={(event, selectedDate) => {
                   setShow(false);
                   setFinalDate(selectedDate || new Date());
                 }}
+                mode={mode}
               />
             )}
           </View>

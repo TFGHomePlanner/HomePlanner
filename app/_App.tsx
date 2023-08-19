@@ -38,6 +38,7 @@ import CreatePaymentScreen from "./screens/payment/Createpayment";
 import PaymentListScreen from "./screens/payment/paymentlist";
 import ResumePaymentScreenScreen from "./screens/payment/resumepayment";
 import CreateEventScreen from "./screens/(tabs)/calendar/create";
+import { IEvent } from "./common/validation/event";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -57,7 +58,7 @@ export type AppStackParamList = {
   UnassignedTasks: undefined;
   TaskDetail: { Task: ITask; isAssigned: boolean };
   GroupTasks: { taskGroup: ITaskGroup };
-  CreateEvent: { edit: boolean }; // pasar { Event?: IEvent, edit: boolean }
+  CreateEvent: { Event?: IEvent; edit: boolean };
   Modal: undefined;
   CreateList: { List?: IList; Edit: boolean };
   Profile: undefined;
