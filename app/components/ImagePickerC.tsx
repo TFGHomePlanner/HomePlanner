@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-import { View, Button, Text, Image } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { S3 } from "aws-sdk";
   
