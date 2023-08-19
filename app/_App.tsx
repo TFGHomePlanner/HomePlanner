@@ -38,6 +38,7 @@ import CreatePaymentScreen from "./screens/payment/Createpayment";
 import PaymentListScreen from "./screens/payment/paymentlist";
 import ResumePaymentScreenScreen from "./screens/payment/resumepayment";
 import CreateEventScreen from "./screens/(tabs)/calendar/create";
+import { IEvent } from "./common/validation/event";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -57,7 +58,7 @@ export type AppStackParamList = {
   UnassignedTasks: undefined;
   TaskDetail: { Task: ITask; isAssigned: boolean };
   GroupTasks: { taskGroup: ITaskGroup };
-  CreateEvent: { edit: boolean }; // pasar { Event?: IEvent, edit: boolean }
+  CreateEvent: { Event?: IEvent; edit: boolean };
   Modal: undefined;
   CreateList: { List?: IList; Edit: boolean };
   Profile: undefined;
@@ -95,7 +96,7 @@ export function App() {
               <NavigationContainer>
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
                   {/*gestureEnabled: false*/}
-                  <Stack.Screen  name="Login" component={LoginScreen} />
+                  <Stack.Screen name="Login" component={LoginScreen} />
                   <Stack.Screen name="Register" component={RegisterScreen} />
                   <Stack.Screen
                     name="GroupSelection"
@@ -160,7 +161,7 @@ export function App() {
                   <Stack.Screen
                     name="ResumePayments"
                     component={ResumePaymentScreenScreen}
-                    options={{gestureEnabled: false}}
+                    options={{ gestureEnabled: false }}
                   />
                   <Stack.Screen
                     name="CreateEvent"

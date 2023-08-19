@@ -70,6 +70,7 @@ model Group {
   PaymentSetion      PaymentSection[]
   Calendar           Calendar[]
   Event              Event[]
+  Reservation        Reservation[]
 
   @@index([adminId])
 }
@@ -155,7 +156,7 @@ model Event {
   name       String
   isEvent    Boolean
   location   String?
-  allDay     Boolean   @default(true)
+  allDay     Boolean
   startsAt   DateTime
   endsAt     DateTime?
   calendar   Calendar? @relation(fields: [calendarId], references: [id])
@@ -164,6 +165,22 @@ model Event {
   group      Group     @relation(fields: [groupId], references: [id])
   groupId    String
   createdBy  String
+
+  @@index([groupId])
+}
+
+model Reservation {
+  id          String   @id @default(cuid())
+  room        String
+  description String
+  allDay      Boolean
+  date        DateTime
+  notes       String?
+  group       Group    @relation(fields: [groupId], references: [id])
+  groupId     String
+  createdBy   String
+
+  @@index([groupId])
 }
 
 model Calendar {

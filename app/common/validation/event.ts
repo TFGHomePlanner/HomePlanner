@@ -4,7 +4,7 @@ export const EventSchema = z.object({
   id: z.string(),
   name: z.string(),
   isEvent: z.boolean(),
-  location: z.string().optional().nullable(),
+  location: z.string().nullable(),
   allDay: z.boolean(),
   startsAt: z.coerce.date(),
   endsAt: z.coerce.date().optional().nullable(),
@@ -15,7 +15,7 @@ export const EventSchema = z.object({
     })
     .optional()
     .nullable(),
-  notes: z.string().optional().nullable(),
+  notes: z.string().nullable(),
   createdBy: z.string(),
 });
 
@@ -31,7 +31,11 @@ export const CreateEventSchema = z.object({
   allDay: z.boolean(),
   startsAt: z.coerce.date(),
   endsAt: z.coerce.date().optional().nullable(),
-  calendarId: z.string().optional().nullable(),
+  calendarId: z
+    .string()
+    .max(200, { message: "Máximo 200 caracteres." })
+    .optional()
+    .nullable(),
   notes: z.string().optional().nullable(),
   groupId: z.string(),
   createdBy: z.string(),

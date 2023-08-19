@@ -82,7 +82,6 @@ export const eventRouter = router({
           endsAt,
           calendarId,
           notes,
-          groupId,
         },
       }) => {
         return await ctx.prisma.event.update({
@@ -95,7 +94,6 @@ export const eventRouter = router({
             endsAt,
             calendarId,
             notes,
-            groupId,
           },
         });
       }

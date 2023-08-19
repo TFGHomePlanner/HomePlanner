@@ -1,7 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Platform,
-  Pressable,
   ScrollView,
   Switch,
   Text,
@@ -17,128 +16,134 @@ import { UserContextType } from "../../../context/types";
 import { SelectList } from "react-native-dropdown-select-list";
 import { Divider } from "@ui-kitten/components";
 import DateTimePicker from "@react-native-community/datetimepicker";
-// import { RouteProp } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
 
 type CreateEventScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateEvent">;
-  //route: RouteProp<AppStackParamList, "CreateEvent">;
+  route: RouteProp<AppStackParamList, "CreateEvent">;
 };
 
 const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   navigation,
+  route,
 }) => {
-  const inputStyle =
-    "mb-4 bg-white rounded-lg space-y-3 text-base p-4 text-dark";
+  const inputStyle = "mb-4 bg-white rounded-lg space-y-3 p-4";
 
   const { User } = useContext(UserContext) as UserContextType;
   const utils = trpc.useContext();
 
-  //const edit = route.params.edit;
-  const edit = false; // CAMBIAR
-  //const eventToEdit = route.params.Event;
+  const edit = route.params.edit;
+  const eventToEdit = route.params.Event;
 
   const [name, setName] = useState("");
-  /*const [enabled, setEnabled] = useState(
+  const [enabled, setEnabled] = useState(
     eventToEdit?.name ? eventToEdit?.name !== "" : false
-  );*/
-  const [enabled, setEnabled] = useState(false);
+  );
   const [location, setLocation] = useState("");
+  const [locationVisible, setLocationVisible] = useState(true);
 
-  const { data: groups } = trpc.task.getAllTaskGroups.useQuery({
-    groupId: User.groupId,
-  });
-  const [selectedGroup, setSelectedGroup] = useState("");
-  const groupOptions = groups?.map((group) => ({
-    key: group.id,
-    value: group.name,
-  }));
+  const [selectedType, setSelectedType] = useState("Evento");
+  const typeOptions = ["Evento", "Recordatorio", "Reserva"];
+  function onTypeChange(type: string) {
+    setSelectedType(type);
+    setLocationVisible(type === "Evento");
+  }
 
   const [checked, setChecked] = React.useState(false);
   const onCheckedChange = (isChecked: boolean) => {
     setChecked(isChecked);
+    isChecked ? setMode("date") : setMode("datetime");
   };
+
+  const { data: calendars } = trpc.event.getAllCalendars.useQuery({
+    groupId: User.groupId,
+  });
+  const [selectedCalendar, setSelectedCalendar] = useState("");
+  const calendarOptions = calendars?.map((calendar) => ({
+    key: calendar.id,
+    value: calendar.name,
+  }));
+  const [show, setShow] = useState(false);
 
   const [initialDate, setInitialDate] = useState(new Date());
   const [finalDate, setFinalDate] = useState(new Date());
-  const [show, setShow] = useState(false);
+  const [mode, setMode] = useState<"date" | "time" | "datetime">(
+    checked ? "date" : "datetime"
+  );
 
   const [notes, setNotes] = useState("");
 
-  // CAMBIAR
   const createMutation = trpc.event.create.useMutation({
     onSuccess() {
       utils.event.getAllEvents.invalidate();
       navigation.navigate("Tabs");
-      console.log(
-        "Event created: " +
-          name +
-          ", " +
-          location +
-          ", " +
-          initialDate.toLocaleDateString() +
-          ", todo el día: " +
-          checked
-      );
     },
   });
   const createEvent = () => {
     enabled &&
       createMutation.mutateAsync({
         name,
-        isEvent: true, // CAMBIAR
+        isEvent: selectedType === "Evento", // CAMBIAR
         location: location,
         allDay: checked,
         startsAt: initialDate,
         endsAt: finalDate,
+        calendarId: selectedCalendar === "" ? undefined : selectedCalendar,
         notes,
         groupId: User.groupId || "",
         createdBy: User.id,
       });
   };
 
-  /*function loadEvent() {
-    setName(taskToEdit?.name ?? "");
-    setDescription(taskToEdit?.description ?? "");
-    setSelectedFrequency(taskToEdit?.frequency ?? "never");
-    setSelectedGroup(taskToEdit?.taskGroupId ?? "");
-    setSelectedUser(taskToEdit?.assignedTo?.id ?? "");
-    setDate(taskToEdit?.startsAt ? new Date(taskToEdit?.startsAt) : new Date());
+  function loadEvent() {
+    setName(eventToEdit?.name ?? "");
+    setSelectedType(eventToEdit?.isEvent ? "Evento" : "Recordatorio");
+    setLocation(eventToEdit?.location ?? "");
+    setSelectedCalendar(eventToEdit?.calendar?.id ?? "");
+    setInitialDate(
+      eventToEdit?.startsAt ? new Date(eventToEdit?.startsAt) : new Date()
+    );
+    setFinalDate(
+      eventToEdit?.endsAt ? new Date(eventToEdit?.endsAt) : new Date()
+    );
   }
   {
-    edit && useEffect(() => loadTask(), [edit]);
+    edit && useEffect(() => loadEvent(), [edit]);
   }
 
-  const updateMutation = trpc.task.update.useMutation({
+  const updateMutation = trpc.event.update.useMutation({
     onSuccess() {
-      utils.task.getAllTasks.invalidate();
+      utils.event.getAllEvents.invalidate();
       navigation.navigate("Tabs");
     },
   });
-  const updateTask = () => {
+  const updateEvent = () => {
     enabled &&
       updateMutation.mutateAsync({
         id: eventToEdit?.id ?? "",
         name,
-        description,
-        frequency: selectedFrequency,
-        startsAt: date,
-        groupId: User.groupId || "",
-        userId: selectedUser,
-        taskGroupId: selectedGroup,
+        isEvent: eventToEdit?.isEvent || false,
+        location,
+        allDay: checked,
+        startsAt: initialDate,
+        endsAt: finalDate,
+        calendarId: selectedCalendar,
+        notes,
         createdBy: eventToEdit?.createdBy ?? User.id,
+        groupId: User.groupId || "",
       });
-  };*/
+  };
 
   return (
     <View className="h-screen bg-light px-6 py-16">
-      <View className="flex flex-row justify-between">
-        <Pressable onPress={navigation.goBack}>
+      <View className="mb-4 flex flex-row justify-between">
+        <TouchableOpacity onPress={navigation.goBack}>
           <Text className="text-orange">Cancelar</Text>
-        </Pressable>
+        </TouchableOpacity>
         <TouchableOpacity
           disabled={!enabled}
           className="self-end"
-          onPress={createEvent} //{edit ? updateEvent : createEvent}
+          onPress={edit ? updateEvent : createEvent}
         >
           <Text
             className={`${
@@ -149,11 +154,51 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
           </Text>
         </TouchableOpacity>
       </View>
+      {!edit && (
+        <View className="z-20 flex-row items-center">
+          <Text className="mr-3">Tipo</Text>
+          <SelectList
+            data={typeOptions}
+            setSelected={onTypeChange}
+            dropdownStyles={{
+              borderColor: "#3A3A3C",
+              backgroundColor: "#3A3A3C",
+              opacity: 0.85,
+              position: "absolute",
+              top: 20,
+              width: 180,
+              borderRadius: 15,
+            }}
+            defaultOption={{ key: typeOptions[0], value: "Evento" }}
+            dropdownTextStyles={{
+              color: "#FFFF",
+              fontSize: 14,
+            }}
+            save="key"
+            search={false}
+            boxStyles={{
+              height: 30,
+              width: 140,
+              borderColor: "#FFFF",
+              backgroundColor: "#FFFF",
+              alignSelf: "flex-end",
+              borderRadius: 50,
+              paddingVertical: 6,
+              shadowColor: "#212529c",
+              shadowOpacity: 0.2,
+              shadowOffset: {
+                width: 0,
+                height: 6,
+              },
+            }}
+          />
+        </View>
+      )}
       <ScrollView
         keyboardShouldPersistTaps="always"
         keyboardDismissMode="on-drag"
       >
-        <View className={`my-6 ${inputStyle}`}>
+        <View className={`mb-6 ${!edit && "mt-4"} ${inputStyle}`}>
           <TextInput
             placeholderTextColor="#95999C"
             value={name}
@@ -165,15 +210,19 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
             maxLength={40}
             selectionColor={"#FFA755"}
           />
-          <Divider />
-          <TextInput
-            placeholderTextColor="#95999C"
-            value={location}
-            onChangeText={setLocation}
-            placeholder="Ubicación"
-            maxLength={40}
-            selectionColor={"#FFA755"}
-          />
+          {locationVisible && (
+            <View className="space-y-3">
+              <Divider />
+              <TextInput
+                placeholderTextColor="#95999C"
+                value={location}
+                onChangeText={setLocation}
+                placeholder="Ubicación"
+                maxLength={40}
+                selectionColor={"#FFA755"}
+              />
+            </View>
+          )}
         </View>
         <View className="mb-4 rounded-lg border-light bg-white text-base text-dark">
           <View className="my-3 flex-row items-center justify-between rounded-lg bg-white px-4">
@@ -186,15 +235,15 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
             />
           </View>
           <Divider />
-          <View className="my-2 flex-row items-center justify-between rounded-lg bg-white px-4">
+          <View className="my-2 flex-row items-center justify-between rounded-lg px-4">
             <Text>Empieza</Text>
             {Platform.OS === "android" && (
-              <Pressable
+              <TouchableOpacity
                 onPress={() => setShow(true)}
                 className="rounded-md bg-lightGray p-2"
               >
                 <Text>{initialDate.toLocaleDateString()}</Text>
-              </Pressable>
+              </TouchableOpacity>
             )}
             {Platform.OS === "ios" && (
               <DateTimePicker
@@ -205,76 +254,81 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
                 }}
                 accentColor="#FFA755"
                 locale="es-ES"
-                positiveButton={{ label: "OK", textColor: "#FFA755" }}
+                mode={mode}
               />
             )}
             {Platform.OS === "android" && show && (
               <DateTimePicker
                 testID="dateTimePicker"
                 value={initialDate}
-                positiveButton={{ label: "OK", textColor: "#FFA755" }}
-                negativeButton={{ label: "Cancelar", textColor: "#FFA755" }}
                 onChange={(event, selectedDate) => {
                   setShow(false);
                   setInitialDate(selectedDate || new Date());
                 }}
+                mode={mode}
               />
             )}
           </View>
-          <Divider />
-          <View className="my-2 flex-row items-center justify-between rounded-lg bg-white px-4">
-            <Text>Acaba</Text>
-            {Platform.OS === "android" && (
-              <Pressable
-                onPress={() => setShow(true)}
-                className="rounded-md bg-lightGray p-2"
-              >
-                <Text>{finalDate.toLocaleDateString()}</Text>
-              </Pressable>
-            )}
-            {Platform.OS === "ios" && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={finalDate}
-                onChange={(event, selectedDate) => {
-                  setFinalDate(selectedDate || new Date());
-                }}
-                accentColor="#FFA755"
-                locale="es-ES"
-                positiveButton={{ label: "OK", textColor: "#FFA755" }}
-              />
-            )}
-            {Platform.OS === "android" && show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={finalDate}
-                positiveButton={{ label: "OK", textColor: "#FFA755" }}
-                negativeButton={{ label: "Cancelar", textColor: "#FFA755" }}
-                onChange={(event, selectedDate) => {
-                  setShow(false);
-                  setFinalDate(selectedDate || new Date());
-                }}
-              />
-            )}
-          </View>
+          {selectedType === "Evento" && (
+            <View>
+              <Divider />
+              <View className="my-2 flex-row items-center justify-between rounded-lg px-4">
+                <Text>Acaba</Text>
+                {Platform.OS === "android" && (
+                  <TouchableOpacity
+                    onPress={() => setShow(true)}
+                    className="rounded-md bg-lightGray p-2"
+                  >
+                    <Text>{finalDate.toLocaleDateString()}</Text>
+                  </TouchableOpacity>
+                )}
+                {Platform.OS === "ios" && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={finalDate}
+                    onChange={(event, selectedDate) => {
+                      setFinalDate(selectedDate || new Date());
+                    }}
+                    accentColor="#FFA755"
+                    locale="es-ES"
+                    mode={mode}
+                  />
+                )}
+                {Platform.OS === "android" && show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={finalDate}
+                    onChange={(event, selectedDate) => {
+                      setShow(false);
+                      setFinalDate(selectedDate || new Date());
+                    }}
+                    mode={mode}
+                  />
+                )}
+              </View>
+            </View>
+          )}
         </View>
         <View className="z-20 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
           <Text>Calendario</Text>
-          {groupOptions ? (
+          {calendarOptions ? (
             <SelectList
-              data={groupOptions}
-              setSelected={setSelectedGroup}
+              data={calendarOptions}
+              setSelected={setSelectedCalendar}
               dropdownStyles={{
                 borderColor: "#3A3A3C",
                 backgroundColor: "#3A3A3C",
                 opacity: 0.85,
                 position: "absolute",
                 right: 14,
-                top: 24,
+                top: 30,
                 width: 180,
-                borderRadius: 12,
+                borderRadius: 15,
               }}
-              dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
+              dropdownTextStyles={{
+                color: "#FFFF",
+                fontSize: 14,
+              }}
               save="key"
               search={false}
               boxStyles={{
