@@ -1,4 +1,4 @@
-import { Pressable, Text, TextInput, View, ScrollView } from "react-native";
+import { Pressable, Text, TextInput, View, ScrollView, Image } from "react-native";
 import React, { useContext, useState } from "react";
 import { trpc } from "../../trpc";
 import { UserContext } from "../../context/userContext";
@@ -9,7 +9,9 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import GroupCard from "../../components/groups/GroupCard";
 import NoteCard from "../../components/NoteCard";
 import { Profileinformation } from "../../components/Profileinformation";
-import ImagePickerC from "../../components/ImagePickerC";
+import { pickImageAndUploadToS3 } from "../../components/ImagePickerC";
+import { TouchableOpacity } from "react-native";
+
 
 /**
  * @typedef {object} ProfileScreenProps
@@ -30,6 +32,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
   const utils = trpc.useContext();
   //contexto de usuario
   const { User } = useContext(UserContext) as UserContextType;
+  const [imageURL, setSelectedImageUrl] = useState("");
   const { data: userGroups } = trpc.user.getUserGroups.useQuery({
     userId: User.id,
   });
@@ -67,14 +70,35 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
   const { data: userNotes } = trpc.user.getNotes.useQuery({
     userId: User.id,
   });
+
+  const handleImageSelected = async () => {
+    pickImageAndUploadToS3((imageUrl) => {
+      setSelectedImageUrl(imageUrl);
+    });
+  };
+
+
   return (
     <ScrollView className="h-full bg-light px-6 pt-16">
       <Pressable onPress={navigation.goBack}>
         <Icon name="chevron-left" size={16} color={"#1E88E5"} />
       </Pressable>
-      <View className="mb-4 mt-4">
-        <ImagePickerC id={User.id} table="users" />
-        <Profileinformation />
+      <View className="relative">
+        <TouchableOpacity
+          className="w-32 h-32 rounded-full bg-gray-300 overflow-hidden" onPress={handleImageSelected}>
+          {imageURL ? (
+            <Image
+              source={{ uri: imageURL }} // Cambia ImageBackground por Image
+              style={{ width: "100%", height: "100%" }} // Asegura que la imagen ocupe todo el espacio
+            />
+          ) : (
+            <Icon name="user-alt" size={16} color={"#1E88E5"}/>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity className="w-10 h-10 rounded-full bg-blue-500 absolute top-0 right-0 flex items-center justify-center"
+          onPress={handleImageSelected}>
+          <Icon name="edit" size={16} color={"#1E88E5"}/>
+        </TouchableOpacity>
       </View>
       <Pressable
         onPress={goToCreateGroup}
