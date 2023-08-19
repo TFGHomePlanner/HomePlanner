@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import {
   View,
   Text,
-  Pressable,
   ScrollView,
   TextInput,
   TouchableOpacity,
@@ -109,12 +108,15 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
         </Text>
         {myGroups ? (
           myGroups.map((group) => (
-            <Pressable onPress={() => selectGroup(group.id)} key={group.id}>
+            <TouchableOpacity
+              onPress={() => selectGroup(group.id)}
+              key={group.id}
+            >
               <GroupCard group={group} />
-            </Pressable>
+            </TouchableOpacity>
           ))
         ) : (
-          <Text>Todavía no tienes grupos</Text>
+          <Text>Cargando...</Text>
         )}
       </ScrollView>
       <View className="flex-row items-center">

@@ -2,11 +2,11 @@ import React, { useContext, useMemo, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Calendar } from "react-native-calendars";
 import Icon from "react-native-vector-icons/AntDesign";
-import { LocaleConfig } from "react-native-calendars";
 import { AppStackParamList } from "../../../_App";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserContext } from "../../../context/userContext";
 import { UserContextType } from "../../../context/types";
+import "./localeConfig";
 
 type TabCalendarScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TabCalendar">;
@@ -14,48 +14,6 @@ type TabCalendarScreenProps = {
 
 const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
   const { User } = useContext(UserContext) as UserContextType;
-  LocaleConfig.locales["es"] = {
-    monthNames: [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Julio",
-      "Agosto",
-      "Septiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre",
-    ],
-    monthNamesShort: [
-      "Ene.",
-      "Feb.",
-      "Mar.",
-      "Abr.",
-      "May.",
-      "Jun.",
-      "Jul.",
-      "Ago.",
-      "Sep.",
-      "Oct.",
-      "Nov.",
-      "Dic.",
-    ],
-    dayNames: [
-      "Lunes",
-      "Martes",
-      "Miércoles",
-      "Jueves",
-      "Viernes",
-      "Sábado",
-      "Domingo",
-    ],
-    dayNamesShort: ["Lun.", "Mar.", "Mié.", "Jue.", "Vie.", "Sáb.", "Dom."],
-  };
-  LocaleConfig.defaultLocale = "es";
-
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState<any>(today);
   const marked = useMemo(

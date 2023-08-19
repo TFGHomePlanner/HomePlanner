@@ -27,8 +27,7 @@ type CreateEventScreenProps = {
 const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   navigation,
 }) => {
-  const inputStyle =
-    "mb-4 bg-white rounded-lg space-y-3 text-base p-4 text-dark";
+  const inputStyle = "mb-4 bg-white rounded-lg space-y-3 p-4";
 
   const { User } = useContext(UserContext) as UserContextType;
   const utils = trpc.useContext();
@@ -43,28 +42,35 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   );*/
   const [enabled, setEnabled] = useState(false);
   const [location, setLocation] = useState("");
+  const [locationVisible, setLocationVisible] = useState(true);
 
-  const { data: groups } = trpc.task.getAllTaskGroups.useQuery({
-    groupId: User.groupId,
-  });
-  const [selectedGroup, setSelectedGroup] = useState("");
-  const groupOptions = groups?.map((group) => ({
-    key: group.id,
-    value: group.name,
-  }));
+  const [selectedType, setSelectedType] = useState("");
+  const typeOptions = ["Evento", "Recordatorio", "Reserva"];
+  function onTypeChange(type: string) {
+    setSelectedType(type);
+    setLocationVisible(type === "Evento");
+  }
 
   const [checked, setChecked] = React.useState(false);
   const onCheckedChange = (isChecked: boolean) => {
     setChecked(isChecked);
   };
 
+  const { data: calendars } = trpc.event.getAllCalendars.useQuery({
+    groupId: User.groupId,
+  });
+  const [selectedCalendar, setSelectedCalendar] = useState("Evento");
+  const calendarOptions = calendars?.map((calendar) => ({
+    key: calendar.id,
+    value: calendar.name,
+  }));
+  const [show, setShow] = useState(false);
+
   const [initialDate, setInitialDate] = useState(new Date());
   const [finalDate, setFinalDate] = useState(new Date());
-  const [show, setShow] = useState(false);
 
   const [notes, setNotes] = useState("");
 
-  // CAMBIAR
   const createMutation = trpc.event.create.useMutation({
     onSuccess() {
       utils.event.getAllEvents.invalidate();
@@ -75,9 +81,9 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
           ", " +
           location +
           ", " +
-          initialDate.toLocaleDateString() +
-          ", todo el día: " +
-          checked
+          selectedType +
+          ", " +
+          selectedCalendar
       );
     },
   });
@@ -85,11 +91,12 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
     enabled &&
       createMutation.mutateAsync({
         name,
-        isEvent: true, // CAMBIAR
+        isEvent: selectedType === "Evento", // CAMBIAR
         location: location,
         allDay: checked,
         startsAt: initialDate,
         endsAt: finalDate,
+        calendarId: selectedCalendar,
         notes,
         groupId: User.groupId || "",
         createdBy: User.id,
@@ -149,11 +156,43 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
           </Text>
         </TouchableOpacity>
       </View>
+      <View className="z-20 my-4 flex-row items-center">
+        <Text className="mr-3">Tipo</Text>
+        <SelectList
+          data={typeOptions}
+          setSelected={onTypeChange}
+          dropdownStyles={{
+            borderColor: "#3A3A3C",
+            backgroundColor: "#3A3A3C",
+            opacity: 0.85,
+            position: "absolute",
+            top: 20,
+            width: 180,
+            borderRadius: 15,
+          }}
+          defaultOption={{ key: typeOptions[0], value: "Evento" }}
+          dropdownTextStyles={{
+            color: "#FFFF",
+            fontSize: 14,
+          }}
+          save="key"
+          search={false}
+          boxStyles={{
+            height: 30,
+            width: 140,
+            borderColor: "#FFFF",
+            backgroundColor: "#FFFF",
+            alignSelf: "flex-end",
+            borderRadius: 50,
+            paddingVertical: 6,
+          }}
+        />
+      </View>
       <ScrollView
         keyboardShouldPersistTaps="always"
         keyboardDismissMode="on-drag"
       >
-        <View className={`my-6 ${inputStyle}`}>
+        <View className={`mb-6 ${inputStyle}`}>
           <TextInput
             placeholderTextColor="#95999C"
             value={name}
@@ -165,15 +204,19 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
             maxLength={40}
             selectionColor={"#FFA755"}
           />
-          <Divider />
-          <TextInput
-            placeholderTextColor="#95999C"
-            value={location}
-            onChangeText={setLocation}
-            placeholder="Ubicación"
-            maxLength={40}
-            selectionColor={"#FFA755"}
-          />
+          {locationVisible && (
+            <View className="space-y-3">
+              <Divider />
+              <TextInput
+                placeholderTextColor="#95999C"
+                value={location}
+                onChangeText={setLocation}
+                placeholder="Ubicación"
+                maxLength={40}
+                selectionColor={"#FFA755"}
+              />
+            </View>
+          )}
         </View>
         <View className="mb-4 rounded-lg border-light bg-white text-base text-dark">
           <View className="my-3 flex-row items-center justify-between rounded-lg bg-white px-4">
@@ -186,7 +229,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
             />
           </View>
           <Divider />
-          <View className="my-2 flex-row items-center justify-between rounded-lg bg-white px-4">
+          <View className="my-2 flex-row items-center justify-between rounded-lg px-4">
             <Text>Empieza</Text>
             {Platform.OS === "android" && (
               <Pressable
@@ -222,7 +265,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
             )}
           </View>
           <Divider />
-          <View className="my-2 flex-row items-center justify-between rounded-lg bg-white px-4">
+          <View className="my-2 flex-row items-center justify-between rounded-lg px-4">
             <Text>Acaba</Text>
             {Platform.OS === "android" && (
               <Pressable
@@ -260,21 +303,24 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
         </View>
         <View className="z-20 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
           <Text>Calendario</Text>
-          {groupOptions ? (
+          {calendarOptions ? (
             <SelectList
-              data={groupOptions}
-              setSelected={setSelectedGroup}
+              data={calendarOptions}
+              setSelected={setSelectedCalendar}
               dropdownStyles={{
                 borderColor: "#3A3A3C",
                 backgroundColor: "#3A3A3C",
                 opacity: 0.85,
                 position: "absolute",
                 right: 14,
-                top: 24,
+                top: 30,
                 width: 180,
-                borderRadius: 12,
+                borderRadius: 15,
               }}
-              dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
+              dropdownTextStyles={{
+                color: "#FFFF",
+                fontSize: 14,
+              }}
               save="key"
               search={false}
               boxStyles={{
