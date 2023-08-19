@@ -54,6 +54,24 @@ export const ReservationSchema = z.object({
   userId: z.string(),
 });
 
+export const CreateReservationSchema = z.object({
+  room: z.string().max(40, { message: "Demasiado largo." }),
+  description: z.string().max(100, { message: "Descripción demasiado larga." }),
+  allDay: z.boolean(),
+  date: z.coerce.date(),
+  notes: z
+    .string()
+    .max(200, { message: "Máximo 200 caracteres." })
+    .optional()
+    .nullable(),
+  groupId: z.string(),
+  userId: z.string(),
+});
+
+export const UpdateReservationSchema = CreateReservationSchema.extend({
+  id: z.string(),
+});
+
 export const CalendarSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -74,5 +92,8 @@ export const CreateCalendarSchema = z.object({
 export type IEvent = z.infer<typeof EventSchema>;
 export type ICreateEvent = z.infer<typeof CreateEventSchema>;
 export type IUpdateEvent = z.infer<typeof UpdateEventSchema>;
+export type IReservation = z.infer<typeof ReservationSchema>;
+export type ICreateReservation = z.infer<typeof CreateReservationSchema>;
+export type IUpdateReservation = z.infer<typeof UpdateReservationSchema>;
 export type ICalendar = z.infer<typeof CalendarSchema>;
 export type ICreateCalendar = z.infer<typeof CreateCalendarSchema>;

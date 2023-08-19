@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { trpc } from "../../trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { SelectList } from "react-native-dropdown-select-list";
 import { Divider } from "@ui-kitten/components";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { RouteProp } from "@react-navigation/native";
@@ -18,12 +17,12 @@ import { AppStackParamList } from "../../_App";
 import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
 
-type CreateEventScreenProps = {
-  navigation: NativeStackNavigationProp<AppStackParamList, "CreateEvent">;
-  route: RouteProp<AppStackParamList, "CreateEvent">;
+type CreateReservationScreenProps = {
+  navigation: NativeStackNavigationProp<AppStackParamList, "CreateReservation">;
+  route: RouteProp<AppStackParamList, "CreateReservation">;
 };
 
-const CreateReservationScreen: React.FC<CreateEventScreenProps> = ({
+const CreateReservationScreen: React.FC<CreateReservationScreenProps> = ({
   navigation,
   route,
 }) => {
@@ -33,21 +32,16 @@ const CreateReservationScreen: React.FC<CreateEventScreenProps> = ({
   const utils = trpc.useContext();
 
   const edit = route.params.edit;
-  const eventToEdit = route.params.Event;
+  const reservationToEdit = route.params.Reservation;
 
-  const [name, setName] = useState("");
-  const [enabled, setEnabled] = useState(
-    eventToEdit?.name ? eventToEdit?.name !== "" : false
-  );
-  const [location, setLocation] = useState("");
-  const [locationVisible, setLocationVisible] = useState(true);
-
-  const [selectedType, setSelectedType] = useState("Evento");
-  const typeOptions = ["Evento", "Recordatorio", "Reserva"];
-  function onTypeChange(type: string) {
-    setSelectedType(type);
-    setLocationVisible(type === "Evento");
-  }
+  const isEnabled =
+    (reservationToEdit?.room ? reservationToEdit?.room !== "" : false) &&
+    (reservationToEdit?.description
+      ? reservationToEdit?.description !== ""
+      : false);
+  const [room, setRoom] = useState("");
+  const [enabled, setEnabled] = useState(isEnabled);
+  const [description, setDescription] = useState("");
 
   const [checked, setChecked] = React.useState(false);
   const onCheckedChange = (isChecked: boolean) => {
@@ -55,63 +49,47 @@ const CreateReservationScreen: React.FC<CreateEventScreenProps> = ({
     isChecked ? setMode("date") : setMode("datetime");
   };
 
-  const { data: calendars } = trpc.event.getAllCalendars.useQuery({
-    groupId: User.groupId,
-  });
-  const [selectedCalendar, setSelectedCalendar] = useState("");
-  const calendarOptions = calendars?.map((calendar) => ({
-    key: calendar.id,
-    value: calendar.name,
-  }));
+  const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
-
-  const [initialDate, setInitialDate] = useState(new Date());
-  const [finalDate, setFinalDate] = useState(new Date());
   const [mode, setMode] = useState<"date" | "time" | "datetime">(
     checked ? "date" : "datetime"
   );
 
   const [notes, setNotes] = useState("");
 
-  const createMutation = trpc.event.create.useMutation({
+  const createMutation = trpc.event.createReservation.useMutation({
     onSuccess() {
-      utils.event.getAllEvents.invalidate();
+      utils.event.getAllReservations.invalidate();
       navigation.navigate("Tabs");
     },
   });
-  const createEvent = () => {
+  const createReservation = () => {
     enabled &&
       createMutation.mutateAsync({
-        name,
-        isEvent: selectedType === "Evento", // CAMBIAR
-        location: location,
+        room,
+        description,
         allDay: checked,
-        startsAt: initialDate,
-        endsAt: finalDate,
-        calendarId: selectedCalendar === "" ? undefined : selectedCalendar,
+        date,
         notes,
         groupId: User.groupId || "",
         userId: User.id,
       });
   };
 
-  function loadEvent() {
-    setName(eventToEdit?.name ?? "");
-    setSelectedType(eventToEdit?.isEvent ? "Evento" : "Recordatorio");
-    setLocation(eventToEdit?.location ?? "");
-    setSelectedCalendar(eventToEdit?.calendar?.id ?? "");
-    setInitialDate(
-      eventToEdit?.startsAt ? new Date(eventToEdit?.startsAt) : new Date()
-    );
-    setFinalDate(
-      eventToEdit?.endsAt ? new Date(eventToEdit?.endsAt) : new Date()
+  // COMPLETAR
+  function loadReservation() {
+    setRoom(reservationToEdit?.room ?? "");
+    setDescription(reservationToEdit?.description ?? "");
+    setChecked(reservationToEdit?.allDay ?? false);
+    setDate(
+      reservationToEdit?.date ? new Date(reservationToEdit?.date) : new Date()
     );
   }
   {
-    edit && useEffect(() => loadEvent(), [edit]);
+    edit && useEffect(() => loadReservation(), [edit]);
   }
 
-  const updateMutation = trpc.event.update.useMutation({
+  const updateMutation = trpc.event.updateReservation.useMutation({
     onSuccess() {
       utils.event.getAllEvents.invalidate();
       navigation.navigate("Tabs");
@@ -120,16 +98,13 @@ const CreateReservationScreen: React.FC<CreateEventScreenProps> = ({
   const updateEvent = () => {
     enabled &&
       updateMutation.mutateAsync({
-        id: eventToEdit?.id ?? "",
-        name,
-        isEvent: eventToEdit?.isEvent || false,
-        location,
+        id: reservationToEdit?.id ?? "",
+        room,
+        description,
         allDay: checked,
-        startsAt: initialDate,
-        endsAt: finalDate,
-        calendarId: selectedCalendar,
+        date,
         notes,
-        userId: eventToEdit?.userId ?? User.id,
+        userId: reservationToEdit?.userId ?? User.id,
         groupId: User.groupId || "",
       });
   };
@@ -143,7 +118,7 @@ const CreateReservationScreen: React.FC<CreateEventScreenProps> = ({
         <TouchableOpacity
           disabled={!enabled}
           className="self-end"
-          onPress={edit ? updateEvent : createEvent}
+          onPress={edit ? updateEvent : createReservation}
         >
           <Text
             className={`${
@@ -154,46 +129,6 @@ const CreateReservationScreen: React.FC<CreateEventScreenProps> = ({
           </Text>
         </TouchableOpacity>
       </View>
-      {!edit && (
-        <View className="z-20 flex-row items-center">
-          <Text className="mr-3">Tipo</Text>
-          <SelectList
-            data={typeOptions}
-            setSelected={onTypeChange}
-            dropdownStyles={{
-              borderColor: "#3A3A3C",
-              backgroundColor: "#3A3A3C",
-              opacity: 0.85,
-              position: "absolute",
-              top: 20,
-              width: 180,
-              borderRadius: 15,
-            }}
-            defaultOption={{ key: typeOptions[0], value: "Evento" }}
-            dropdownTextStyles={{
-              color: "#FFFF",
-              fontSize: 14,
-            }}
-            save="key"
-            search={false}
-            boxStyles={{
-              height: 30,
-              width: 140,
-              borderColor: "#FFFF",
-              backgroundColor: "#FFFF",
-              alignSelf: "flex-end",
-              borderRadius: 50,
-              paddingVertical: 6,
-              shadowColor: "#212529c",
-              shadowOpacity: 0.2,
-              shadowOffset: {
-                width: 0,
-                height: 6,
-              },
-            }}
-          />
-        </View>
-      )}
       <ScrollView
         keyboardShouldPersistTaps="always"
         keyboardDismissMode="on-drag"
@@ -201,28 +136,24 @@ const CreateReservationScreen: React.FC<CreateEventScreenProps> = ({
         <View className={`mb-6 ${!edit && "mt-4"} ${inputStyle}`}>
           <TextInput
             placeholderTextColor="#95999C"
-            value={name}
+            value={room}
             onChangeText={(newName) => {
-              setName(newName);
+              setRoom(newName);
               setEnabled(newName.trim() !== "");
             }}
             placeholder="Título *"
             maxLength={40}
             selectionColor={"#FFA755"}
           />
-          {locationVisible && (
-            <View className="space-y-3">
-              <Divider />
-              <TextInput
-                placeholderTextColor="#95999C"
-                value={location}
-                onChangeText={setLocation}
-                placeholder="Ubicación"
-                maxLength={40}
-                selectionColor={"#FFA755"}
-              />
-            </View>
-          )}
+          <Divider />
+          <TextInput
+            placeholderTextColor="#95999C"
+            value={description}
+            onChangeText={setDescription}
+            placeholder="Descripción"
+            maxLength={40}
+            selectionColor={"#FFA755"}
+          />
         </View>
         <View className="mb-4 rounded-lg border-light bg-white text-base text-dark">
           <View className="my-3 flex-row items-center justify-between rounded-lg bg-white px-4">
@@ -242,15 +173,15 @@ const CreateReservationScreen: React.FC<CreateEventScreenProps> = ({
                 onPress={() => setShow(true)}
                 className="rounded-md bg-lightGray p-2"
               >
-                <Text>{initialDate.toLocaleDateString()}</Text>
+                <Text>{date.toLocaleDateString()}</Text>
               </TouchableOpacity>
             )}
             {Platform.OS === "ios" && (
               <DateTimePicker
                 testID="dateTimePicker"
-                value={initialDate}
+                value={date}
                 onChange={(event, selectedDate) => {
-                  setInitialDate(selectedDate || new Date());
+                  setDate(selectedDate || new Date());
                 }}
                 accentColor="#FFA755"
                 locale="es-ES"
@@ -260,88 +191,15 @@ const CreateReservationScreen: React.FC<CreateEventScreenProps> = ({
             {Platform.OS === "android" && show && (
               <DateTimePicker
                 testID="dateTimePicker"
-                value={initialDate}
+                value={date}
                 onChange={(event, selectedDate) => {
                   setShow(false);
-                  setInitialDate(selectedDate || new Date());
+                  setDate(selectedDate || new Date());
                 }}
                 mode={mode}
               />
             )}
           </View>
-          {selectedType === "Evento" && (
-            <View>
-              <Divider />
-              <View className="my-2 flex-row items-center justify-between rounded-lg px-4">
-                <Text>Acaba</Text>
-                {Platform.OS === "android" && (
-                  <TouchableOpacity
-                    onPress={() => setShow(true)}
-                    className="rounded-md bg-lightGray p-2"
-                  >
-                    <Text>{finalDate.toLocaleDateString()}</Text>
-                  </TouchableOpacity>
-                )}
-                {Platform.OS === "ios" && (
-                  <DateTimePicker
-                    testID="dateTimePicker"
-                    value={finalDate}
-                    onChange={(event, selectedDate) => {
-                      setFinalDate(selectedDate || new Date());
-                    }}
-                    accentColor="#FFA755"
-                    locale="es-ES"
-                    mode={mode}
-                  />
-                )}
-                {Platform.OS === "android" && show && (
-                  <DateTimePicker
-                    testID="dateTimePicker"
-                    value={finalDate}
-                    onChange={(event, selectedDate) => {
-                      setShow(false);
-                      setFinalDate(selectedDate || new Date());
-                    }}
-                    mode={mode}
-                  />
-                )}
-              </View>
-            </View>
-          )}
-        </View>
-        <View className="z-20 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
-          <Text>Calendario</Text>
-          {calendarOptions ? (
-            <SelectList
-              data={calendarOptions}
-              setSelected={setSelectedCalendar}
-              dropdownStyles={{
-                borderColor: "#3A3A3C",
-                backgroundColor: "#3A3A3C",
-                opacity: 0.85,
-                position: "absolute",
-                right: 14,
-                top: 30,
-                width: 180,
-                borderRadius: 15,
-              }}
-              dropdownTextStyles={{
-                color: "#FFFF",
-                fontSize: 14,
-              }}
-              save="key"
-              search={false}
-              boxStyles={{
-                height: 42,
-                width: 140,
-                borderColor: "#FFFF",
-                alignSelf: "flex-end",
-              }}
-              placeholder="Seleccionar"
-            />
-          ) : (
-            <Text>Cargando...</Text>
-          )}
         </View>
         <ScrollView className="h-36 rounded-lg bg-white px-4 py-2">
           <TextInput

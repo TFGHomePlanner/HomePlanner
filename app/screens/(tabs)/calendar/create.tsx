@@ -63,10 +63,10 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
     key: calendar.id,
     value: calendar.name,
   }));
-  const [show, setShow] = useState(false);
 
   const [initialDate, setInitialDate] = useState(new Date());
   const [finalDate, setFinalDate] = useState(new Date());
+  const [show, setShow] = useState(false);
   const [mode, setMode] = useState<"date" | "time" | "datetime">(
     checked ? "date" : "datetime"
   );
@@ -83,7 +83,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
     enabled &&
       createMutation.mutateAsync({
         name,
-        isEvent: selectedType === "Evento", // CAMBIAR
+        isEvent: selectedType === "Evento",
         location: location,
         allDay: checked,
         startsAt: initialDate,
