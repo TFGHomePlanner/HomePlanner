@@ -3,7 +3,9 @@ import { z } from "zod";
 import {
   CreateCalendarSchema,
   CreateEventSchema,
+  CreateReservationSchema,
   UpdateEventSchema,
+  UpdateReservationSchema,
 } from "../../../common/validation/event";
 
 export const eventRouter = router({
@@ -73,7 +75,6 @@ export const eventRouter = router({
         return await ctx.prisma.event.create({ data: eventData });
       }
     ),
-
   update: publicProcedure
     .input(UpdateEventSchema)
     .mutation(
@@ -104,7 +105,6 @@ export const eventRouter = router({
         });
       }
     ),
-
   delete: publicProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -113,7 +113,81 @@ export const eventRouter = router({
       });
       return {
         status: 201,
-        message: "Event deleted successfully",
+        message: "Evento eliminado correctamente.",
+      };
+    }),
+
+  getAllReservations: publicProcedure
+    .input(z.object({ groupId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.reservation.findMany({
+        select: {
+          id: true,
+          room: true,
+          description: true,
+          allDay: true,
+          date: true,
+          notes: true,
+          createdBy: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        where: {
+          groupId: input.groupId,
+        },
+      });
+    }),
+  createReservation: publicProcedure
+    .input(CreateReservationSchema)
+    .mutation(
+      async ({
+        ctx,
+        input: { room, description, allDay, date, notes, groupId, userId },
+      }) => {
+        return await ctx.prisma.reservation.create({
+          data: {
+            room,
+            description,
+            allDay,
+            date,
+            notes,
+            groupId,
+            userId,
+          },
+        });
+      }
+    ),
+  updateReservation: publicProcedure
+    .input(UpdateReservationSchema)
+    .mutation(
+      async ({
+        ctx,
+        input: { id, room, description, allDay, date, notes },
+      }) => {
+        return await ctx.prisma.reservation.update({
+          where: { id },
+          data: {
+            room,
+            description,
+            allDay,
+            date,
+            notes,
+          },
+        });
+      }
+    ),
+  deleteReservation: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.reservation.delete({
+        where: { id: input.id },
+      });
+      return {
+        status: 201,
+        message: "Reserva eliminada correctamente.",
       };
     }),
 
