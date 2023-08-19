@@ -26,6 +26,12 @@ export const eventRouter = router({
             },
           },
           notes: true,
+          createdBy: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
         where: {
           groupId: input.groupId,
@@ -48,7 +54,7 @@ export const eventRouter = router({
           calendarId,
           notes,
           groupId,
-          createdBy,
+          userId,
         },
       }) => {
         const eventData = {
@@ -61,7 +67,7 @@ export const eventRouter = router({
           calendarId,
           notes,
           groupId,
-          createdBy,
+          userId,
         };
         isEvent && (eventData.endsAt = endsAt);
         return await ctx.prisma.event.create({ data: eventData });
@@ -154,6 +160,12 @@ export const eventRouter = router({
             },
           },
           notes: true,
+          createdBy: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
         where: {
           groupId: input.groupId,

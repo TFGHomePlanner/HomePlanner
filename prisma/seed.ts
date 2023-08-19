@@ -172,7 +172,7 @@ async function main() {
       startsAt: new Date(2023, 7, 22, 10, 0), // Agosto = 7
       calendarId: calendario.id,
       notes: "Llevar regalos.",
-      createdBy: a.id,
+      userId: a.id,
       groupId: minigrupo.id,
     },
   });
@@ -187,7 +187,7 @@ async function main() {
       endsAt: new Date(2023, 7, 24, 12, 30),
       calendarId: calendario.id,
       notes: "Llevar entradas.",
-      createdBy: a.id,
+      userId: a.id,
       groupId: minigrupo.id,
     },
   });
@@ -199,7 +199,7 @@ async function main() {
       allDay: true,
       startsAt: new Date(2023, 7, 10, 10, 0),
       calendarId: calendario.id,
-      createdBy: marta.id,
+      userId: marta.id,
       groupId: minigrupo.id,
     },
   });
@@ -212,7 +212,7 @@ async function main() {
       date: new Date(2023, 7, 30),
       notes: "Garaje ocupado.",
       groupId: minigrupo.id,
-      createdBy: marta.id,
+      userId: marta.id,
     },
   });
 
@@ -223,7 +223,7 @@ async function main() {
       allDay: false,
       date: new Date(2023, 7, 27, 18, 0),
       groupId: minigrupo.id,
-      createdBy: a.id,
+      userId: a.id,
     },
   });
 

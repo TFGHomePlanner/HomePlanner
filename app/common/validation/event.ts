@@ -15,8 +15,8 @@ export const EventSchema = z.object({
     })
     .optional()
     .nullable(),
-  notes: z.string().nullable(),
-  createdBy: z.string(),
+  notes: z.string().optional().nullable(),
+  userId: z.string(),
 });
 
 export const CreateEventSchema = z.object({
@@ -31,17 +31,28 @@ export const CreateEventSchema = z.object({
   allDay: z.boolean(),
   startsAt: z.coerce.date(),
   endsAt: z.coerce.date().optional().nullable(),
-  calendarId: z
+  calendarId: z.string().optional().nullable(),
+  notes: z
     .string()
     .max(200, { message: "Máximo 200 caracteres." })
     .optional()
     .nullable(),
-  notes: z.string().optional().nullable(),
   groupId: z.string(),
-  createdBy: z.string(),
+  userId: z.string(),
 });
 
 export const UpdateEventSchema = CreateEventSchema.extend({ id: z.string() });
+
+export const ReservationSchema = z.object({
+  id: z.string(),
+  room: z.string(),
+  description: z.string(),
+  allDay: z.boolean(),
+  date: z.coerce.date(),
+  notes: z.string().optional().nullable(),
+  groupId: z.string(),
+  userId: z.string(),
+});
 
 export const CalendarSchema = z.object({
   id: z.string(),

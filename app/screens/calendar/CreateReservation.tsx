@@ -8,22 +8,22 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { trpc } from "../../../trpc";
+import { trpc } from "../../trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { AppStackParamList } from "../../../_App";
-import { UserContext } from "../../../context/userContext";
-import { UserContextType } from "../../../context/types";
 import { SelectList } from "react-native-dropdown-select-list";
 import { Divider } from "@ui-kitten/components";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { RouteProp } from "@react-navigation/native";
+import { AppStackParamList } from "../../_App";
+import { UserContext } from "../../context/userContext";
+import { UserContextType } from "../../context/types";
 
 type CreateEventScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "CreateEvent">;
   route: RouteProp<AppStackParamList, "CreateEvent">;
 };
 
-const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
+const CreateReservationScreen: React.FC<CreateEventScreenProps> = ({
   navigation,
   route,
 }) => {
@@ -360,4 +360,4 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   );
 };
 
-export default CreateEventScreen;
+export default CreateReservationScreen;

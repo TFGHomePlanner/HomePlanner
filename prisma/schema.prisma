@@ -51,6 +51,8 @@ model User {
   Payment                      Payment[]
   DebtorUser                   DebtorUser[]
   paymentSectionsAsParticipant PaymentSection[] @relation("PaymentSectionParticipants")
+  Event                        Event[]
+  Reservation                  Reservation[]
 }
 
 model Group {
@@ -164,7 +166,8 @@ model Event {
   notes      String?
   group      Group     @relation(fields: [groupId], references: [id])
   groupId    String
-  createdBy  String
+  createdBy  User      @relation(fields: [userId], references: [id])
+  userId     String
 
   @@index([groupId])
 }
@@ -178,7 +181,8 @@ model Reservation {
   notes       String?
   group       Group    @relation(fields: [groupId], references: [id])
   groupId     String
-  createdBy   String
+  createdBy   User     @relation(fields: [userId], references: [id])
+  userId      String
 
   @@index([groupId])
 }
