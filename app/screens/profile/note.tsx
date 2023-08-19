@@ -6,7 +6,6 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
 } from "react-native";
 import { trpc } from "../../server/utils/trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

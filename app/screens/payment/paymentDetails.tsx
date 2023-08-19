@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from "react";
+import { View, Text, ScrollView } from "react-native";
 import { AppStackParamList } from "../../_App";
-import { RouteProp, useNavigation } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
 import { Header } from "../../components/Header";
 import { Divider } from "@ui-kitten/components";
 

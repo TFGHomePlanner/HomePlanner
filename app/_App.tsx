@@ -34,7 +34,6 @@ import { ISharedNote } from "./common/validation/sharedNote";
 import CreateSharedNoteScreen from "./screens/sharedNotes/create";
 import NoteDetailScreen from "./screens/sharedNotes/NoteDetail";
 import PaymentDetailScreen from "./screens/payment/paymentDetails";
-import PaymentScreen from "./screens/payment/payments";
 import CreatePaymentScreen from "./screens/payment/Createpayment";
 import PaymentListScreen from "./screens/payment/paymentlist";
 import ResumePaymentScreenScreen from "./screens/payment/resumepayment";
@@ -64,7 +63,6 @@ export type AppStackParamList = {
   Profile: undefined;
   CreateGroup: undefined;
   DetailsList: { List: IList };
-  Payments: { Payments: IPaymentSection };
   PaymentDetails: { Payment: IPayment };
   UserNote: { Note?: INote; Edit: boolean };
   CreateSharedNote: { Note?: ISharedNote; edit: boolean };
@@ -141,8 +139,6 @@ export function App() {
                     name="PaymentDetails"
                     component={PaymentDetailScreen}
                   />
-
-                  <Stack.Screen name="Payments" component={PaymentScreen} />
                   <Stack.Screen name="TabLists" component={TabListsScreen} />
                   <Stack.Screen name="UserNote" component={UserNoteScreen} />
                   <Stack.Screen
