@@ -13,7 +13,9 @@ export const EventSchema = z.object({
       id: z.string(),
       name: z.string(),
     })
+    .optional()
     .nullable(),
+  notes: z.string().optional().nullable(),
   createdBy: z.string(),
 });
 
@@ -29,7 +31,8 @@ export const CreateEventSchema = z.object({
   allDay: z.boolean(),
   startsAt: z.coerce.date(),
   endsAt: z.coerce.date().optional().nullable(),
-  calendarId: z.string(),
+  calendarId: z.string().optional().nullable(),
+  notes: z.string().optional().nullable(),
   groupId: z.string(),
   createdBy: z.string(),
 });

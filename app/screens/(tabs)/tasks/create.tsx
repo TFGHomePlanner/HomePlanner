@@ -160,6 +160,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
         <View className={`my-6 ${inputStyle}`}>
           <TextInput
             placeholderTextColor="#95999C"
+            selectionColor={"#7B61FF"}
             value={name}
             onChangeText={(newName) => {
               setName(newName);
@@ -171,6 +172,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
           <Divider />
           <TextInput
             placeholderTextColor="#95999C"
+            selectionColor={"#7B61FF"}
             value={description}
             onChangeText={setDescription}
             placeholder="Descripción"

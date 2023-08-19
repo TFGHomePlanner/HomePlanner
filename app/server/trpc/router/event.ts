@@ -17,14 +17,15 @@ export const eventRouter = router({
           isEvent: true,
           location: true,
           allDay: true,
+          startsAt: true,
+          endsAt: true,
           calendar: {
             select: {
               id: true,
               name: true,
             },
           },
-          startsAt: true,
-          endsAt: true,
+          notes: true,
         },
         where: {
           groupId: input.groupId,
@@ -45,23 +46,25 @@ export const eventRouter = router({
           startsAt,
           endsAt,
           calendarId,
+          notes,
           groupId,
           createdBy,
         },
       }) => {
-        return await ctx.prisma.event.create({
-          data: {
-            name,
-            isEvent,
-            location,
-            allDay,
-            startsAt,
-            endsAt,
-            calendarId,
-            groupId,
-            createdBy,
-          },
-        });
+        const eventData = {
+          name,
+          isEvent,
+          location,
+          allDay,
+          startsAt,
+          endsAt,
+          calendarId,
+          notes,
+          groupId,
+          createdBy,
+        };
+        isEvent && (eventData.endsAt = endsAt);
+        return await ctx.prisma.event.create({ data: eventData });
       }
     ),
 
@@ -78,6 +81,7 @@ export const eventRouter = router({
           startsAt,
           endsAt,
           calendarId,
+          notes,
           groupId,
         },
       }) => {
@@ -90,6 +94,7 @@ export const eventRouter = router({
             startsAt,
             endsAt,
             calendarId,
+            notes,
             groupId,
           },
         });
@@ -142,14 +147,15 @@ export const eventRouter = router({
           isEvent: true,
           location: true,
           allDay: true,
+          startsAt: true,
+          endsAt: true,
           calendar: {
             select: {
               id: true,
               name: true,
             },
           },
-          startsAt: true,
-          endsAt: true,
+          notes: true,
         },
         where: {
           groupId: input.groupId,

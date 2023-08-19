@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Platform,
   Pressable,
@@ -12,12 +12,10 @@ import {
 import { trpc } from "../../../trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../../_App";
-import { Frequency } from "@prisma/client";
 import { UserContext } from "../../../context/userContext";
 import { UserContextType } from "../../../context/types";
 import { SelectList } from "react-native-dropdown-select-list";
 import { Divider } from "@ui-kitten/components";
-import CreateTaskGroupScreen from "../../../components/tasks/CreateTaskGroup";
 import DateTimePicker from "@react-native-community/datetimepicker";
 // import { RouteProp } from "@react-navigation/native";
 
@@ -35,12 +33,6 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   const { User } = useContext(UserContext) as UserContextType;
   const utils = trpc.useContext();
 
-  const frequencyOptions = [
-    { key: Frequency.never, value: "Nunca" },
-    { key: Frequency.oncePerDay, value: "Cada día" },
-    { key: Frequency.oncePerWeek, value: "Cada semana" },
-    { key: Frequency.oncePerMonth, value: "Cada mes" },
-  ];
   //const edit = route.params.edit;
   const edit = false; // CAMBIAR
   //const eventToEdit = route.params.Event;
@@ -51,16 +43,6 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   );*/
   const [enabled, setEnabled] = useState(false);
   const [location, setLocation] = useState("");
-  const [selectedFrequency, setSelectedFrequency] = useState<Frequency>(
-    Frequency.never
-  );
-
-  const { data: users } = trpc.group.getUsers.useQuery({ id: User.groupId });
-  const [selectedUser, setSelectedUser] = useState("");
-  const userOptions = users?.map((user) => ({
-    key: user.id,
-    value: user.name,
-  }));
 
   const { data: groups } = trpc.task.getAllTaskGroups.useQuery({
     groupId: User.groupId,
@@ -83,22 +65,33 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   const [notes, setNotes] = useState("");
 
   // CAMBIAR
-  const createMutation = trpc.task.create.useMutation({
+  const createMutation = trpc.event.create.useMutation({
     onSuccess() {
-      utils.task.getAllTasks.invalidate();
+      utils.event.getAllEvents.invalidate();
       navigation.navigate("Tabs");
+      console.log(
+        "Event created: " +
+          name +
+          ", " +
+          location +
+          ", " +
+          initialDate.toLocaleDateString() +
+          ", todo el día: " +
+          checked
+      );
     },
   });
   const createEvent = () => {
     enabled &&
       createMutation.mutateAsync({
         name,
-        description: location,
-        frequency: selectedFrequency,
+        isEvent: true, // CAMBIAR
+        location: location,
+        allDay: checked,
         startsAt: initialDate,
+        endsAt: finalDate,
+        notes,
         groupId: User.groupId || "",
-        userId: selectedUser == "" ? undefined : selectedUser,
-        taskGroupId: selectedGroup == "" ? undefined : selectedGroup,
         createdBy: User.id,
       });
   };
@@ -170,7 +163,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
             }}
             placeholder="Título *"
             maxLength={40}
-            cursorColor={"#FFA755"}
+            selectionColor={"#FFA755"}
           />
           <Divider />
           <TextInput
@@ -179,7 +172,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
             onChangeText={setLocation}
             placeholder="Ubicación"
             maxLength={40}
-            cursorColor={"#FFA755"}
+            selectionColor={"#FFA755"}
           />
         </View>
         <View className="mb-4 rounded-lg border-light bg-white text-base text-dark">
@@ -266,7 +259,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
           </View>
         </View>
         <View className="z-20 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
-          <Text>Grupo de tareas</Text>
+          <Text>Calendario</Text>
           {groupOptions ? (
             <SelectList
               data={groupOptions}
@@ -296,10 +289,10 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
             <Text>Cargando...</Text>
           )}
         </View>
-        <ScrollView className="h-36 rounded-lg bg-white">
+        <ScrollView className="h-36 rounded-lg bg-white px-4 py-2">
           <TextInput
-            cursorColor={"#FFA755"}
-            className="p-4 text-base text-dark"
+            selectionColor={"#FFA755"}
+            className="text-base text-dark"
             placeholderTextColor="#95999C"
             value={notes}
             onChangeText={setNotes}
@@ -309,7 +302,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
           />
         </ScrollView>
       </ScrollView>
-    </View> 
+    </View>
   );
 };
 
