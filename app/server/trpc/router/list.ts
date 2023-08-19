@@ -134,7 +134,7 @@ export const listrouter = router({
     .input(z.object({id: z.string()}))
     .mutation(async ({input, ctx}) => {
       try {
-        const deletedList = await ctx.prisma.$transaction(async (tx) => {
+        await ctx.prisma.$transaction(async (tx) => {
           await tx.product.deleteMany({
             where: { listId: input.id },
           });

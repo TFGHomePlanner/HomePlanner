@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { trpc } from "../../server/utils/trpc";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
-import { RouteProp, useNavigation } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import {
   Menu,

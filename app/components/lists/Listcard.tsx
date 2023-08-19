@@ -1,9 +1,7 @@
 import React from "react";
-import { useNavigation } from "expo-router";
 import { Pressable, Text, View} from "react-native";
 import { IList } from "../../common/validation/list";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import {AppStackParamList} from "../../_App";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 /**

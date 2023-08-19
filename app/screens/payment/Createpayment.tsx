@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState} from "react";
+import React, {useState} from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../_App";
 import { View, Text, ScrollView, TextInput, TouchableOpacity} from "react-native";
 import { RouteProp } from "@react-navigation/native";
-import { UserContextType } from "../../context/types";
-import { UserContext } from "../../context/userContext";
 import { Header } from "../../components/Header";
 import { SelectList } from "react-native-dropdown-select-list";
 import { Divider } from "@ui-kitten/components";
@@ -28,7 +26,6 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
 }) => {
 
   const utils = trpc.useContext();
-  const {User} = useContext(UserContext) as UserContextType;
   const [title, setTitle] = useState<string>("");
   const [price, setprice] = useState<string>("0");
   const [total, settotal] = useState<number>(0);
