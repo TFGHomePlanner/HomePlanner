@@ -169,7 +169,7 @@ async function main() {
       isEvent: true,
       location: "Masía Venta l'Home, Buñol",
       allDay: false,
-      startsAt: new Date(2023, 7, 22, 10, 0),
+      startsAt: new Date(2023, 7, 22, 10, 0), // Agosto = 7
       calendarId: calendario.id,
       notes: "Llevar regalos.",
       createdBy: a.id,
@@ -197,10 +197,33 @@ async function main() {
       name: "Cumpleaños de a",
       isEvent: false,
       allDay: true,
-      startsAt: new Date(2023, 8, 10, 10, 0),
+      startsAt: new Date(2023, 7, 10, 10, 0),
       calendarId: calendario.id,
       createdBy: marta.id,
       groupId: minigrupo.id,
+    },
+  });
+
+  const reservaCasa = await prisma.reservation.create({
+    data: {
+      room: "Casa entera",
+      description: "Despedida María",
+      allDay: true,
+      date: new Date(2023, 7, 30),
+      notes: "Garaje ocupado.",
+      groupId: minigrupo.id,
+      createdBy: marta.id,
+    },
+  });
+
+  const reservaSalon = await prisma.reservation.create({
+    data: {
+      room: "Salón",
+      description: "Viene Pablo a ver una peli",
+      allDay: false,
+      date: new Date(2023, 7, 27, 18, 0),
+      groupId: minigrupo.id,
+      createdBy: a.id,
     },
   });
 

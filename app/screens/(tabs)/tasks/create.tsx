@@ -92,8 +92,8 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
         frequency: selectedFrequency,
         startsAt: date,
         groupId: User.groupId || "",
-        userId: selectedUser == "" ? undefined : selectedUser,
-        taskGroupId: selectedGroup == "" ? undefined : selectedGroup,
+        userId: selectedUser === "" ? undefined : selectedUser,
+        taskGroupId: selectedGroup === "" ? undefined : selectedGroup,
         createdBy: User.id,
       });
   };

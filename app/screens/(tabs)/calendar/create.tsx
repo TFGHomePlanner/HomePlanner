@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
   Platform,
-  Pressable,
   ScrollView,
   Switch,
   Text,
@@ -53,6 +52,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   const [checked, setChecked] = React.useState(false);
   const onCheckedChange = (isChecked: boolean) => {
     setChecked(isChecked);
+    isChecked ? setMode("date") : setMode("datetime");
   };
 
   const { data: calendars } = trpc.event.getAllCalendars.useQuery({
@@ -67,7 +67,9 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
 
   const [initialDate, setInitialDate] = useState(new Date());
   const [finalDate, setFinalDate] = useState(new Date());
-  const [mode, setMode] = useState<"date" | "time" | "datetime">("datetime");
+  const [mode, setMode] = useState<"date" | "time" | "datetime">(
+    checked ? "date" : "datetime"
+  );
 
   const [notes, setNotes] = useState("");
 
@@ -75,16 +77,6 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
     onSuccess() {
       utils.event.getAllEvents.invalidate();
       navigation.navigate("Tabs");
-      console.log(
-        "Event created: " +
-          name +
-          ", " +
-          location +
-          ", " +
-          selectedType +
-          ", " +
-          selectedCalendar
-      );
     },
   });
   const createEvent = () => {
@@ -96,7 +88,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
         allDay: checked,
         startsAt: initialDate,
         endsAt: finalDate,
-        calendarId: selectedCalendar,
+        calendarId: selectedCalendar === "" ? undefined : selectedCalendar,
         notes,
         groupId: User.groupId || "",
         createdBy: User.id,
@@ -145,9 +137,9 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   return (
     <View className="h-screen bg-light px-6 py-16">
       <View className="mb-4 flex flex-row justify-between">
-        <Pressable onPress={navigation.goBack}>
+        <TouchableOpacity onPress={navigation.goBack}>
           <Text className="text-orange">Cancelar</Text>
-        </Pressable>
+        </TouchableOpacity>
         <TouchableOpacity
           disabled={!enabled}
           className="self-end"
@@ -246,12 +238,12 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
           <View className="my-2 flex-row items-center justify-between rounded-lg px-4">
             <Text>Empieza</Text>
             {Platform.OS === "android" && (
-              <Pressable
+              <TouchableOpacity
                 onPress={() => setShow(true)}
                 className="rounded-md bg-lightGray p-2"
               >
                 <Text>{initialDate.toLocaleDateString()}</Text>
-              </Pressable>
+              </TouchableOpacity>
             )}
             {Platform.OS === "ios" && (
               <DateTimePicker
@@ -277,41 +269,45 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
               />
             )}
           </View>
-          <Divider />
-          <View className="my-2 flex-row items-center justify-between rounded-lg px-4">
-            <Text>Acaba</Text>
-            {Platform.OS === "android" && (
-              <Pressable
-                onPress={() => setShow(true)}
-                className="rounded-md bg-lightGray p-2"
-              >
-                <Text>{finalDate.toLocaleDateString()}</Text>
-              </Pressable>
-            )}
-            {Platform.OS === "ios" && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={finalDate}
-                onChange={(event, selectedDate) => {
-                  setFinalDate(selectedDate || new Date());
-                }}
-                accentColor="#FFA755"
-                locale="es-ES"
-                mode={mode}
-              />
-            )}
-            {Platform.OS === "android" && show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={finalDate}
-                onChange={(event, selectedDate) => {
-                  setShow(false);
-                  setFinalDate(selectedDate || new Date());
-                }}
-                mode={mode}
-              />
-            )}
-          </View>
+          {selectedType === "Evento" && (
+            <View>
+              <Divider />
+              <View className="my-2 flex-row items-center justify-between rounded-lg px-4">
+                <Text>Acaba</Text>
+                {Platform.OS === "android" && (
+                  <TouchableOpacity
+                    onPress={() => setShow(true)}
+                    className="rounded-md bg-lightGray p-2"
+                  >
+                    <Text>{finalDate.toLocaleDateString()}</Text>
+                  </TouchableOpacity>
+                )}
+                {Platform.OS === "ios" && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={finalDate}
+                    onChange={(event, selectedDate) => {
+                      setFinalDate(selectedDate || new Date());
+                    }}
+                    accentColor="#FFA755"
+                    locale="es-ES"
+                    mode={mode}
+                  />
+                )}
+                {Platform.OS === "android" && show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={finalDate}
+                    onChange={(event, selectedDate) => {
+                      setShow(false);
+                      setFinalDate(selectedDate || new Date());
+                    }}
+                    mode={mode}
+                  />
+                )}
+              </View>
+            </View>
+          )}
         </View>
         <View className="z-20 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
           <Text>Calendario</Text>
