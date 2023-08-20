@@ -7,35 +7,54 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserContext } from "../../../context/userContext";
 import { UserContextType } from "../../../context/types";
 import "./localeConfig";
+import { trpc } from "../../../trpc";
 
 type TabCalendarScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TabCalendar">;
 };
 
 const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
-  //const { User } = useContext(UserContext) as UserContextType;
+  const { User } = useContext(UserContext) as UserContextType;
+  const { data: allEvents } = trpc.event.getAllEvents.useQuery({
+    groupId: User.groupId,
+  });
+
   const today = new Date().toISOString().split("T")[0];
-  const [date, setDate] = useState<any>(today);
-  const marked = useMemo(
-    () => ({
-      [date]: {
+  const [selectedDate, setSelectedDate] = useState(today);
+  const marked = useMemo(() => {
+    const markedDates: any = {};
+
+    if (selectedDate) {
+      markedDates[selectedDate] = {
         selected: true,
         selectedColor: "#212529",
         selectedTextColor: "white",
-      },
-      [today]: {
-        customStyles: {
-          text: {
-            fontWeight: "bold",
-            color: date === today ? "white" : "#FFA755",
-          },
+      };
+    }
+
+    markedDates[today] = {
+      customStyles: {
+        text: {
+          fontWeight: "bold",
+          color: selectedDate === today ? "white" : "#FFA755",
         },
-        selected: date === today,
-        selectedColor: "#FFA755",
       },
-    }),
-    [date, today]
-  );
+      selected: selectedDate === today,
+      selectedColor: "#FFA755",
+    };
+
+    if (allEvents) {
+      allEvents.forEach((event) => {
+        const eventDate = new Date(event.startsAt).toISOString().split("T")[0];
+        if (!markedDates[eventDate]) {
+          markedDates[eventDate] = {};
+        }
+        markedDates[eventDate].marked = true;
+      });
+    }
+
+    return markedDates;
+  }, [selectedDate, today, allEvents]);
 
   function goToCreateEvent() {
     navigation.navigate("CreateEvent", { edit: false });
@@ -54,7 +73,7 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
         monthFormat="MMMM yyyy"
         onDayPress={(day) => {
           console.log("seleccionado: " + day.dateString);
-          setDate(day.dateString);
+          setSelectedDate(day.dateString);
         }}
         hideArrows={true}
         markingType="custom"
