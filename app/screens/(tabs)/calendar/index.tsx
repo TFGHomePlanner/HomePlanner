@@ -1,12 +1,13 @@
 import React, { useContext, useMemo, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { Calendar } from "react-native-calendars";
+import { ScrollView, TouchableOpacity, View } from "react-native";
+import "./localeConfig";
+import { format } from "date-fns";
+import { Agenda, Calendar } from "react-native-calendars";
 import Icon from "react-native-vector-icons/AntDesign";
 import { AppStackParamList } from "../../../_App";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserContext } from "../../../context/userContext";
 import { UserContextType } from "../../../context/types";
-import "./localeConfig";
 import { trpc } from "../../../trpc";
 
 type TabCalendarScreenProps = {
@@ -19,48 +20,39 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
     groupId: User.groupId,
   });
 
-  const today = new Date().toISOString().split("T")[0];
+  const today = format(new Date(), "yyyy-MM-dd");
   const [selectedDate, setSelectedDate] = useState(today);
   const marked = useMemo(() => {
     const markedDates: any = {};
-    {
-      selectedDate &&
-        (markedDates[selectedDate] = {
-          selected: true,
+    selectedDate &&
+      (markedDates[selectedDate] = {
+        selected: true,
+        selectedColor: "#212529",
+      });
+
+    allEvents &&
+      allEvents.forEach((event) => {
+        const eventDate = format(new Date(event.startsAt), "yyyy-MM-dd");
+        if (!markedDates[eventDate]) markedDates[eventDate] = {};
+        markedDates[eventDate] = {
+          marked: true,
+          dotColor: selectedDate === eventDate ? "white" : "#FFA755",
+          selected: selectedDate === eventDate,
           selectedColor: "#212529",
-          selectedTextColor: "white",
-        });
-    }
-
-    markedDates[today] = {
-      customStyles: {
-        text: {
-          fontWeight: "bold",
-          color: selectedDate === today ? "white" : "#FFA755",
-        },
-      },
-      selected: selectedDate === today,
-      selectedColor: "#FFA755",
-    };
-
-    {
-      allEvents &&
-        allEvents.forEach((event) => {
-          const eventDate = new Date(event.startsAt)
-            .toISOString()
-            .split("T")[0];
-          const isToday = eventDate === today && eventDate === selectedDate;
-          if (!markedDates[eventDate]) markedDates[eventDate] = {};
-          {
-            markedDates[eventDate] = {
-              marked: true,
-              dotColor: isToday ? "white" : "#FFA755",
-              selected: selectedDate === eventDate,
-              selectedColor: "#212529",
-            };
-          }
-        });
-    }
+        };
+        markedDates[today] = {
+          customStyles: {
+            text: {
+              fontWeight: "bold",
+              color: today === selectedDate ? "white" : "#FFA755",
+            },
+          },
+          selected: today === selectedDate,
+          selectedColor: "#FFA755",
+          marked: today === eventDate,
+          dotColor: today === selectedDate ? "white" : "#FFA755",
+        };
+      });
 
     return markedDates;
   }, [selectedDate, today, allEvents]);
@@ -78,7 +70,6 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
         <Icon name="plus" size={24} color={"#FFA755"} />
       </TouchableOpacity>
       <Calendar
-        style={{ padding: 10 }}
         monthFormat="MMMM yyyy"
         onDayPress={(day) => {
           console.log("seleccionado: " + day.dateString);
@@ -92,9 +83,7 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
         maxDate="2030-12-31"
         firstDay={1}
       />
-      <ScrollView>
-        <Text>Patatas</Text>
-      </ScrollView>
+      <ScrollView></ScrollView>
     </View>
   );
 };
