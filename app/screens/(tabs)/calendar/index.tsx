@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Calendar } from "react-native-calendars";
 import Icon from "react-native-vector-icons/AntDesign";
 import { AppStackParamList } from "../../../_App";
@@ -23,13 +23,13 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
   const [selectedDate, setSelectedDate] = useState(today);
   const marked = useMemo(() => {
     const markedDates: any = {};
-
-    if (selectedDate) {
-      markedDates[selectedDate] = {
-        selected: true,
-        selectedColor: "#212529",
-        selectedTextColor: "white",
-      };
+    {
+      selectedDate &&
+        (markedDates[selectedDate] = {
+          selected: true,
+          selectedColor: "#212529",
+          selectedTextColor: "white",
+        });
     }
 
     markedDates[today] = {
@@ -43,14 +43,23 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
       selectedColor: "#FFA755",
     };
 
-    if (allEvents) {
-      allEvents.forEach((event) => {
-        const eventDate = new Date(event.startsAt).toISOString().split("T")[0];
-        if (!markedDates[eventDate]) {
-          markedDates[eventDate] = {};
-        }
-        markedDates[eventDate].marked = true;
-      });
+    {
+      allEvents &&
+        allEvents.forEach((event) => {
+          const eventDate = new Date(event.startsAt)
+            .toISOString()
+            .split("T")[0];
+          const isToday = eventDate === today && eventDate === selectedDate;
+          if (!markedDates[eventDate]) markedDates[eventDate] = {};
+          {
+            markedDates[eventDate] = {
+              marked: true,
+              dotColor: isToday ? "white" : "#FFA755",
+              selected: selectedDate === eventDate,
+              selectedColor: "#212529",
+            };
+          }
+        });
     }
 
     return markedDates;
@@ -64,7 +73,7 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
     <View className="h-full bg-light">
       <TouchableOpacity
         onPress={goToCreateEvent}
-        className="mb-4 mr-4 items-end"
+        className="mb-2 mr-5 items-end"
       >
         <Icon name="plus" size={24} color={"#FFA755"} />
       </TouchableOpacity>
@@ -83,6 +92,9 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
         maxDate="2030-12-31"
         firstDay={1}
       />
+      <ScrollView>
+        <Text>Patatas</Text>
+      </ScrollView>
     </View>
   );
 };
