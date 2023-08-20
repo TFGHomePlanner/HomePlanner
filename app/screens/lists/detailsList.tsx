@@ -206,7 +206,7 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({
         {!List.isClosed && (
           <View className="w-full">
             <TouchableOpacity onPress={handleImageSelected} className=" items-center w-full flex flex-row bg-white rounded-lg border-b-dark border-2 justify-start mb-4 space-y-2">
-              <View className = "rounded-lg w-10 h-10 bg-bgGray items-center mr-2">
+              <View className = "rounded-lg w-10 h-10 bg-pink items-center mr-2">
                 {!isphoto ?  
                   <Icon name="plus" size={40} color="black"/> :
                   <Icon name="pen" size={30} color="black"/>     

@@ -241,4 +241,20 @@ export const userRouter = router({
       const userParse = userProfileSchema.parse(userprofile);
       return userParse;
     }),
+
+  getUserImage: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const userprofile = await ctx.prisma.user.findUnique({
+        select: {
+          imageprofile: true || "",
+        },
+        where: { id: input.id },
+      });
+      if (!userprofile) {
+        throw new Error("Usuario no encontrado"); // Maneja la ausencia de usuario
+      }
+      return userprofile;
+    }),
+    
 });

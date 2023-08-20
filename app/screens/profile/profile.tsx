@@ -32,7 +32,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
   const utils = trpc.useContext();
   //contexto de usuario
   const { User } = useContext(UserContext) as UserContextType;
-  const [imageURL, setSelectedImageUrl] = useState("");
+  
   const { data: userGroups } = trpc.user.getUserGroups.useQuery({
     userId: User.id,
   });
@@ -40,7 +40,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
   const { data: activeUser } = trpc.user.getUserByID.useQuery({
     id: User.id,
   });
-
+  
+  const [imageURL, setSelectedImageUrl] = useState(activeUser?.imageprofile || "");
+  console.log(imageURL);
   const mutation  = trpc.user.updateUserImage.useMutation({
     onSuccess() {
       utils.user.getUserByID.invalidate();
@@ -103,23 +105,27 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
       <Pressable onPress={navigation.goBack}>
         <Icon name="chevron-left" size={16} color={"#1E88E5"} />
       </Pressable>
-      <View className="flex flex-row w-full items-center">
+      <View className="flex flex-row w-full items-center justify-center">
         <TouchableOpacity
-          className="w-32 h-32 items-center rounded-full bg-bgGray overflow-hidden" onPress={handleImageSelected}>
-          {imageURL ? (
+          className="relative w-32 h-32 rounded-full bg-bgGray overflow-hidden"
+          onPress={handleImageSelected}
+        >{imageURL && (
             <Image
-              source={{ uri: imageURL }} 
-              style={{ width: "100%", height: "100%" }} // Asegura que la imagen ocupe todo el espacio
+              source={{ uri: imageURL }}
+              style={{ width: "100%", height: "100%" }}
             />
-          ) : (
-            <Icon name="user-alt" size={48} color={"#212529"} className="pt-12 mt-12"/>
           )}
-        </TouchableOpacity>
-        <TouchableOpacity className="w-10 h-10 rounded-full bg-blue-500 absolute top-0 right-20 flex items-center justify-center"
-          onPress={handleImageSelected}>
-          <Icon name="edit" size={16} color={"#1E88E5"} className="pt-12"/>
+          <TouchableOpacity
+            className="absolute top-0 right-10 z-10"
+            style={{ marginTop: -10, marginRight: -10 }}
+            onPress={handleImageSelected}
+          >
+            <Icon name="edit" size={16} color={"#1E88E5"} />
+          </TouchableOpacity>
         </TouchableOpacity>
       </View>
+
+
       <Profileinformation/>
       <Pressable
         onPress={goToCreateGroup}
