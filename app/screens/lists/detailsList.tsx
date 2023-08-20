@@ -212,11 +212,7 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({
                   <Icon name="pen" size={30} color="black"/>     
                 }
               </View>
-              <View className="flex flex-row justify-start w-full">
-                <Text className="font-semibol text-lg">{isphoto ? "Actualizar ticket": "Añadir ticket"}</Text>
-                {isphoto && <Icon name="check" size={30} color="green"/> }
-              </View>
-             
+              <Text className="font-semibol text-lg">{isphoto ? "Actualizar ticket": "Añadir ticket"}</Text>          
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
