@@ -7,6 +7,7 @@ export const listSchema = z.object({
   isClosed: z.boolean(),
   isPublic: z.boolean(),
   creatorId: z.string(),
+  imageURl: z.string().nullable(),
   id: z.string(),
   items: z.array(z.object ({
     name: z.string().min(1, "el nombre no puede ser vacio"),

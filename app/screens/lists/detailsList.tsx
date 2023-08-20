@@ -13,6 +13,7 @@ import {
 } from "react-native-popup-menu";
 import { UserContextType } from "../../context/types";
 import { UserContext } from "../../context/userContext";
+import { pickImageAndUploadToS3 } from "../../components/ImagePickerC";
 
 /**
  * @typedef {object} DetailsScreenProps Props necesarios para el componente DetailsScreen
@@ -36,7 +37,7 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({
 
   // Obtener los datos de la lista de la ruta
   const { List } = route.params;
-
+  const [isphoto, setisphoto] = useState<boolean>(List.imageURl ? true : false);
   // Obtener el contexto de usuario
   const { User } = useContext(UserContext) as UserContextType;
   
@@ -77,6 +78,15 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({
       utils.list.getAllLists.invalidate();
       navigation.goBack();
     },
+  });
+
+  // Mutación para actualizar la imagen de perfil
+  const  mutation = trpc.list.uploadImage.useMutation({
+    onSuccess: () => {
+      setisphoto(true);
+      utils.list.getAllLists.invalidate();
+    },
+
   });
   // Mutación para actualizar un producto
   const { mutate: updateProduct } = trpc.list.updateProduct.useMutation({
@@ -119,6 +129,15 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({
       ? navigation.navigate("CreateList", { List: List, Edit: true })
       : deleteList({ id });
   }
+
+  const handleImageSelected = async () => {
+    pickImageAndUploadToS3((imageUrl) => {
+      mutation.mutateAsync({
+        id: List.id,
+        imageUrl: imageUrl,   
+      });
+    });
+  };
 
   return (
     <View className="h-screen w-screen px-6 pt-10">
@@ -172,29 +191,47 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({
             </TouchableOpacity>
           ))}
         </View>
-      </ScrollView>
-      <View className="w-full flex-row">
-        {!List.isClosed ? (
-          <TouchableOpacity
-            onPress={() => {
-              closeList({ id: List.id });
-            }}
-            className="mb-6 w-full"
-          >
-            <View className="flex w-full flex-row items-center justify-center rounded-xl bg-pink p-3">
-              <Icon name="lock" size={20} color="white" className="mr-2" />
-              <Text className="mx-2 px-4 text-center text-lg font-bold text-white">
-                Cerrar lista
-              </Text>
-              <Icon name="lock" size={20} color="white" className="mr-2" />
-            </View>
-          </TouchableOpacity>
-        ) : (
-          <View className="w-full">
+        {List.isClosed && List.imageURl && (
+          <View className="w-full h-200 pt-4">
+            <Text className="text-center text-xl font-bold text-balck"> Ticket de compra</Text>
             <Image
-              source={require("../../../assets/images/ticket.jpg")}
-              style={{ width: 200, height: 200 }}
+              className="w-full h-200"
+              source={{ uri: List.imageURl }}
+              style={{ width: "100%", height: 400 }}
             />
+          </View>
+        )}
+      </ScrollView>
+      <View className="w-full flex-col">
+        {!List.isClosed && (
+          <View className="w-full">
+            <TouchableOpacity onPress={handleImageSelected} className=" items-center w-full flex flex-row bg-white rounded-lg border-b-dark border-2 justify-start mb-4 space-y-2">
+              <View className = "rounded-lg w-10 h-10 bg-bgGray items-center mr-2">
+                {!isphoto ?  
+                  <Icon name="plus" size={40} color="black"/> :
+                  <Icon name="pen" size={30} color="black"/>     
+                }
+              </View>
+              <View className="flex flex-row justify-start w-full">
+                <Text className="font-semibol text-lg">{isphoto ? "Actualizar ticket": "Añadir ticket"}</Text>
+                {isphoto && <Icon name="check" size={30} color="green"/> }
+              </View>
+             
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                closeList({ id: List.id });
+              }}
+              className="mb-6 w-full"
+            >
+              <View className="flex w-full flex-row items-center justify-center rounded-xl bg-pink p-3">
+                <Icon name="lock" size={20} color="white" className="mr-2" />
+                <Text className="mx-2 px-4 text-center text-lg font-bold text-white">
+                Cerrar lista
+                </Text>
+                <Icon name="lock" size={20} color="white" className="mr-2" />
+              </View>
+            </TouchableOpacity>
           </View>
         )}
       </View>

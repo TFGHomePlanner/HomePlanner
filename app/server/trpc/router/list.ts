@@ -16,6 +16,7 @@ export const listrouter = router({
           id: true,
           creatorId: true,
           isPublic: true,
+          imageURl: true,
           items: {
             select: {
               isPurchased: true,
@@ -86,6 +87,7 @@ export const listrouter = router({
           id: true,
           creatorId: true,
           isPublic: true,
+          imageURl: true,
           items: {
             select: {
               isPurchased: true,
@@ -227,6 +229,15 @@ export const listrouter = router({
         console.error("Error al actualizar la lista:", error);
         throw new Error("No se pudo actualizar la lista.");
       }
+    }),
+
+  uploadImage: publicProcedure
+    .input(z.object({id: z.string(), imageUrl: z.string()}))
+    .mutation(async ({input, ctx}) => {
+      await ctx.prisma.list.update({
+        where: {id: input.id},
+        data: {imageURl: input.imageUrl},
+      });
     }),
   
 });

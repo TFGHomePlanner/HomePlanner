@@ -94,6 +94,7 @@ model List {
   id          String    @id @default(cuid())
   name        String
   description String
+  imageURl  String?
   isClosed    Boolean
   group       Group     @relation(fields: [groupId], references: [id])
   groupId     String
