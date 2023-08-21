@@ -7,6 +7,7 @@ import { trpc } from "../../trpc";
 import { UserContextType } from "../../context/types";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import NoteCard from "../../components/sharedNotes/NoteCard";
+import ChatScreen from "../chat";
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TabHome">;
@@ -50,6 +51,9 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       ) : (
         <Text>Todavía no hay notas compartidas.</Text>
       )}
+      <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
+        <Text>Chat</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
