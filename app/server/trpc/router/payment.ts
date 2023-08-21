@@ -46,6 +46,7 @@ export const paymentRouter = router({
           
           title: true,
           createdAt: true,
+          imageURL: true,
           amount: true,
           debtorUsers: {
             select: {

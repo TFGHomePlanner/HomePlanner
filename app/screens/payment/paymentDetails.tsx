@@ -1,9 +1,10 @@
-import React from "react";
-import { View, Text, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { AppStackParamList } from "../../_App";
 import { RouteProp } from "@react-navigation/native";
 import { Header } from "../../components/Header";
 import { Divider } from "@ui-kitten/components";
+
 
 
 
@@ -17,6 +18,8 @@ const PaymentDetailScreen: React.FC<PaymentDetailsScreenProps> = ({
 
 }) => {
   const PaymentDetail = route.params.Payment;
+  const  [showImage, setShowImage] = useState(false);
+   
   return (
     <View className="w-full h-full flex flex-col bg-light">
       <Header />
@@ -53,7 +56,24 @@ const PaymentDetailScreen: React.FC<PaymentDetailsScreenProps> = ({
               </View>
             );
           })} 
-        </View>       
+        </View>    
+        {PaymentDetail.imageURL &&  
+        <TouchableOpacity onPress={() => setShowImage(!showImage)}>
+          <Text className="text-lg font-semibold pt-4">{showImage ? "Ocultar factura"  :  "Mostrar factura" }</Text>
+        </TouchableOpacity>
+        }
+        {showImage && PaymentDetail.imageURL && (
+          <View className="w-full h-200 pt-4">
+            <Image
+              className="w-full h-200"
+              source={{ uri: PaymentDetail.imageURL }}
+              style={{ width: "100%", height: 400 }}
+            />
+          </View>
+        )}
+
+
+          
       </ScrollView>
     </View>
   );

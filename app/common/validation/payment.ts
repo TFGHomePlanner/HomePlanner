@@ -9,6 +9,7 @@ export const PaymentSchema =
       id: z.string(),
     }),
     title: z.string(),
+    imageURL: z.string().nullable(),
     createdAt: z.coerce.date(),
     amount: z.number(),
     debtorUsers: z.array(z.object({
