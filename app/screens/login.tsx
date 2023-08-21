@@ -32,7 +32,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputStyle =
-    "mb-3 border-[1px] rounded-xl border-darkGray bg-lightGray p-2 text-dark";
+    "mb-3 border-[1px] rounded-xl w-full border-darkGray bg-lightGray p-2 text-dark";
 
   // Mutación de TRPC para iniciar sesión
   const { mutate } = trpc.user.login.useMutation({
@@ -64,12 +64,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 items-center justify-center bg-light"
+      className="h-full w-full bg-light"
     >
-      <Text className="-mt-10 mb-8 text-2xl font-semibold text-dark">
-        homeplanner
-      </Text>
-      <View className="w-72">
+      <View className="flex-1 items-center justify-center px-12">
+        <Text className="mb-4 text-2xl font-semibold text-dark">
+          homeplanner
+        </Text>
         <TextInput
           className={`${inputStyle}`}
           placeholderTextColor="#929193"
@@ -89,19 +89,19 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         </Text>
         <TouchableOpacity
           onPress={handleLogin}
-          className="my-4 w-full rounded-lg bg-blue p-2"
+          className="mt-6 w-full rounded-lg bg-blue p-2"
         >
-          <Text className="text-center font-medium text-light">
+          <Text className="text-center text-base text-light">
             Iniciar sesión
           </Text>
         </TouchableOpacity>
-        <Text className="mt-2 text-sm text-placeholderGray">
-          ¿Todavía no tienes cuenta?{" "}
-          <Link to={{ screen: "Register" }}>
-            <Text className="font-semibold text-blue">Únete</Text>
-          </Link>
-        </Text>
       </View>
+      <Text className="mb-12 text-center text-placeholderGray">
+        ¿Todavía no tienes cuenta?{" "}
+        <Link to={{ screen: "Register" }}>
+          <Text className="font-semibold text-blue">Únete</Text>
+        </Link>
+      </Text>
     </KeyboardAvoidingView>
   );
 };

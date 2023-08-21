@@ -30,14 +30,15 @@ LocaleConfig.locales["es"] = {
     "Dic.",
   ],
   dayNames: [
+    "Domingo",
     "Lunes",
     "Martes",
     "Miércoles",
     "Jueves",
     "Viernes",
     "Sábado",
-    "Domingo",
   ],
-  dayNamesShort: ["Lun.", "Mar.", "Mié.", "Jue.", "Vie.", "Sáb.", "Dom."],
+  dayNamesShort: ["Dom.", "Lun.", "Mar.", "Mié.", "Jue.", "Vie.", "Sáb."],
 };
+
 LocaleConfig.defaultLocale = "es";

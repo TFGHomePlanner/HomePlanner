@@ -4,13 +4,13 @@
     "slug": "HomePlanner",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#212529"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -21,11 +21,6 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
-    },
-    "web": {
-      "bundler": "metro",
-      "favicon": "./assets/images/favicon.png",
-      "build": { "babel": { "include": ["@ui-kitten/components"] } }
     }
   }
 }
