@@ -90,20 +90,17 @@ export function App() {
       ],
     })
   );
-  const [initialRoute, setInitialRoute] = useState("Login"); // Default to Login screen
+  const [initialRoute, setInitialRoute] = useState("Login");
 
   useEffect(() => {
     const checkUserData = async () => {
       try {
         const userData = await AsyncStorage.getItem("userData");
-        if (userData !== null) {
-          setInitialRoute("GroupSelection");
-        }
+        userData !== null && setInitialRoute("GroupSelection");
       } catch (error) {
         console.error("Error al verificar los datos del usuario en la caché:", error);    
       }
     };
-
     checkUserData();
   }, []);
 
@@ -118,6 +115,7 @@ export function App() {
                   {/*gestureEnabled: false*/}
                   {initialRoute === "Login" && <Stack.Screen name="Login" component={LoginScreen} />}
                   <Stack.Screen name="GroupSelection" component={GroupSelectionScreen} />
+                  {initialRoute !== "Login" && <Stack.Screen name="Login" component={LoginScreen} />}
                   <Stack.Screen name="Register" component={RegisterScreen} />
                   <Stack.Screen name="Profile" component={ProfileScreen} />
                   <Stack.Screen

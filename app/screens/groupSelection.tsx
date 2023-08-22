@@ -26,7 +26,6 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
   const { data: myGroups } = trpc.user.getUserGroups.useQuery({
     userId: User.id,
   });
-
   const [error, setError] = useState("");
 
   const utils = trpc.useContext();
@@ -79,13 +78,11 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
         try {
           const userData = await AsyncStorage.getItem("userData");
           if (userData !== null) {
-            console.log("User data found in cache:", userData);
             const user: IUser = {
-              id: JSON.parse(userData),
+              id: JSON.parse(userData).id,
               groupId: "",
               isAdmin: false,
             };
-            console.log("User data found in cache:", user);
             updateUser(user); 
           
           }
