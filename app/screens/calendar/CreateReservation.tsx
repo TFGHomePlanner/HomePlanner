@@ -95,7 +95,7 @@ const CreateReservationScreen: React.FC<CreateReservationScreenProps> = ({
       navigation.navigate("Tabs");
     },
   });
-  const updateEvent = () => {
+  const updateReservation = () => {
     enabled &&
       updateMutation.mutateAsync({
         id: reservationToEdit?.id ?? "",
@@ -104,7 +104,7 @@ const CreateReservationScreen: React.FC<CreateReservationScreenProps> = ({
         allDay: checked,
         date,
         notes,
-        userId: reservationToEdit?.userId ?? User.id,
+        userId: reservationToEdit?.createdBy.id ?? User.id,
         groupId: User.groupId || "",
       });
   };
@@ -118,7 +118,7 @@ const CreateReservationScreen: React.FC<CreateReservationScreenProps> = ({
         <TouchableOpacity
           disabled={!enabled}
           className="self-end"
-          onPress={edit ? updateEvent : createReservation}
+          onPress={edit ? updateReservation : createReservation}
         >
           <Text
             className={`${

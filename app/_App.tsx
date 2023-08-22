@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { registerRootComponent } from "expo";
 import { trpc } from "./server/utils/trpc";
 import { httpBatchLink } from "@trpc/client";
@@ -13,7 +13,7 @@ import CreateTaskScreen from "./screens/(tabs)/tasks/create";
 import ChatScreen from "./screens/chat";
 import { ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
-import UserProvider, { UserContext } from "./context/userContext";
+import UserProvider from "./context/userContext";
 import MyTasksScreen from "./screens/tasks/MyTasks";
 import ProfileScreen from "./screens/profile/profile";
 import CreateGroupScreen from "./screens/groups/create";
@@ -41,7 +41,7 @@ import CreateEventScreen from "./screens/(tabs)/calendar/create";
 import { IEvent, IReservation } from "./common/validation/event";
 import CreateReservationScreen from "./screens/calendar/CreateReservation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IUser, UserContextType } from "./context/types";
+import EventDetailScreen from "./screens/calendar/EventDetail";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -63,6 +63,7 @@ export type AppStackParamList = {
   GroupTasks: { taskGroup: ITaskGroup };
   CreateEvent: { Event?: IEvent; edit: boolean };
   CreateReservation: { Reservation?: IReservation; edit: boolean };
+  EventDetail: { Event: IEvent };
   Modal: undefined;
   CreateList: { List?: IList; Edit: boolean };
   Profile: undefined;
@@ -85,7 +86,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.46:4000/trpc",
+          url: "http://192.168.1.37:4000/trpc",
         }),
       ],
     })
@@ -98,7 +99,10 @@ export function App() {
         const userData = await AsyncStorage.getItem("userData");
         userData !== null && setInitialRoute("GroupSelection");
       } catch (error) {
-        console.error("Error al verificar los datos del usuario en la caché:", error);    
+        console.error(
+          "Error al verificar los datos del usuario en la caché:",
+          error
+        );
       }
     };
     checkUserData();
@@ -113,9 +117,16 @@ export function App() {
               <NavigationContainer>
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
                   {/*gestureEnabled: false*/}
-                  {initialRoute === "Login" && <Stack.Screen name="Login" component={LoginScreen} />}
-                  <Stack.Screen name="GroupSelection" component={GroupSelectionScreen} />
-                  {initialRoute !== "Login" && <Stack.Screen name="Login" component={LoginScreen} />}
+                  {initialRoute === "Login" && (
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                  )}
+                  <Stack.Screen
+                    name="GroupSelection"
+                    component={GroupSelectionScreen}
+                  />
+                  {initialRoute !== "Login" && (
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                  )}
                   <Stack.Screen name="Register" component={RegisterScreen} />
                   <Stack.Screen name="Profile" component={ProfileScreen} />
                   <Stack.Screen
@@ -149,6 +160,10 @@ export function App() {
                   <Stack.Screen
                     name="CreateReservation"
                     component={CreateReservationScreen}
+                  />
+                  <Stack.Screen
+                    name="EventDetail"
+                    component={EventDetailScreen}
                   />
                   <Stack.Screen
                     name="CreateList"

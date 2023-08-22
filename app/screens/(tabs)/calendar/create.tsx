@@ -129,7 +129,7 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
         endsAt: finalDate,
         calendarId: selectedCalendar,
         notes,
-        userId: eventToEdit?.userId ?? User.id,
+        userId: eventToEdit?.createdBy.id ?? User.id,
         groupId: User.groupId || "",
       });
   };

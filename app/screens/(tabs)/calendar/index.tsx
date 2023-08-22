@@ -81,7 +81,6 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
       <Calendar
         monthFormat="MMMM yyyy"
         onDayPress={(day) => {
-          console.log("seleccionado: " + day.dateString);
           setSelectedDate(day.dateString);
         }}
         hideArrows={true}
@@ -101,6 +100,7 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
             selectedDate === format(eventStartDate, "yyyy-MM-dd") && (
               <EventCard
                 key={event.id}
+                navigation={navigation}
                 event={{
                   ...event,
                   startsAt: eventStartDate,

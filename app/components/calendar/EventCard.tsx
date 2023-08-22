@@ -2,10 +2,22 @@ import { Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { IEvent } from "../../common/validation/event";
 import { format } from "date-fns";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-export default function EventCard({ event }: { event: IEvent }) {
+type EventCardProps = {
+  navigation: NativeStackNavigationProp<any>;
+  event: IEvent;
+};
+
+const EventCard: React.FC<EventCardProps> = ({ navigation, event }) => {
+  function goToEventDetail() {
+    navigation.navigate("EventDetail", { Event: event });
+  }
   return (
-    <TouchableOpacity className="mb-4 w-full flex-row space-x-1 rounded-lg p-5 pr-8">
+    <TouchableOpacity
+      onPress={goToEventDetail}
+      className="mb-4 w-full flex-row space-x-1 rounded-lg p-5 pr-8"
+    >
       <View className="h-full w-[5] rounded-full bg-orange" />
       <View className="w-full space-y-2">
         <View className="flex-row justify-between">
@@ -22,4 +34,6 @@ export default function EventCard({ event }: { event: IEvent }) {
       </View>
     </TouchableOpacity>
   );
-}
+};
+
+export default EventCard;
