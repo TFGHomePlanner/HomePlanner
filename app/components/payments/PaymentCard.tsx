@@ -15,9 +15,20 @@ type PaymentCardProps = {
    payment: IPayment;
 };
 
-
+/**
+ * COmponete que se encarga de mostrar un pago en forma de tarjeta con la
+ * información más relevante del mismo.
+ *
+ * @param {NativeStackNavigationProp<AppStackParamList, "DetailsList">} props.navigation Permite la navegación entre pantallas
+ * @param {IList} props.list Lista que se está editando
+ * @returns {React.FC} Componente ListCard
+ */
 const PaymentCard: React.FC< PaymentCardProps> = ({ navigation, payment }) => {
 
+  /**
+   * Función que se encarga de navegar a la pantalla de detalles de la lista
+   * @returns {void}
+   */
   function move() {
     navigation.navigate("PaymentDetails", { Payment: payment });
   }

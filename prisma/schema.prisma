@@ -239,6 +239,7 @@ model Payment {
   id               String         @id @default(cuid())
   title            String?
   section          PaymentSection @relation(fields: [paymentSectionId], references: [id])
+  imageURL        String?
   paymentSectionId String
   payingUser       User           @relation(fields: [payingUserId], references: [id])
   payingUserId     String

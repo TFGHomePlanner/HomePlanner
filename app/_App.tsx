@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { registerRootComponent } from "expo";
 import { trpc } from "./server/utils/trpc";
 import { httpBatchLink } from "@trpc/client";
@@ -13,7 +13,7 @@ import CreateTaskScreen from "./screens/(tabs)/tasks/create";
 import ChatScreen from "./screens/chat";
 import { ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
-import UserProvider from "./context/userContext";
+import UserProvider, { UserContext } from "./context/userContext";
 import MyTasksScreen from "./screens/tasks/MyTasks";
 import ProfileScreen from "./screens/profile/profile";
 import CreateGroupScreen from "./screens/groups/create";
@@ -40,6 +40,8 @@ import ResumePaymentScreenScreen from "./screens/payment/resumepayment";
 import CreateEventScreen from "./screens/(tabs)/calendar/create";
 import { IEvent, IReservation } from "./common/validation/event";
 import CreateReservationScreen from "./screens/calendar/CreateReservation";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { IUser, UserContextType } from "./context/types";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -83,11 +85,27 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.214:4000/trpc",
+          url: "http://192.168.1.46:4000/trpc",
         }),
       ],
     })
   );
+  const [initialRoute, setInitialRoute] = useState("Login"); // Default to Login screen
+
+  useEffect(() => {
+    const checkUserData = async () => {
+      try {
+        const userData = await AsyncStorage.getItem("userData");
+        if (userData !== null) {
+          setInitialRoute("GroupSelection");
+        }
+      } catch (error) {
+        console.error("Error al verificar los datos del usuario en la caché:", error);    
+      }
+    };
+
+    checkUserData();
+  }, []);
 
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
@@ -98,12 +116,9 @@ export function App() {
               <NavigationContainer>
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
                   {/*gestureEnabled: false*/}
-                  <Stack.Screen name="Login" component={LoginScreen} />
+                  {initialRoute === "Login" && <Stack.Screen name="Login" component={LoginScreen} />}
+                  <Stack.Screen name="GroupSelection" component={GroupSelectionScreen} />
                   <Stack.Screen name="Register" component={RegisterScreen} />
-                  <Stack.Screen
-                    name="GroupSelection"
-                    component={GroupSelectionScreen}
-                  />
                   <Stack.Screen name="Profile" component={ProfileScreen} />
                   <Stack.Screen
                     name="CreateGroup"
@@ -182,5 +197,4 @@ export function App() {
     </trpc.Provider>
   );
 }
-
 registerRootComponent(App);

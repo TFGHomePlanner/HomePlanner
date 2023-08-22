@@ -26,12 +26,14 @@ function Message({
           borderRadius: 20,
           overflow: "hidden",
           marginRight: 8,
+          backgroundColor: "#E5E5E5",
         }}
       >
-        <Image
-          source={require("../../assets/images/Perfil.jpg")}
-          style={{ width: "100%", height: "100%" }}
-        />
+        {imageProfile != "" && (
+          <Image
+            source={{ uri: imageProfile }}
+            style={{ width: "100%", height: "100%" }}
+          /> )}
       </View>
       <View
         className={`p-3 rounded-xl w-auto ${

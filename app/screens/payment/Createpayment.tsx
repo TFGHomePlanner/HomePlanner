@@ -8,6 +8,8 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { Divider } from "@ui-kitten/components";
 import { trpc } from "../../server/utils/trpc";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import { pickImageAndUploadToS3 } from "../../components/ImagePickerC";
+import Snackbar from "react-native-snackbar";
 
 
 /**
@@ -29,12 +31,18 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
   const [title, setTitle] = useState<string>("");
   const [price, setprice] = useState<string>("0");
   const [total, settotal] = useState<number>(0);
+  const [imageUrl, setimageUrl] = useState<string>("");
   const PaymentSection = route.params.Payments;
   const Users = PaymentSection.participants;
   
   const [participantsAmounts, setParticipantsAmounts] = useState<{[userId: string]: string }>({});
 
-  
+
+  const handleImageSelected = async () => {
+    pickImageAndUploadToS3((imageUrl) => {
+      setimageUrl(imageUrl);
+    });
+  };
 
   const handleParticipantAmountChange = async (userId: string, amount: string) => {
     console.log("userId: " + userId + " amount: " + amount);
@@ -96,46 +104,60 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
       error = "El total no coincide con la suma de los participantes";
     }
     if (error != "") {
-      alert(error);
-      console.log(error);
-      return false;
+      /**
+      * Snackbar.show({
+        text: error,
+        duration: Snackbar.LENGTH_SHORT, 
+        backgroundColor: "white", 
+      *  */ 
+      console.log(error); 
     }
     return true;
   }
 
   
   return (
-    <View className="flex flex-col w-full h-full bg-light">
+    <View className="flex flex-1 flex-col w-full h-full bg-light">
       <Header />
       <ScrollView className="flex flex-1 pb-10 space-y-2 px-6">
-        <View className="flex flex-row pt-2 pr-1 items-center">
-          <Text className="text-lg font-semibold">Título: </Text>
-          <TextInput
-            className="flex flex-row w-36 border-b-2 border-[#21CF84] bg-light  text-dark"
-            value={title}
-            onChangeText={setTitle}
-            maxLength={20}
-          />
+        <View className="flex flex-row justify-between mr-10"> 
+          <View className="w-full">
+            <View className="flex flex-row pt-2 pr-1 items-center">
+              <Text className="text-lg font-semibold">Título: </Text>
+              <TextInput
+                className="flex flex-row w-36 border-b-2 border-[#21CF84] bg-light  text-dark"
+                value={title}
+                onChangeText={setTitle}
+                maxLength={20}
+              />
+            </View>
+            <View className="flex flex-row pt-2 items-center">
+              <Text className="text-lg font-semibold pr-2">Total: </Text>
+              <TextInput
+                className="flex flex-row w-36 border-b-2 border-[#21CF84] bg-light  text-dark"
+                value={price.toString()}
+                onChangeText={(text) => {
+                  let numericValue = text.replace(/[^0-9,.]/g, ""); // Permitir solo números, comas y puntos
+                  const parts = numericValue.split(/[,.]/);
+                  if (parts.length > 1) {
+                    // Si hay más de un punto o coma, reemplazar solo el último
+                    numericValue = parts.slice(0, -1).join("") + "." + parts[parts.length - 1];
+                  }
+                  setprice(numericValue);
+                }}
+                maxLength={20}
+                keyboardType="numeric"
+              />
+              <Text className="text-lg font-semibold">€</Text>
+            </View>
+          </View>
+          <View className="flex flex-row justify-center mt-8">
+            <TouchableOpacity className="h-8 w-8 bg-light items-center" onPress={handleImageSelected}>
+              <Icon name="paperclip" size={30} color={imageUrl !="" ? "#21CF84" : "#212529"} />
+            </TouchableOpacity>
+          </View>
         </View>
-        <View className="flex flex-row pt-2 items-center">
-          <Text className="text-lg font-semibold pr-2">Total: </Text>
-          <TextInput
-            className="flex flex-row w-36 border-b-2 border-[#21CF84] bg-light  text-dark"
-            value={price.toString()}
-            onChangeText={(text) => {
-              let numericValue = text.replace(/[^0-9,.]/g, ""); // Permitir solo números, comas y puntos
-              const parts = numericValue.split(/[,.]/);
-              if (parts.length > 1) {
-                // Si hay más de un punto o coma, reemplazar solo el último
-                numericValue = parts.slice(0, -1).join("") + "." + parts[parts.length - 1];
-              }
-              setprice(numericValue);
-            }}
-            maxLength={20}
-            keyboardType="numeric"
-          />
-          <Text className="text-lg font-semibold">€</Text>
-        </View>
+        
         <View className="fflex flex-row pt-2 items-center">
           <Text className="text-lg font-semibold pr-4">Pagado por:</Text>
           <SelectList
@@ -193,16 +215,17 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
           </View>
 
         ))}
-        <TouchableOpacity
-          onPress={createPayment}
-          className="w-full"
-        >
-          <View className="flex w-full flex-row justify-start rounded-xl bg-dark mb-14 ">
-            <Icon name="plus" size={20} color="#21CF84" className="mr-2" />
-            <Text className="ml-2 pl-4 text-lg font-bold text-green"> Crear Pago</Text>
-          </View> 
-        </TouchableOpacity>
+       
       </ScrollView>
+      <TouchableOpacity
+        onPress={createPayment}
+        className="flex flex-row justify-center pb-4 px-6 w-full"
+      >
+        <View className="flex w-full flex-row justify-center rounded-xl bg-dark py-4 mb-8 space-x-2 ">
+          <Icon name="plus" size={20} color="#21CF84" className="pt-2 mt-2"/>
+          <Text className=" text-lg font-bold text-green"> Crear Pago</Text>
+        </View> 
+      </TouchableOpacity>
       
     </View>
   );
