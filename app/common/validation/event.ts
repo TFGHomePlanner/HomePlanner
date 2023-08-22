@@ -16,7 +16,10 @@ export const EventSchema = z.object({
     .optional()
     .nullable(),
   notes: z.string().optional().nullable(),
-  userId: z.string(),
+  createdBy: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
 });
 
 export const CreateEventSchema = z.object({
@@ -51,7 +54,10 @@ export const ReservationSchema = z.object({
   date: z.coerce.date(),
   notes: z.string().optional().nullable(),
   groupId: z.string(),
-  userId: z.string(),
+  createdBy: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
 });
 
 export const CreateReservationSchema = z.object({
