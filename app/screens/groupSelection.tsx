@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import { IUser, UserContextType } from "../context/types";
 import { trpc } from "../trpc";
 import GroupCard from "../components/groups/GroupCard";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type GroupSelectionScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "GroupSelection">;
@@ -72,7 +73,30 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
     updateUser(user);
     mutation.mutateAsync({ id: groupId });
   }
-
+  useEffect(() => {
+    const checkUserData = async () => {
+      if(User.id == "") {
+        try {
+          const userData = await AsyncStorage.getItem("userData");
+          if (userData !== null) {
+            console.log("User data found in cache:", userData);
+            const user: IUser = {
+              id: JSON.parse(userData),
+              groupId: "",
+              isAdmin: false,
+            };
+            console.log("User data found in cache:", user);
+            updateUser(user); 
+          
+          }
+        } catch (error) {
+          console.error("Error al verificar los datos del usuario en la caché:", error);
+        
+        }
+      }
+    };
+    checkUserData();
+  }, [User, updateUser]);
   return (
     <View className="h-full bg-light p-6 pb-10 pt-16">
       <Text className="mb-2 text-lg font-bold text-dark">

@@ -13,6 +13,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../_App";
 import { UserContext } from "../context/userContext";
 import { IUser, UserContextType } from "../context/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 /**
  * @typedef {object} LoginScreenProps
@@ -36,17 +37,23 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
   // Mutación de TRPC para iniciar sesión
   const { mutate } = trpc.user.login.useMutation({
-    onSuccess: (output) => {
+    onSuccess: async (output) => {
       if (output.success) {
         const userId: IUser = {
           id: output.user.id,
           groupId: "",
           isAdmin: false,
         };
+        try {
+          await AsyncStorage.setItem("userData", JSON.stringify(userId));
+        } catch (error) {
+          console.error("Error al guardar los datos del usuario en la caché:", error);
+        }
         updateUser(userId);
         navigation.navigate("GroupSelection");
       } else console.log(output.message);
     },
+    
     onError: (error) => {
       console.log("Error during login:", error);
     },
