@@ -1,14 +1,15 @@
 import React, { useContext, useMemo, useState } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import "./localeConfig";
-import { format } from "date-fns";
-import { Agenda, Calendar } from "react-native-calendars";
+import { format, startOfMonth } from "date-fns";
+import { Calendar, DateData } from "react-native-calendars";
 import Icon from "react-native-vector-icons/AntDesign";
 import { AppStackParamList } from "../../../_App";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserContext } from "../../../context/userContext";
 import { UserContextType } from "../../../context/types";
 import { trpc } from "../../../trpc";
+import EventCard from "../../../components/calendar/EventCard";
 
 type TabCalendarScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TabCalendar">;
@@ -57,6 +58,14 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
     return markedDates;
   }, [selectedDate, today, allEvents]);
 
+  const handleMonthChange = (months: DateData[]) => {
+    const firstDay = format(
+      startOfMonth(new Date(months[0].dateString)),
+      "yyyy-MM-dd"
+    );
+    months.length > 0 && setSelectedDate(firstDay);
+  };
+
   function goToCreateEvent() {
     navigation.navigate("CreateEvent", { edit: false });
   }
@@ -79,11 +88,29 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
         markingType="custom"
         markedDates={marked}
         enableSwipeMonths={true}
+        onVisibleMonthsChange={handleMonthChange}
         minDate="2016-01-01"
         maxDate="2030-12-31"
         firstDay={1}
       />
-      <ScrollView></ScrollView>
+      <ScrollView>
+        {allEvents?.map((event) => {
+          const eventStartDate = new Date(event.startsAt);
+          return (
+            !isNaN(eventStartDate.getTime()) &&
+            selectedDate === format(eventStartDate, "yyyy-MM-dd") && (
+              <EventCard
+                key={event.id}
+                event={{
+                  ...event,
+                  startsAt: eventStartDate,
+                  endsAt: event.endsAt ? new Date(event.endsAt) : null,
+                }}
+              />
+            )
+          );
+        })}
+      </ScrollView>
     </View>
   );
 };
