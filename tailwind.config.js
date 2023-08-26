@@ -7,19 +7,9 @@ module.exports = {
 	theme: {
 		extend: {},
 		colors: {
-			white: "#FFFFFF",
-			light: "#F8F3ED",
-			dark: "#212529",
-			pink: "#F1889F",
-			purple: "#7B61FF",
-			blue: "#1E88E5",
-			orange: "#FFA755",
-			green: "#21CF84",
-			lightGray: "#E5E5E5",
-			bgGray: "#D9D9D9",
-			darkGray: "#2125292c",
-			placeholderGray: "#929193",
-			red: "#FF3B3F"
+			white: "#FFFFFF", light: "#F8F3ED", dark: "#212529", pink: "#F1889F",purple: "#7B61FF", 
+			blue: "#1E88E5",orange: "#FFA755", green: "#21CF84", lightGray: "#E5E5E5",bgGray: "#D9D9D9",
+			darkGray: "#2125292c",placeholderGray: "#929193",red: "#FF3B3F"
 		}
 	},
 	plugins: [],
