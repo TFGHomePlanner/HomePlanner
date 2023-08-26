@@ -140,7 +140,7 @@ const DetailsListScreen: React.FC<DetailsScreenProps> = ({
   };
 
   return (
-    <View className="h-screen w-screen px-6 pt-10">
+    <View className="h-screen w-screen px-6 pt-10 bg-light">
       <View className="flex flex-row items-center justify-between px-4 py-2">
         <Text className="flex-1 text-center text-2xl font-bold text-pink">
           {List.name}

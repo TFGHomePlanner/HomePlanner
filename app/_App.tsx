@@ -97,6 +97,7 @@ export function App() {
       try {
         const userData = await AsyncStorage.getItem("userData");
         userData !== null && setInitialRoute("GroupSelection");
+        console.log("Datos del usuario en caché:", userData);
       } catch (error) {
         console.error("Error al verificar los datos del usuario en la caché:", error);    
       }
@@ -115,7 +116,7 @@ export function App() {
                   {/*gestureEnabled: false*/}
                   {initialRoute === "Login" && <Stack.Screen name="Login" component={LoginScreen} />}
                   <Stack.Screen name="GroupSelection" component={GroupSelectionScreen} />
-                  {initialRoute !== "Login" && <Stack.Screen name="Login" component={LoginScreen} />}
+                  
                   <Stack.Screen name="Register" component={RegisterScreen} />
                   <Stack.Screen name="Profile" component={ProfileScreen} />
                   <Stack.Screen
