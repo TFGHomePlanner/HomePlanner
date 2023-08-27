@@ -55,7 +55,7 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
   /**
    * Navega a la pantalla de creación/edición de tareas.
    */
-  function goToCreateTask() {
+  function goToEditTask() {
     navigation.navigate("CreateTask", { Task: Task, edit: true });
   }
 
@@ -88,7 +88,7 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
       <View className="flex-1 px-6 pb-10">
         <View className="flex-1 space-y-4">
           {canEdit && (
-            <Text onPress={goToCreateTask} className="self-end text-purple">
+            <Text onPress={goToEditTask} className="self-end text-purple">
               Editar
             </Text>
           )}

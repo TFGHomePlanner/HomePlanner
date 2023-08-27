@@ -16,7 +16,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
   task,
   isAssigned,
 }) => {
-  function goToTaskDetails() {
+  function goToTaskDetail() {
     navigation.navigate("TaskDetail", { Task: task, isAssigned: isAssigned });
   }
 
@@ -33,7 +33,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
 
   return (
     <Pressable
-      onPress={goToTaskDetails}
+      onPress={goToTaskDetail}
       className="mb-4 w-full rounded-lg bg-white px-4 py-4 shadow-sm"
     >
       <View className="flex-row justify-between">
