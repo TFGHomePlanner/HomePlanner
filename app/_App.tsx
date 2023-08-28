@@ -96,6 +96,7 @@ export function App() {
       try {
         const userData = await AsyncStorage.getItem("userData");
         userData !== null && setInitialRoute("GroupSelection");
+        console.log("Datos del usuario en caché:", userData);
       } catch (error) {
         console.error(
           "Error al verificar los datos del usuario en la caché:",
