@@ -3,7 +3,7 @@ import { ScrollView, TouchableOpacity, View } from "react-native";
 import "./localeConfig";
 import { format, startOfMonth } from "date-fns";
 import { Calendar, DateData } from "react-native-calendars";
-import Icon from "react-native-vector-icons/AntDesign";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { AppStackParamList } from "../../../_App";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserContext } from "../../../context/userContext";
@@ -76,7 +76,7 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
         onPress={goToCreateEvent}
         className="mb-2 mr-5 items-end"
       >
-        <Icon name="plus" size={24} color={"#FFA755"} />
+        <Icon name="shape-square-rounded-plus" size={24} color={"#FFA755"} />
       </TouchableOpacity>
       <Calendar
         monthFormat="MMMM yyyy"
