@@ -126,7 +126,8 @@ export const eventRouter = router({
           room: true,
           description: true,
           allDay: true,
-          date: true,
+          startsAt: true,
+          endsAt: true,
           notes: true,
           createdBy: {
             select: {
@@ -145,14 +146,24 @@ export const eventRouter = router({
     .mutation(
       async ({
         ctx,
-        input: { room, description, allDay, date, notes, groupId, userId },
+        input: {
+          room,
+          description,
+          allDay,
+          startsAt,
+          endsAt,
+          notes,
+          groupId,
+          userId,
+        },
       }) => {
         return await ctx.prisma.reservation.create({
           data: {
             room,
             description,
             allDay,
-            date,
+            startsAt,
+            endsAt,
             notes,
             groupId,
             userId,
@@ -165,7 +176,7 @@ export const eventRouter = router({
     .mutation(
       async ({
         ctx,
-        input: { id, room, description, allDay, date, notes },
+        input: { id, room, description, allDay, startsAt, endsAt, notes },
       }) => {
         return await ctx.prisma.reservation.update({
           where: { id },
@@ -173,7 +184,8 @@ export const eventRouter = router({
             room,
             description,
             allDay,
-            date,
+            startsAt,
+            endsAt,
             notes,
           },
         });
