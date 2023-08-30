@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./screens/login";
-import ModalScreen from "./modal";
 import AppLayout from "./screens/(tabs)/_layout";
 import RegisterScreen from "./screens/register";
 import CreateTaskScreen from "./screens/(tabs)/tasks/create";
@@ -64,7 +63,6 @@ export type AppStackParamList = {
   CreateEvent: { Event?: IEvent; edit: boolean };
   CreateReservation: { Reservation?: IReservation; edit: boolean };
   EventDetail: { Event: IEvent };
-  Modal: undefined;
   CreateList: { List?: IList; Edit: boolean };
   Profile: undefined;
   CreateGroup: undefined;
@@ -86,7 +84,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.46:4000/trpc",
+          url: "http://192.168.1.48:4000/trpc",
         }),
       ],
     })
@@ -170,7 +168,6 @@ export function App() {
                     name="CreateList"
                     component={CreateListScreen}
                   />
-                  <Stack.Screen name="Modal" component={ModalScreen} />
                   <Stack.Screen
                     name="DetailsList"
                     component={DetailsListScreen}

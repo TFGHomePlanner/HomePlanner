@@ -47,13 +47,16 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         try {
           await AsyncStorage.setItem("userData", JSON.stringify(userId));
         } catch (error) {
-          console.error("Error al guardar los datos del usuario en la caché:", error);
+          console.error(
+            "Error al guardar los datos del usuario en la caché:",
+            error
+          );
         }
         updateUser(userId);
         navigation.navigate("GroupSelection");
       } else console.log(output.message);
     },
-    
+
     onError: (error) => {
       console.log("Error during login:", error);
     },
@@ -90,6 +93,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
           value={password}
           onChangeText={setPassword}
           placeholder="contraseña"
+          secureTextEntry={true}
         />
         <Text className="mb-2 self-end text-xs font-semibold text-blue">
           ¿Has olvidado tu contraseña?

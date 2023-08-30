@@ -7,7 +7,6 @@ import { trpc } from "../../trpc";
 import { UserContextType } from "../../context/types";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import NoteCard from "../../components/sharedNotes/NoteCard";
-import ChatScreen from "../chat";
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TabHome">;
