@@ -94,7 +94,7 @@ model List {
   id          String    @id @default(cuid())
   name        String
   description String
-  imageURl  String?
+  imageURl    String?
   isClosed    Boolean
   group       Group     @relation(fields: [groupId], references: [id])
   groupId     String
@@ -174,15 +174,16 @@ model Event {
 }
 
 model Reservation {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   room        String
   description String
   allDay      Boolean
-  date        DateTime
+  startsAt    DateTime
+  endsAt      DateTime?
   notes       String?
-  group       Group    @relation(fields: [groupId], references: [id])
+  group       Group     @relation(fields: [groupId], references: [id])
   groupId     String
-  createdBy   User     @relation(fields: [userId], references: [id])
+  createdBy   User      @relation(fields: [userId], references: [id])
   userId      String
 
   @@index([groupId])
@@ -239,7 +240,7 @@ model Payment {
   id               String         @id @default(cuid())
   title            String?
   section          PaymentSection @relation(fields: [paymentSectionId], references: [id])
-  imageURL        String?
+  imageURL         String?
   paymentSectionId String
   payingUser       User           @relation(fields: [payingUserId], references: [id])
   payingUserId     String

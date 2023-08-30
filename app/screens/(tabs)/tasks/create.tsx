@@ -23,7 +23,7 @@ import { RouteProp } from "@react-navigation/native";
 
 /**
  * Propiedades necesarias para la pantalla de creación de una tarea.
- * @typedef {Object} EventDetailScreenProps
+ * @typedef {Object} CreateTaskScreenProps
  * @property {NativeStackNavigationProp<AppStackParamList, "CreateTask">} navigation - Propiedad de navegación que permite interactuar con la navegación de la aplicación.
  * @property {RouteProp<AppStackParamList, "CreateTask">} route - Propiedad que contiene los parámetros pasados a la pantalla a través de la navegación.
  */
@@ -35,7 +35,7 @@ type CreateTaskScreenProps = {
 /**
  * Pantalla que muestra el formulario para crear una tarea.
  * @remarks
- * Permite visualizar rellenar los campos para crear una nueva tarea.
+ * Permite rellenar los campos para crear una nueva tarea.
  * @param {CreateTaskScreenProps} props Propiedades del componente.
  * @returns {JSX.Element} Pantalla de la creación de una tarea.
  */

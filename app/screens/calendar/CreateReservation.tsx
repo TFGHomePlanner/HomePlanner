@@ -49,7 +49,8 @@ const CreateReservationScreen: React.FC<CreateReservationScreenProps> = ({
     isChecked ? setMode("date") : setMode("datetime");
   };
 
-  const [date, setDate] = useState(new Date());
+  const [initialDate, setInitialDate] = useState(new Date());
+  const [finalDate, setFinalDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState<"date" | "time" | "datetime">(
     checked ? "date" : "datetime"
@@ -69,21 +70,29 @@ const CreateReservationScreen: React.FC<CreateReservationScreenProps> = ({
         room,
         description,
         allDay: checked,
-        date,
+        startsAt: initialDate,
+        endsAt: finalDate,
         notes,
         groupId: User.groupId || "",
         userId: User.id,
       });
   };
 
-  // COMPLETAR
   function loadReservation() {
     setRoom(reservationToEdit?.room ?? "");
     setDescription(reservationToEdit?.description ?? "");
     setChecked(reservationToEdit?.allDay ?? false);
-    setDate(
-      reservationToEdit?.date ? new Date(reservationToEdit?.date) : new Date()
+    setInitialDate(
+      reservationToEdit?.startsAt
+        ? new Date(reservationToEdit?.startsAt)
+        : new Date()
     );
+    setFinalDate(
+      reservationToEdit?.endsAt
+        ? new Date(reservationToEdit?.endsAt)
+        : new Date()
+    );
+    setNotes(reservationToEdit?.notes ?? "");
   }
   {
     edit && useEffect(() => loadReservation(), [edit]);
@@ -91,7 +100,7 @@ const CreateReservationScreen: React.FC<CreateReservationScreenProps> = ({
 
   const updateMutation = trpc.event.updateReservation.useMutation({
     onSuccess() {
-      utils.event.getAllEvents.invalidate();
+      utils.event.getAllReservations.invalidate();
       navigation.navigate("Tabs");
     },
   });
@@ -102,7 +111,8 @@ const CreateReservationScreen: React.FC<CreateReservationScreenProps> = ({
         room,
         description,
         allDay: checked,
-        date,
+        startsAt: initialDate,
+        endsAt: finalDate,
         notes,
         userId: reservationToEdit?.createdBy.id ?? User.id,
         groupId: User.groupId || "",
@@ -115,6 +125,7 @@ const CreateReservationScreen: React.FC<CreateReservationScreenProps> = ({
         <TouchableOpacity onPress={navigation.goBack}>
           <Text className="text-orange">Cancelar</Text>
         </TouchableOpacity>
+        <Text className="mr-4 self-center text-dark">Nueva reserva</Text>
         <TouchableOpacity
           disabled={!enabled}
           className="self-end"
@@ -141,7 +152,7 @@ const CreateReservationScreen: React.FC<CreateReservationScreenProps> = ({
               setRoom(newName);
               setEnabled(newName.trim() !== "");
             }}
-            placeholder="Título *"
+            placeholder="Habitación *"
             maxLength={40}
             selectionColor={"#FFA755"}
           />
@@ -173,15 +184,15 @@ const CreateReservationScreen: React.FC<CreateReservationScreenProps> = ({
                 onPress={() => setShow(true)}
                 className="rounded-md bg-lightGray p-2"
               >
-                <Text>{date.toLocaleDateString()}</Text>
+                <Text>{initialDate.toLocaleDateString()}</Text>
               </TouchableOpacity>
             )}
             {Platform.OS === "ios" && (
               <DateTimePicker
                 testID="dateTimePicker"
-                value={date}
+                value={initialDate}
                 onChange={(event, selectedDate) => {
-                  setDate(selectedDate || new Date());
+                  setInitialDate(selectedDate || new Date());
                 }}
                 accentColor="#FFA755"
                 locale="es-ES"
@@ -191,10 +202,45 @@ const CreateReservationScreen: React.FC<CreateReservationScreenProps> = ({
             {Platform.OS === "android" && show && (
               <DateTimePicker
                 testID="dateTimePicker"
-                value={date}
+                value={initialDate}
                 onChange={(event, selectedDate) => {
                   setShow(false);
-                  setDate(selectedDate || new Date());
+                  setInitialDate(selectedDate || new Date());
+                }}
+                mode={mode}
+              />
+            )}
+          </View>
+          <Divider />
+          <View className="my-2 flex-row items-center justify-between rounded-lg px-4">
+            <Text>Acaba</Text>
+            {Platform.OS === "android" && (
+              <TouchableOpacity
+                onPress={() => setShow(true)}
+                className="rounded-md bg-lightGray p-2"
+              >
+                <Text>{finalDate.toLocaleDateString()}</Text>
+              </TouchableOpacity>
+            )}
+            {Platform.OS === "ios" && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={finalDate}
+                onChange={(event, selectedDate) => {
+                  setFinalDate(selectedDate || new Date());
+                }}
+                accentColor="#FFA755"
+                locale="es-ES"
+                mode={mode}
+              />
+            )}
+            {Platform.OS === "android" && show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={finalDate}
+                onChange={(event, selectedDate) => {
+                  setShow(false);
+                  setFinalDate(selectedDate || new Date());
                 }}
                 mode={mode}
               />

@@ -47,6 +47,8 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   function onTypeChange(type: string) {
     setSelectedType(type);
     setLocationVisible(type === "Evento");
+    type === "Reserva" &&
+      navigation.navigate("CreateReservation", { edit: false });
   }
 
   const [checked, setChecked] = React.useState(false);

@@ -51,7 +51,8 @@ export const ReservationSchema = z.object({
   room: z.string(),
   description: z.string(),
   allDay: z.boolean(),
-  date: z.coerce.date(),
+  startsAt: z.coerce.date(),
+  endsAt: z.coerce.date(),
   notes: z.string().optional().nullable(),
   groupId: z.string(),
   createdBy: z.object({
@@ -64,7 +65,8 @@ export const CreateReservationSchema = z.object({
   room: z.string().max(40, { message: "Demasiado largo." }),
   description: z.string().max(100, { message: "Descripción demasiado larga." }),
   allDay: z.boolean(),
-  date: z.coerce.date(),
+  startsAt: z.coerce.date(),
+  endsAt: z.coerce.date().optional().nullable(),
   notes: z
     .string()
     .max(200, { message: "Máximo 200 caracteres." })
