@@ -86,7 +86,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.37:4000/trpc",
+          url: "http://192.168.1.46:4000/trpc",
         }),
       ],
     })
