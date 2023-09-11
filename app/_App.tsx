@@ -41,6 +41,7 @@ import { IEvent, IReservation } from "./common/validation/event";
 import CreateReservationScreen from "./screens/calendar/CreateReservation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EventDetailScreen from "./screens/calendar/EventDetail";
+import ReservationDetailScreen from "./screens/calendar/ReservationDetail";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -63,6 +64,7 @@ export type AppStackParamList = {
   CreateEvent: { Event?: IEvent; edit: boolean };
   CreateReservation: { Reservation?: IReservation; edit: boolean };
   EventDetail: { Event: IEvent };
+  ReservationDetail: { Reservation: IReservation };
   CreateList: { List?: IList; Edit: boolean };
   Profile: undefined;
   CreateGroup: undefined;
@@ -84,7 +86,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.48:4000/trpc",
+          url: "http://192.168.1.38:4000/trpc",
         }),
       ],
     })
@@ -163,6 +165,10 @@ export function App() {
                   <Stack.Screen
                     name="EventDetail"
                     component={EventDetailScreen}
+                  />
+                  <Stack.Screen
+                    name="ReservationDetail"
+                    component={ReservationDetailScreen}
                   />
                   <Stack.Screen
                     name="CreateList"
