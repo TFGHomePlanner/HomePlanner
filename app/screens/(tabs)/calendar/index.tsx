@@ -20,6 +20,10 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
   const { data: allEvents } = trpc.event.getAllEvents.useQuery({
     groupId: User.groupId,
   });
+  const { data: allReservations } = trpc.event.getAllReservations.useQuery({
+    groupId: User.groupId,
+  });
+  const allCalendarItems = [...(allEvents || []), ...(allReservations || [])];
 
   const today = format(new Date(), "yyyy-MM-dd");
   const [selectedDate, setSelectedDate] = useState(today);
@@ -31,8 +35,8 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
         selectedColor: "#212529",
       });
 
-    allEvents &&
-      allEvents.forEach((event) => {
+    allCalendarItems &&
+      allCalendarItems.forEach((event) => {
         const eventDate = format(new Date(event.startsAt), "yyyy-MM-dd");
         if (!markedDates[eventDate]) markedDates[eventDate] = {};
         markedDates[eventDate] = {

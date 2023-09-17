@@ -98,17 +98,12 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
           {Task.startsAt instanceof Date && (
             <Text>Empieza el {Task.startsAt.toLocaleDateString()}</Text>
           )}
-          <View className="flex-row space-x-4">
-            <TouchableOpacity
-              onPress={checkTask}
-              className="w-36 rounded-full border-[1px] border-light bg-purple p-1"
-            >
-              <Text className="text-center text-light">marcar hecha</Text>
-            </TouchableOpacity>
-            <Pressable className="w-36 rounded-full border-[1px] border-purple p-1">
-              <Text className="text-center text-purple">reasignar tarea</Text>
-            </Pressable>
-          </View>
+          <TouchableOpacity
+            onPress={checkTask}
+            className="w-36 rounded-full border-[1px] border-light bg-purple p-1"
+          >
+            <Text className="text-center text-light">marcar hecha</Text>
+          </TouchableOpacity>
         </View>
         {canEdit && (
           <TouchableOpacity onPress={handleDelete} className="self-end">

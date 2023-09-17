@@ -40,17 +40,12 @@ const TaskCard: React.FC<TaskCardProps> = ({
         <Text className="text-base font-semibold">{task.name}</Text>
         <Icon name="chevron-right" size={24} />
       </View>
-      <View className="flex-row space-x-1">
-        <Pressable
-          onPress={checkTask}
-          className="mt-6 w-36 rounded-full border-[1px] border-light bg-purple p-1"
-        >
-          <Text className="text-center text-light">marcar hecha</Text>
-        </Pressable>
-        <Pressable className="mt-6 w-36 rounded-full border-[1px] border-purple p-1">
-          <Text className="text-center text-purple">reasignar tarea</Text>
-        </Pressable>
-      </View>
+      <Pressable
+        onPress={checkTask}
+        className="mt-6 w-36 rounded-full border-[1px] border-light bg-purple p-1"
+      >
+        <Text className="text-center text-light">marcar hecha</Text>
+      </Pressable>
     </Pressable>
   );
 };
