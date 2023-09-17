@@ -51,7 +51,7 @@ async function main() {
   const minigrupo = await prisma.group.create({
     data: {
       codeGroup: "lasminissonmonas",
-      name: "Grupo de minis",
+      name: "Grupo Casa estudiantes",
       admin: { connect: { id: marta.id } },
       favouritesProducts: {
         createMany: {
@@ -74,27 +74,27 @@ async function main() {
             {
               day: datetoday,
               userId: marta.id,
-              text: "Holi caracoli",
+              text: "Hola",
             },
             {
               day: datetoday,
               userId: a.id,
-              text: "Hola Buenas tardes",
+              text: "Como Vas",
             },
             {
               day: datetoday,
               userId: a.id,
-              text: "SOy un macarron",
+              text: "Yo muy bien",
             },
             {
               day: datetoday,
               userId: marta.id,
-              text: "Que pesado",
+              text: "Voy ha hacer la compra",
             },
             {
               day: datetoday,
               userId: juan.id,
-              text: "Hola Buenas Tardes",
+              text: "Okeyy",
             },
           ],
         },

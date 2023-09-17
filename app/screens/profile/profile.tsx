@@ -173,7 +173,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
           onPress={() =>
             navigation.navigate("UserNote", { Note: undefined, Edit: Edit })
           }
-          className="bg-gray rounded-full p-2"
+          className="bg-gray rounded-full p-2 mb-10"
         >
           <Text className="text-md text-center font-light text-blue">
             Añadir nueva nota

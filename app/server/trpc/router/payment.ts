@@ -86,6 +86,7 @@ export const paymentRouter = router({
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.payment.create({
         data: {
+          title: input.title,
           paymentSectionId: input.paymentSectionId,
           payingUserId: input.payingUserId,
           amount: input.amount,

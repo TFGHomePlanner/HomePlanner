@@ -46,20 +46,32 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
 
   const handleParticipantAmountChange = async (userId: string, amount: string) => {
     console.log("userId: " + userId + " amount: " + amount);
+  
+    // Actualiza el estado de participantsAmounts
     setParticipantsAmounts((prevCheckedItems) => ({
       ...prevCheckedItems,
       [userId]: amount,
     }));
-    console.log("participantsAmounts: " + participantsAmounts[userId]);
-    total1();
-
+  
+    // Calcula el total usando el valor actualizado de participantsAmounts
+    const updatedParticipantsAmounts: { [userId: string]: string } = {
+      ...participantsAmounts,
+      [userId]: amount,
+    };
+    total1(updatedParticipantsAmounts); // Pasa el valor actualizado como argumento
   };
-  function total1() {
-    const newTotal = Object.values(participantsAmounts).filter((amt) => amt !== "").map((amt) => parseFloat(amt)).reduce((acc, amt) => acc + amt, 0);
+  
+  function total1(updatedParticipantsAmounts: { [userId: string]: string }) {
+    const newTotal = Object.values(updatedParticipantsAmounts)
+      .filter((amt) => amt !== "")
+      .map((amt) => parseFloat(amt))
+      .reduce((acc, amt) => acc + amt, 0);
     console.log("newTotal: " + newTotal);
     settotal(newTotal);
-    console.log("total: " + total);
+    console.log("total: " + newTotal);
   }
+  
+  
 
   const [selectedUser, setSelectedUser] = useState("");
   const userOptions = PaymentSection.participants.map((user) => ({
@@ -76,12 +88,14 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
   });
   
   function createPayment() {
-    if(!isCorrectdate) {
+    if(isCorrectdate()) {
       const debtorUsersArray = Object.entries(participantsAmounts).map(([userId, amount]) => ({
         amount: parseFloat(amount),
         debtorId: userId,
       
       }));
+      console.log(title);
+
       mutattion.mutate({
         title: title,
         payingUserId: selectedUser,
@@ -104,15 +118,10 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
       error = "El total no coincide con la suma de los participantes";
     }
     if (error != "") {
-      /**
-      * Snackbar.show({
-        text: error,
-        duration: Snackbar.LENGTH_SHORT, 
-        backgroundColor: "white", 
-      *  */ 
-      console.log(error); 
+     
+      return false;
     }
-    return true;
+    else { return true; }
   }
 
   
@@ -158,7 +167,7 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
           </View>
         </View>
         
-        <View className="fflex flex-row pt-2 items-center">
+        <View className="fflex flex-row pt-2 items-center z-10">
           <Text className="text-lg font-semibold pr-4">Pagado por:</Text>
           <SelectList
             data={userOptions}
@@ -174,6 +183,7 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
               top: 34,
               width: 180,
               borderRadius: 12,
+              zIndex: 5
             }}
             dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
             boxStyles={{
@@ -181,6 +191,7 @@ const CreatePaymentScreen: React.FC<CreatePaymentScreenProps> = ({
               width: 140,
               borderColor: "#212529",
               alignSelf: "flex-end",
+              zIndex: 5,
             }}
             placeholder="Seleccionar"
           />
