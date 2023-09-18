@@ -45,7 +45,7 @@ const GroupTasksScreen: React.FC<GroupTasksScreenProps> = ({
               />
             ))
           ) : (
-            <Text>No hay tareas</Text>
+            <Text>Cargando...</Text>
           )}
         </View>
       </View>

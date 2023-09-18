@@ -13,12 +13,12 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
   navigation,
   reservation,
 }) => {
-  function goToEventDetail() {
-    navigation.navigate("EventDetail", { Reservation: reservation });
+  function goToReservationDetail() {
+    navigation.navigate("ReservationDetail", { Reservation: reservation });
   }
   return (
     <TouchableOpacity
-      onPress={goToEventDetail}
+      onPress={goToReservationDetail}
       className="mb-4 w-full flex-row space-x-1 rounded-lg p-5 pr-8"
     >
       <View className="h-full w-[5] rounded-full bg-orange" />

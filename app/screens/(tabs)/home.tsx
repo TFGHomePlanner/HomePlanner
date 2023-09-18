@@ -23,15 +23,19 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <View className="flex flex-1 h-full bg-light">
+    <View className="flex h-full flex-1 bg-light">
       <ScrollView
-        className="h-full bg-light px-6 flex-1"
+        className="h-full flex-1 bg-light px-6"
         showsVerticalScrollIndicator={false}
       >
         <View className="my-3 flex-row items-center justify-between">
           <Text className="text-lg font-semibold">NOTAS COMPARTIDAS</Text>
           <TouchableOpacity onPress={goToCreateNote}>
-            <Icon name="shape-square-rounded-plus" size={24} color={"#1E88E5"} />
+            <Icon
+              name="shape-square-rounded-plus"
+              size={24}
+              color={"#1E88E5"}
+            />
           </TouchableOpacity>
         </View>
         {sharedNotes?.length !== 0 ? (
@@ -49,16 +53,16 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             ))}
           </View>
         ) : (
-          <Text>Todavía no hay notas compartidas.</Text>
+          <Text>Cargando...</Text>
         )}
       </ScrollView>
       <TouchableOpacity
         onPress={() => navigation.navigate("Chat")}
-        className="flex justify-end items-end pb-4 px-6 w-full"
+        className="flex w-full items-end justify-end px-6 pb-4"
       >
-        <View className="flex justify-end items-end py-4 w-full">
-          <Icon name="comment" size={30} color="black" className="pt-2 mt-2"/>
-        </View> 
+        <View className="flex w-full items-end justify-end py-4">
+          <Icon name="comment" size={30} color="black" className="mt-2 pt-2" />
+        </View>
       </TouchableOpacity>
     </View>
   );

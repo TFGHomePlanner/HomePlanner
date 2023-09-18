@@ -135,6 +135,7 @@ export const eventRouter = router({
               name: true,
             },
           },
+          groupId: true,
         },
         where: {
           groupId: input.groupId,

@@ -10,6 +10,7 @@ import { UserContext } from "../../../context/userContext";
 import { UserContextType } from "../../../context/types";
 import { trpc } from "../../../trpc";
 import EventCard from "../../../components/calendar/EventCard";
+import ReservationCard from "../../../components/calendar/ReservationCard";
 
 type TabCalendarScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TabCalendar">;
@@ -109,6 +110,25 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
                   ...event,
                   startsAt: eventStartDate,
                   endsAt: event.endsAt ? new Date(event.endsAt) : null,
+                }}
+              />
+            )
+          );
+        })}
+        {allReservations?.map((reservation) => {
+          const reservationDate = new Date(reservation.startsAt);
+          return (
+            !isNaN(reservationDate.getTime()) &&
+            selectedDate === format(reservationDate, "yyyy-MM-dd") && (
+              <ReservationCard
+                key={reservation.id}
+                navigation={navigation}
+                reservation={{
+                  ...reservation,
+                  startsAt: reservationDate,
+                  endsAt: reservation.endsAt
+                    ? new Date(reservation.endsAt)
+                    : null,
                 }}
               />
             )

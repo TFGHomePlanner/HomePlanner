@@ -43,7 +43,7 @@ const MyTasksScreen: React.FC<MyTasksScreenProps> = ({ navigation }) => {
               />
             ))
           ) : (
-            <Text>No hay tareas</Text>
+            <Text>Cargando...</Text>
           )}
         </View>
       </View>

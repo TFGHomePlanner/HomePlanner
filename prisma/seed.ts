@@ -11,6 +11,8 @@ async function main() {
       name: "Juan",
       email: "johnny",
       passwordHash: "a",
+      imageprofile:
+        "https://homeplannerimages.s3.eu-north-1.amazonaws.com/imagenes/16950560096761.jpg",
     },
   });
 
@@ -19,14 +21,34 @@ async function main() {
       name: "Marta",
       email: "marta",
       passwordHash: "a",
+      imageprofile:
+        "https://homeplannerimages.s3.eu-north-1.amazonaws.com/imagenes/16950560149521.jpg",
+    },
+  });
+
+  const mama = await prisma.user.create({
+    data: {
+      name: "Mamá",
+      email: "m",
+      passwordHash: "m",
+    },
+  });
+
+  const papa = await prisma.user.create({
+    data: {
+      name: "Papá",
+      email: "p",
+      passwordHash: "p",
     },
   });
 
   const a = await prisma.user.create({
     data: {
-      name: "a",
+      name: "Alfredo",
       email: "a",
-      passwordHash: "a",
+      passwordHash: "contraseña",
+      imageprofile:
+        "https://homeplannerimages.s3.eu-north-1.amazonaws.com/imagenes/16950560198471.jpg",
     },
   });
 
@@ -65,6 +87,18 @@ async function main() {
             {
               name: "chuches",
             },
+            {
+              name: "papel higiénico",
+            },
+            {
+              name: "calabacín",
+            },
+            {
+              name: "agua",
+            },
+            {
+              name: "leche",
+            },
           ],
         },
       },
@@ -79,7 +113,7 @@ async function main() {
             {
               day: datetoday,
               userId: a.id,
-              text: "Como Vas",
+              text: "Cómo vas?",
             },
             {
               day: datetoday,
@@ -89,7 +123,7 @@ async function main() {
             {
               day: datetoday,
               userId: marta.id,
-              text: "Voy ha hacer la compra",
+              text: "Voy a hacer la compra",
             },
             {
               day: datetoday,
@@ -101,6 +135,17 @@ async function main() {
       },
       users: {
         connect: [{ id: a.id }, { id: juan.id }, { id: marta.id }],
+      },
+    },
+  });
+
+  const familia = await prisma.group.create({
+    data: {
+      codeGroup: "000000",
+      name: "Familia",
+      admin: { connect: { id: marta.id } },
+      users: {
+        connect: [{ id: marta.id }, { id: mama.id }, { id: papa.id }],
       },
     },
   });
@@ -131,27 +176,113 @@ async function main() {
       id: "1",
       name: "Limpiar cristales",
       frequency: "oncePerWeek",
-      groupId: minigrupo.id,
+      groupId: familia.id,
       createdBy: marta.id,
     },
   });
 
   const tarea4 = await prisma.task.create({
     data: {
-      name: "Cook zome minitrotila.",
-      description: "Pliz!!",
+      name: "Sacar la basura",
       frequency: "oncePerDay",
-      groupId: minigrupo.id,
-      createdBy: a.id,
+      groupId: familia.id,
+      userId: marta.id,
+      createdBy: mama.id,
     },
   });
 
-  const grupoTareas = await prisma.taskGroup.create({
+  const tarea5 = await prisma.task.create({
     data: {
-      name: "Flusis",
+      name: "Ordenar habitación",
+      frequency: "never",
+      groupId: familia.id,
+      userId: marta.id,
+      createdBy: mama.id,
+    },
+  });
+
+  const tarea6 = await prisma.task.create({
+    data: {
+      name: "Barrer terraza",
+      description: "Es la escoba roja.",
+      frequency: "oncePerWeek",
+      groupId: familia.id,
+      userId: marta.id,
+      createdBy: mama.id,
+    },
+  });
+
+  const tarea7 = await prisma.task.create({
+    data: {
+      name: "Poner lavavajillas",
+      description: "Las pastillas están en el armario de la cocina.",
+      frequency: "oncePerDay",
+      groupId: familia.id,
+      userId: papa.id,
+      createdBy: papa.id,
+    },
+  });
+
+  const tarea8 = await prisma.task.create({
+    data: {
+      name: "Pintar marco de la puerta",
+      description: "Terraza",
+      frequency: "never",
+      groupId: familia.id,
+      userId: mama.id,
+      createdBy: marta.id,
+    },
+  });
+
+  const tarea9 = await prisma.task.create({
+    data: {
+      name: "Ordenar caja de herramientas.",
+      frequency: "oncePerMonth",
+      groupId: familia.id,
+      userId: papa.id,
+      createdBy: marta.id,
+    },
+  });
+
+  const tarea10 = await prisma.task.create({
+    data: {
+      name: "Sacar hamacas",
+      description: "A la terraza. Están en el trastero.",
+      frequency: "never",
+      groupId: familia.id,
+      userId: papa.id,
+      createdBy: marta.id,
+    },
+  });
+
+  // Tareas del grupo estudiantes
+  const grupoTareas1 = await prisma.taskGroup.create({
+    data: {
+      name: "Limpieza",
       groupId: minigrupo.id,
       Tasks: {
-        connect: [{ id: tarea1.id }, { id: tarea2.id }, { id: tarea3.id }],
+        connect: [{ id: tarea1.id }, { id: tarea2.id }],
+      },
+    },
+  });
+
+  // Tareas del grupo familia
+  const grupoTareas2 = await prisma.taskGroup.create({
+    data: {
+      name: "Limpieza",
+      groupId: familia.id,
+      Tasks: {
+        connect: [{ id: tarea3.id }, { id: tarea6.id }],
+      },
+    },
+  });
+
+  const grupoTareas3 = await prisma.taskGroup.create({
+    data: {
+      name: "Terraza",
+      groupId: familia.id,
+      Tasks: {
+        connect: [{ id: tarea6.id }, { id: tarea10.id }, { id: tarea8.id }],
       },
     },
   });
@@ -159,7 +290,7 @@ async function main() {
   const calendario = await prisma.calendar.create({
     data: {
       name: "Casa",
-      groupId: minigrupo.id,
+      groupId: familia.id,
     },
   });
 
@@ -169,11 +300,11 @@ async function main() {
       isEvent: true,
       location: "Masía Venta l'Home, Buñol",
       allDay: false,
-      startsAt: new Date(2023, 7, 22, 10, 0), // Agosto = 7
+      startsAt: new Date(2023, 8, 22, 10, 0), // Septiembre = 8
       calendarId: calendario.id,
       notes: "Llevar regalos.",
       userId: a.id,
-      groupId: minigrupo.id,
+      groupId: familia.id,
     },
   });
 
@@ -183,24 +314,24 @@ async function main() {
       isEvent: true,
       location: "Teatro Lope de Vega, Madrid",
       allDay: false,
-      startsAt: new Date(2023, 7, 24, 10, 0),
-      endsAt: new Date(2023, 7, 24, 12, 30),
+      startsAt: new Date(2023, 8, 24, 10, 0),
+      endsAt: new Date(2023, 8, 24, 12, 30),
       calendarId: calendario.id,
       notes: "Llevar entradas.",
       userId: a.id,
-      groupId: minigrupo.id,
+      groupId: familia.id,
     },
   });
 
   const recordatorio1 = await prisma.event.create({
     data: {
-      name: "Cumpleaños de a",
+      name: "Cumpleaños de Ana",
       isEvent: false,
       allDay: true,
-      startsAt: new Date(2023, 7, 10, 10, 0),
+      startsAt: new Date(2023, 8, 10, 10, 0),
       calendarId: calendario.id,
       userId: marta.id,
-      groupId: minigrupo.id,
+      groupId: familia.id,
     },
   });
 
@@ -209,9 +340,9 @@ async function main() {
       room: "Casa entera",
       description: "Despedida María",
       allDay: true,
-      startsAt: new Date(2023, 7, 30),
-      notes: "Garaje ocupado.",
-      groupId: minigrupo.id,
+      startsAt: new Date(2023, 8, 30),
+      notes: "El garaje estará ocupado.",
+      groupId: familia.id,
       userId: marta.id,
     },
   });
@@ -221,8 +352,8 @@ async function main() {
       room: "Salón",
       description: "Viene Pablo a ver una peli",
       allDay: false,
-      startsAt: new Date(2023, 7, 27, 18, 0),
-      groupId: minigrupo.id,
+      startsAt: new Date(2023, 8, 27, 18, 0),
+      groupId: familia.id,
       userId: a.id,
     },
   });
@@ -296,15 +427,15 @@ async function main() {
           data: [
             {
               name: "Leche",
-              isPurchased: false,
+              isPurchased: true,
             },
             {
               name: "Pan",
-              isPurchased: false,
+              isPurchased: true,
             },
             {
               name: "Huevos",
-              isPurchased: false,
+              isPurchased: true,
             },
           ],
         },
@@ -324,27 +455,27 @@ async function main() {
           data: [
             {
               name: "Leche",
-              isPurchased: false,
+              isPurchased: true,
             },
             {
               name: "Pan",
-              isPurchased: false,
+              isPurchased: true,
             },
             {
               name: "Huevos",
-              isPurchased: false,
+              isPurchased: true,
             },
             {
               name: "Maccarones",
-              isPurchased: false,
+              isPurchased: true,
             },
             {
               name: "Sal",
-              isPurchased: false,
+              isPurchased: true,
             },
             {
               name: "Pizza",
-              isPurchased: false,
+              isPurchased: true,
             },
           ],
         },
@@ -364,15 +495,15 @@ async function main() {
           data: [
             {
               name: "Leche",
-              isPurchased: false,
+              isPurchased: true,
             },
             {
               name: "Pan",
-              isPurchased: false,
+              isPurchased: true,
             },
             {
               name: "Huevos",
-              isPurchased: false,
+              isPurchased: true,
             },
           ],
         },
@@ -380,7 +511,7 @@ async function main() {
     },
   });
 
-  const notaCompartida = await prisma.sharedNote.create({
+  const notaCompartida1 = await prisma.sharedNote.create({
     data: {
       title: "Arreglar tapa del váter",
       text: "Baño pequeño.",
@@ -389,11 +520,38 @@ async function main() {
     },
   });
 
+  const notaCompartida2 = await prisma.sharedNote.create({
+    data: {
+      title: "Arreglar tapa del váter",
+      text: "Baño pequeño.",
+      userId: marta.id,
+      groupId: familia.id,
+    },
+  });
+
+  const notaCompartida3 = await prisma.sharedNote.create({
+    data: {
+      title: "Desperfectos de la casa",
+      text: "- Cambiar pilas mando aire. \n- Arreglar asa puerta nevera. \n- Revisar cisterna baño pequeño.",
+      userId: marta.id,
+      groupId: familia.id,
+    },
+  });
+
+  const notaCompartida4 = await prisma.sharedNote.create({
+    data: {
+      title: "Cuentas",
+      text: "Netflix - usuario: FamiliaLH, contraseña: famNetflix23",
+      userId: marta.id,
+      groupId: familia.id,
+    },
+  });
+
   const paymentSection1 = await prisma.paymentSection.create({
     data: {
       group: { connect: { id: minigrupo.id } },
       title: "Section 1",
-      totalAmount: 100.0,
+      totalAmount: 50.0,
       description: "Payment Section 1 Description",
       participants: {
         connect: [{ id: marta.id }, { id: juan.id }, { id: a.id }],

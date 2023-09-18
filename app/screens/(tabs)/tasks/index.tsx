@@ -92,7 +92,7 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
             />
           ))
         ) : (
-          <Text>No hay tareas</Text>
+          <Text>Cargando...</Text>
         )}
       </View>
     </ScrollView>

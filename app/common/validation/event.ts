@@ -52,7 +52,7 @@ export const ReservationSchema = z.object({
   description: z.string(),
   allDay: z.boolean(),
   startsAt: z.coerce.date(),
-  endsAt: z.coerce.date(),
+  endsAt: z.coerce.date().optional().nullable(),
   notes: z.string().optional().nullable(),
   groupId: z.string(),
   createdBy: z.object({

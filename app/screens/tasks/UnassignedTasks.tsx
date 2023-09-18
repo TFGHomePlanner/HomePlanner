@@ -41,7 +41,7 @@ const UnassignedTasksScreen: React.FC<UnassignedTasksScreenProps> = ({
               />
             ))
           ) : (
-            <Text>No hay tareas</Text>
+            <Text>Cargando...</Text>
           )}
         </View>
       </View>

@@ -16,7 +16,7 @@ const EventCard: React.FC<EventCardProps> = ({ navigation, event }) => {
   return (
     <TouchableOpacity
       onPress={goToEventDetail}
-      className="mb-4 w-full flex-row space-x-1 rounded-lg p-5 pr-8"
+      className="w-full flex-row space-x-1 rounded-lg px-4 py-3 pr-8"
     >
       <View className="h-full w-[5] rounded-full bg-orange" />
       <View className="w-full space-y-2">
