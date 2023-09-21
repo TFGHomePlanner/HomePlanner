@@ -62,7 +62,9 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
         >
           <View className="flex-row items-center space-x-2">
             <Icon name="account-question-outline" color={"#7B61FF"} size={20} />
-            <Text className="text-base text-dark">Tareas sin asignar</Text>
+            <Text className="font-rale text-base text-dark">
+              Tareas sin asignar
+            </Text>
           </View>
           <Icon name="chevron-right" color={"#212529"} size={20} />
         </TouchableOpacity>
@@ -77,7 +79,9 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
             />
           ))}
       </View>
-      <Text className="mb-2 text-lg font-medium">TODAS LAS TAREAS</Text>
+      <Text className="mb-2 font-rale text-lg font-medium text-dark">
+        Todas las tareas
+      </Text>
       <View>
         {allTasks ? (
           allTasks.map((task) => (

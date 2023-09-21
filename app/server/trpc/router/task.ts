@@ -32,6 +32,7 @@ export const taskRouter = router({
           groupId: input.groupId,
           isDone: false,
         },
+        orderBy: { createdAt: "desc" },
       });
     }),
 

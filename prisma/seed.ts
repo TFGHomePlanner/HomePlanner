@@ -317,7 +317,7 @@ async function main() {
       startsAt: new Date(2023, 8, 24, 10, 0),
       endsAt: new Date(2023, 8, 24, 12, 30),
       calendarId: calendario.id,
-      notes: "Llevar entradas.",
+      notes: "Llevar las entradas. Están en el cajón del mueble del recibidor.",
       userId: a.id,
       groupId: familia.id,
     },
@@ -350,11 +350,11 @@ async function main() {
   const reservaSalon = await prisma.reservation.create({
     data: {
       room: "Salón",
-      description: "Viene Pablo a ver una peli",
+      description: "Viene Pablo a ver una peli.",
       allDay: false,
       startsAt: new Date(2023, 8, 27, 18, 0),
       groupId: familia.id,
-      userId: a.id,
+      userId: papa.id,
     },
   });
 
@@ -517,6 +517,7 @@ async function main() {
       text: "Baño pequeño.",
       userId: marta.id,
       groupId: minigrupo.id,
+      createdAt: new Date(2023, 8, 22, 10, 17),
     },
   });
 
@@ -524,8 +525,9 @@ async function main() {
     data: {
       title: "Arreglar tapa del váter",
       text: "Baño pequeño.",
-      userId: marta.id,
+      userId: mama.id,
       groupId: familia.id,
+      createdAt: new Date(2023, 7, 10, 21, 14),
     },
   });
 
@@ -535,6 +537,7 @@ async function main() {
       text: "- Cambiar pilas mando aire. \n- Arreglar asa puerta nevera. \n- Revisar cisterna baño pequeño.",
       userId: marta.id,
       groupId: familia.id,
+      createdAt: new Date(2023, 5, 5, 10, 30),
     },
   });
 
@@ -544,6 +547,7 @@ async function main() {
       text: "Netflix - usuario: FamiliaLH, contraseña: famNetflix23",
       userId: marta.id,
       groupId: familia.id,
+      createdAt: new Date(2023, 5, 4, 10, 32),
     },
   });
 

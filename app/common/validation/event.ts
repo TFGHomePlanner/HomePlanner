@@ -27,8 +27,8 @@ export const CreateEventSchema = z.object({
   isEvent: z.boolean(),
   location: z
     .string()
-    .max(20, {
-      message: "Máximo 20 caracteres.",
+    .max(50, {
+      message: "Máximo 50 caracteres.",
     })
     .nullable(),
   allDay: z.boolean(),

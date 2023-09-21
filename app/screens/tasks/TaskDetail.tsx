@@ -1,4 +1,4 @@
-import { Alert, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 import React, { useContext } from "react";
 import { RouteProp } from "@react-navigation/native";
 import { AppStackParamList } from "../../_App";
@@ -8,6 +8,7 @@ import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
 import Icon from "react-native-vector-icons/Ionicons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Divider } from "@ui-kitten/components";
 
 type TaskDetailScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TaskDetail">;
@@ -93,11 +94,25 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
             </Text>
           )}
           <Text className="text-xl font-bold">{Task.name}</Text>
-          {Task.description && <Text>{Task.description}</Text>}
-          {Task.assignedTo && <Text>Asignada a {Task.assignedTo.name}</Text>}
-          {Task.startsAt instanceof Date && (
-            <Text>Empieza el {Task.startsAt.toLocaleDateString()}</Text>
-          )}
+          <View className="space-y-2 rounded-lg bg-white px-4 py-3">
+            {Task.description && (
+              <View>
+                <Text className="mb-2">{Task.description}</Text>
+                <Divider />
+              </View>
+            )}
+            {Task.assignedTo && (
+              <Text>👤 Asignada a {Task.assignedTo.name}</Text>
+            )}
+            {Task.startsAt instanceof Date && (
+              <View>
+                <Divider />
+                <Text className="mt-2">
+                  ⏳ Empieza el {Task.startsAt.toLocaleDateString()}
+                </Text>
+              </View>
+            )}
+          </View>
           <TouchableOpacity
             onPress={checkTask}
             className="w-36 rounded-full border-[1px] border-light bg-purple p-1"
@@ -106,8 +121,8 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
           </TouchableOpacity>
         </View>
         {canEdit && (
-          <TouchableOpacity onPress={handleDelete} className="self-end">
-            <Icon name="trash-outline" color={"#7B61FF"} size={24} />
+          <TouchableOpacity onPress={handleDelete} className="self-center">
+            <Text className="text-purple">Eliminar tarea</Text>
           </TouchableOpacity>
         )}
       </View>

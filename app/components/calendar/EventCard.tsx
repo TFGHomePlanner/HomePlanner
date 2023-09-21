@@ -25,7 +25,7 @@ const EventCard: React.FC<EventCardProps> = ({ navigation, event }) => {
           {event.allDay ? (
             <Text>Todo el día</Text>
           ) : (
-            <Text>{format(event.startsAt.getTime(), "hh:mm")} h</Text>
+            <Text>{format(event.startsAt.getTime(), "HH:mm")} h</Text>
           )}
         </View>
         {event.location && (

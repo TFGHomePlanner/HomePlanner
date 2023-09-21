@@ -72,7 +72,7 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
   };
 
   function goToCreateEvent() {
-    navigation.navigate("CreateEvent", { edit: false });
+    navigation.navigate("CreateEvent", { edit: false, startsAt: selectedDate });
   }
 
   return (

@@ -32,6 +32,8 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
   const { User } = useContext(UserContext) as UserContextType;
   const utils = trpc.useContext();
 
+  const startsAt = route.params.startsAt;
+
   const edit = route.params.edit;
   const eventToEdit = route.params.Event;
 
@@ -48,13 +50,21 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
     setSelectedType(type);
     setLocationVisible(type === "Evento");
     type === "Reserva" &&
-      navigation.navigate("CreateReservation", { edit: false });
+      navigation.navigate("CreateReservation", {
+        edit: false,
+        startsAt: startsAt,
+      });
   }
 
-  const [checked, setChecked] = React.useState(false);
+  const [visibleTime, setVisibleTime] = useState(true);
+  const [checked, setChecked] = useState(false);
   const onCheckedChange = (isChecked: boolean) => {
     setChecked(isChecked);
-    isChecked ? setMode("date") : setMode("datetime");
+    Platform.OS === "ios"
+      ? isChecked
+        ? setMode("date")
+        : setMode("datetime")
+      : setVisibleTime(!isChecked);
   };
 
   const { data: calendars } = trpc.event.getAllCalendars.useQuery({
@@ -66,9 +76,12 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
     value: calendar.name,
   }));
 
-  const [initialDate, setInitialDate] = useState(new Date());
-  const [finalDate, setFinalDate] = useState(new Date());
+  const [initialDate, setInitialDate] = useState(
+    new Date(startsAt || Date.now())
+  );
+  const [finalDate, setFinalDate] = useState(initialDate);
   const [show, setShow] = useState(false);
+  const [showTime, setShowTime] = useState(false);
   const [mode, setMode] = useState<"date" | "time" | "datetime">(
     checked ? "date" : "datetime"
   );
@@ -108,6 +121,8 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
     setFinalDate(
       eventToEdit?.endsAt ? new Date(eventToEdit?.endsAt) : new Date()
     );
+    setNotes(eventToEdit?.notes ?? "");
+    setChecked(eventToEdit?.allDay ?? false);
   }
   {
     edit && useEffect(() => loadEvent(), [edit]);
@@ -240,12 +255,27 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
           <View className="my-2 flex-row items-center justify-between rounded-lg px-4">
             <Text>Empieza</Text>
             {Platform.OS === "android" && (
-              <TouchableOpacity
-                onPress={() => setShow(true)}
-                className="rounded-md bg-lightGray p-2"
-              >
-                <Text>{initialDate.toLocaleDateString()}</Text>
-              </TouchableOpacity>
+              <View className="flex-row space-x-2">
+                <TouchableOpacity
+                  onPress={() => setShow(true)}
+                  className="rounded-md bg-lightGray p-2"
+                >
+                  <Text>{initialDate.toLocaleDateString()}</Text>
+                </TouchableOpacity>
+                {visibleTime && (
+                  <TouchableOpacity
+                    onPress={() => setShowTime(true)}
+                    className="rounded-md bg-lightGray p-2"
+                  >
+                    <Text>
+                      {initialDate.toLocaleTimeString("es-ES", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             )}
             {Platform.OS === "ios" && (
               <DateTimePicker
@@ -267,7 +297,18 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
                   setShow(false);
                   setInitialDate(selectedDate || new Date());
                 }}
-                mode={mode}
+                mode={"date"}
+              />
+            )}
+            {Platform.OS === "android" && showTime && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={initialDate}
+                onChange={(event, selectedDate) => {
+                  setShowTime(false);
+                  setInitialDate(selectedDate || new Date());
+                }}
+                mode={"time"}
               />
             )}
           </View>
@@ -277,12 +318,27 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
               <View className="my-2 flex-row items-center justify-between rounded-lg px-4">
                 <Text>Acaba</Text>
                 {Platform.OS === "android" && (
-                  <TouchableOpacity
-                    onPress={() => setShow(true)}
-                    className="rounded-md bg-lightGray p-2"
-                  >
-                    <Text>{finalDate.toLocaleDateString()}</Text>
-                  </TouchableOpacity>
+                  <View className="flex-row space-x-2">
+                    <TouchableOpacity
+                      onPress={() => setShow(true)}
+                      className="rounded-md bg-lightGray p-2"
+                    >
+                      <Text>{finalDate.toLocaleDateString()}</Text>
+                    </TouchableOpacity>
+                    {visibleTime && (
+                      <TouchableOpacity
+                        onPress={() => setShowTime(true)}
+                        className="rounded-md bg-lightGray p-2"
+                      >
+                        <Text>
+                          {finalDate.toLocaleTimeString("es-ES", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
                 )}
                 {Platform.OS === "ios" && (
                   <DateTimePicker
@@ -304,7 +360,18 @@ const CreateEventScreen: React.FC<CreateEventScreenProps> = ({
                       setShow(false);
                       setFinalDate(selectedDate || new Date());
                     }}
-                    mode={mode}
+                    mode={"date"}
+                  />
+                )}
+                {Platform.OS === "android" && showTime && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={finalDate}
+                    onChange={(event, selectedDate) => {
+                      setShowTime(false);
+                      setFinalDate(selectedDate || new Date());
+                    }}
+                    mode={"time"}
                   />
                 )}
               </View>

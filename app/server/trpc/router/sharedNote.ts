@@ -16,6 +16,7 @@ export const sharedNoteRouter = router({
           groupId: true,
         },
         where: { groupId: input.groupId },
+        orderBy: { createdAt: "desc" },
       });
     }),
   createNote: publicProcedure

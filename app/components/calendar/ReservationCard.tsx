@@ -19,16 +19,22 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
   return (
     <TouchableOpacity
       onPress={goToReservationDetail}
-      className="mb-4 w-full flex-row space-x-1 rounded-lg p-5 pr-8"
+      className="mb-3 w-full flex-row space-x-1 rounded-lg p-4 pr-8"
     >
-      <View className="h-full w-[5] rounded-full bg-orange" />
+      <View className="h-full w-[5] rounded-full bg-dark" />
       <View className="w-full space-y-2">
         <View className="flex-row justify-between">
-          <Text className="font-medium text-dark"> {reservation.room}</Text>
+          <Text className="font-medium text-dark">
+            {" "}
+            Reserva para {reservation.createdBy.name}
+          </Text>
           {reservation.allDay ? (
             <Text>Todo el día</Text>
           ) : (
-            <Text>{format(reservation.startsAt.getTime(), "hh:mm")} h</Text>
+            <Text>
+              {format(reservation.startsAt.getTime(), "HH:mm")} h -{" "}
+              {format(reservation.endsAt?.getTime() || 1, "HH:mm")} h
+            </Text>
           )}
         </View>
         <Text className="text-placeholderGray">📍{reservation.room}</Text>

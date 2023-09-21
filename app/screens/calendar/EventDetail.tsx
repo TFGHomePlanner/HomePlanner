@@ -58,7 +58,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({
    * @function
    */
   function goToEditEvent() {
-    navigation.navigate("CreateEvent", { Event: Event, edit: true });
+    navigation.navigate("CreateEvent", { Event, edit: true });
   }
 
   /**
@@ -109,14 +109,35 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({
             </Text>
           )}
           <Text className="text-xl font-bold">{Event.name}</Text>
-          {Event.location && <Text>{Event.location}</Text>}
+          {Event.location && <Text>📍{Event.location}</Text>}
+          {Event.calendar && (
+            <View className="flex-row items-center justify-between rounded-lg bg-white px-3 py-2">
+              <Text className="text-dark">Calendario</Text>
+              <View className="flex-row items-center space-x-2">
+                <View className="h-2 w-2 rounded-full bg-orange" />
+                <Text>{Event.calendar.name}</Text>
+              </View>
+            </View>
+          )}
           {Event.startsAt instanceof Date && (
-            <Text>Empieza el {Event.startsAt.toLocaleDateString()}</Text>
+            <Text className="">
+              Empieza el {Event.startsAt.toLocaleDateString()} a las{" "}
+              {Event.startsAt.toLocaleTimeString("es-ES", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+              h
+            </Text>
+          )}
+          {Event.notes && (
+            <View className="h-20 flex-row justify-between rounded-lg bg-white p-3">
+              <Text>{Event.notes}</Text>
+            </View>
           )}
         </View>
         {canEdit && (
-          <TouchableOpacity onPress={handleDelete} className="self-end">
-            <Icon name="trash-outline" color={"#7B61FF"} size={24} />
+          <TouchableOpacity onPress={handleDelete} className="self-center">
+            <Text className="text-purple">Eliminar evento</Text>
           </TouchableOpacity>
         )}
       </View>

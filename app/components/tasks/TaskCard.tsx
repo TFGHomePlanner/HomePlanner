@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { ITask } from "../../common/validation/task";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -32,21 +32,21 @@ const TaskCard: React.FC<TaskCardProps> = ({
   }
 
   return (
-    <Pressable
+    <TouchableOpacity
       onPress={goToTaskDetail}
       className="mb-4 w-full rounded-lg bg-white px-4 py-4 shadow-sm"
     >
       <View className="flex-row justify-between">
-        <Text className="text-base font-semibold">{task.name}</Text>
+        <Text className="text-lg font-medium">{task.name}</Text>
         <Icon name="chevron-right" size={24} />
       </View>
-      <Pressable
+      <TouchableOpacity
         onPress={checkTask}
-        className="mt-6 w-36 rounded-full border-[1px] border-light bg-purple p-1"
+        className="mt-4 w-36 rounded-full border-[1px] border-light bg-purple p-1"
       >
         <Text className="text-center text-light">marcar hecha</Text>
-      </Pressable>
-    </Pressable>
+      </TouchableOpacity>
+    </TouchableOpacity>
   );
 };
 

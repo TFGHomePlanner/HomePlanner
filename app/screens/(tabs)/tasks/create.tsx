@@ -173,7 +173,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
         startsAt: date,
         groupId: User.groupId || "",
         userId: selectedUser === "" ? undefined : selectedUser,
-        taskGroupId: selectedGroup === "" ? undefined : selectedGroup,
+        taskGroupId: selectedGroup === "" ? "" : selectedGroup,
         createdBy: User.id,
       });
   };
@@ -218,7 +218,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
         frequency: selectedFrequency,
         startsAt: date,
         groupId: User.groupId || "",
-        userId: selectedUser,
+        userId: selectedUser === "" ? undefined : selectedUser,
         taskGroupId: selectedGroup,
         createdBy: taskToEdit?.createdBy ?? User.id,
       });
@@ -226,7 +226,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
 
   // JSX y componentes visuales de la pantalla.
   return (
-    <View className="h-screen bg-light px-6 py-16">
+    <View className="h-full bg-light px-6 py-16">
       <View className="flex flex-row justify-between">
         <Pressable onPress={navigation.goBack}>
           <Text className="text-purple">Cancelar</Text>
@@ -247,6 +247,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
         </TouchableOpacity>
       </View>
       <ScrollView
+        className="h-full"
         keyboardShouldPersistTaps="always"
         keyboardDismissMode="on-drag"
       >
@@ -274,7 +275,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
           />
         </View>
         <CreateTaskGroupScreen />
-        <View className="z-20 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
+        <View className="z-40 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
           <Text>Grupo de tareas</Text>
           {groupOptions ? (
             <SelectList
@@ -305,7 +306,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             <Text>Cargando...</Text>
           )}
         </View>
-        <View className="z-10 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
+        <View className="z-20 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
           <Text>Repetir tarea</Text>
           <SelectList
             data={frequencyOptions}
@@ -332,7 +333,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             }}
           />
         </View>
-        <View className="mb-4 rounded-lg border-light bg-white text-base text-dark">
+        <View className="mb-16 rounded-lg border-light bg-white text-base text-dark">
           <View className="my-2 flex-row items-center justify-between rounded-lg bg-white px-4">
             <Text>Empieza</Text>
             {Platform.OS === "android" && (
