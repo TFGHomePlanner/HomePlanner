@@ -33,14 +33,14 @@ const CreateTaskGroupScreen = () => {
   return (
     <View className="mb-2">
       <TouchableOpacity className="items-end">
-        <Text onPress={openCreateTaskGroup} className="text-purple">
+        <Text onPress={openCreateTaskGroup} className="font-sans text-purple">
           {visible ? "Cancelar" : "Crear grupo"}
         </Text>
       </TouchableOpacity>
       {visible && (
         <View className="mt-2 flex-row items-center justify-between space-x-2">
           <TextInput
-            className="flex-1 rounded-lg bg-white px-4 py-3"
+            className="flex-1 rounded-lg bg-white px-4 py-2 font-sans"
             placeholderTextColor="#95999C"
             value={name}
             onChangeText={(newName) => {
@@ -55,7 +55,7 @@ const CreateTaskGroupScreen = () => {
             onPress={createTaskGroup}
             className={`${
               enabled ? "text-purple" : "text-darkGray"
-            } font-semibold`}
+            } font-ralewayBold`}
           >
             OK
           </Text>

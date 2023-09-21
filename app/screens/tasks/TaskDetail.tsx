@@ -89,25 +89,29 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
       <View className="flex-1 px-6 pb-10">
         <View className="flex-1 space-y-4">
           {canEdit && (
-            <Text onPress={goToEditTask} className="self-end text-purple">
-              Editar
-            </Text>
+            <TouchableOpacity onPress={goToEditTask}>
+              <Text className="self-end font-ralewayMedium text-purple">
+                Editar
+              </Text>
+            </TouchableOpacity>
           )}
-          <Text className="text-xl font-bold">{Task.name}</Text>
+          <Text className="font-ralewayBold text-xl">{Task.name}</Text>
           <View className="space-y-2 rounded-lg bg-white px-4 py-3">
             {Task.description && (
               <View>
-                <Text className="mb-2">{Task.description}</Text>
+                <Text className="mb-2 font-sans">{Task.description}</Text>
                 <Divider />
               </View>
             )}
             {Task.assignedTo && (
-              <Text>👤 Asignada a {Task.assignedTo.name}</Text>
+              <Text className="font-sans">
+                👤 Asignada a {Task.assignedTo.name}
+              </Text>
             )}
             {Task.startsAt instanceof Date && (
               <View>
                 <Divider />
-                <Text className="mt-2">
+                <Text className="mt-2 font-sans">
                   ⏳ Empieza el {Task.startsAt.toLocaleDateString()}
                 </Text>
               </View>
@@ -117,12 +121,16 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
             onPress={checkTask}
             className="w-36 rounded-full border-[1px] border-light bg-purple p-1"
           >
-            <Text className="text-center text-light">marcar hecha</Text>
+            <Text className="mb-1 text-center font-ralewayMedium text-light">
+              marcar hecha
+            </Text>
           </TouchableOpacity>
         </View>
         {canEdit && (
           <TouchableOpacity onPress={handleDelete} className="self-center">
-            <Text className="text-purple">Eliminar tarea</Text>
+            <Text className="font-ralewayMedium text-purple">
+              Eliminar tarea
+            </Text>
           </TouchableOpacity>
         )}
       </View>

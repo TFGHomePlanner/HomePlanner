@@ -11,12 +11,24 @@ import { UserContextType } from "../../../context/types";
 import { trpc } from "../../../trpc";
 import EventCard from "../../../components/calendar/EventCard";
 import ReservationCard from "../../../components/calendar/ReservationCard";
+import {
+  useFonts,
+  Raleway_400Regular,
+  Raleway_700Bold,
+  Raleway_900Black,
+} from "@expo-google-fonts/raleway";
 
 type TabCalendarScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TabCalendar">;
 };
 
 const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
+  const [fontsLoaded] = useFonts({
+    Raleway_400Regular,
+    Raleway_700Bold,
+    Raleway_900Black,
+  });
+
   const { User } = useContext(UserContext) as UserContextType;
   const { data: allEvents } = trpc.event.getAllEvents.useQuery({
     groupId: User.groupId,
@@ -49,7 +61,7 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
         markedDates[today] = {
           customStyles: {
             text: {
-              fontWeight: "bold",
+              fontFamily: "Raleway_700Bold",
               color: today === selectedDate ? "white" : "#FFA755",
             },
           },
@@ -85,6 +97,10 @@ const CalendarScreen: React.FC<TabCalendarScreenProps> = ({ navigation }) => {
       </TouchableOpacity>
       <Calendar
         monthFormat="MMMM yyyy"
+        theme={{
+          textDayFontFamily: "Raleway_400Regular",
+          textDayHeaderFontFamily: "Raleway_400Regular",
+        }}
         onDayPress={(day) => {
           setSelectedDate(day.dateString);
         }}

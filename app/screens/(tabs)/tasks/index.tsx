@@ -9,12 +9,23 @@ import { UserContextType } from "../../../context/types";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import TaskGroupCard from "../../../components/tasks/TaskGroupCard";
 import { Divider } from "@ui-kitten/components";
+import {
+  useFonts,
+  Raleway_400Regular,
+  Raleway_700Bold,
+  Raleway_900Black,
+} from "@expo-google-fonts/raleway";
 
 type TabTasksScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "TabTasks">;
 };
 
 const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
+  const [fontsLoaded] = useFonts({
+    Raleway_400Regular,
+    Raleway_700Bold,
+    Raleway_900Black,
+  });
   const { User } = useContext(UserContext) as UserContextType;
   const { data: allTasks } = trpc.task.getAllTasks.useQuery({
     groupId: User.groupId || "",
@@ -51,7 +62,7 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
         >
           <View className="flex-row items-center space-x-2">
             <Icon name="account-details" color={"#7B61FF"} size={20} />
-            <Text className="text-base text-dark">Mis tareas</Text>
+            <Text className="font-sans text-base text-dark">Mis tareas</Text>
           </View>
           <Icon name="chevron-right" color={"#212529"} size={20} />
         </TouchableOpacity>
@@ -62,7 +73,7 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
         >
           <View className="flex-row items-center space-x-2">
             <Icon name="account-question-outline" color={"#7B61FF"} size={20} />
-            <Text className="font-rale text-base text-dark">
+            <Text className="font-sans text-base text-dark">
               Tareas sin asignar
             </Text>
           </View>
@@ -79,7 +90,7 @@ const TabTasksScreen: React.FC<TabTasksScreenProps> = ({ navigation }) => {
             />
           ))}
       </View>
-      <Text className="mb-2 font-rale text-lg font-medium text-dark">
+      <Text className="mb-2 font-ralewayBold text-lg text-dark">
         Todas las tareas
       </Text>
       <View>

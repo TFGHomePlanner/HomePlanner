@@ -5,7 +5,6 @@ import { AppStackParamList } from "../../_App";
 import { Header } from "../../components/Header";
 import { UserContext } from "../../context/userContext";
 import { UserContextType } from "../../context/types";
-import Icon from "react-native-vector-icons/Ionicons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { trpc } from "../../trpc";
 
@@ -70,21 +69,26 @@ const NoteDetailScreen: React.FC<NoteDetailScreenProps> = ({
       <View className="flex-1 px-6 pb-10">
         <View className="flex-1 space-y-4">
           {canEdit && (
-            <Text onPress={goToCreateNote} className="self-end text-blue">
+            <Text
+              onPress={goToCreateNote}
+              className="self-end font-ralewayMedium text-blue"
+            >
               Editar
             </Text>
           )}
-          <Text className="text-xl font-bold">{Note.title}</Text>
-          {Note.text && <Text className="text-dark">{Note.text}</Text>}
+          <Text className="font-ralewayBold text-xl">{Note.title}</Text>
+          {Note.text && (
+            <Text className="font-sans text-dark">{Note.text}</Text>
+          )}
           {Note.createdAt && (
-            <Text className="text-placeholderGray">
+            <Text className="font-sans text-placeholderGray">
               Creada el {new Date(Note.createdAt).toLocaleDateString()}
             </Text>
           )}
         </View>
         {canEdit && (
-          <TouchableOpacity onPress={handleDelete} className="self-end">
-            <Icon name="trash-outline" color={"#1E88E5"} size={24} />
+          <TouchableOpacity onPress={handleDelete} className="self-center">
+            <Text className="font-ralewayMedium text-blue">Eliminar nota</Text>
           </TouchableOpacity>
         )}
       </View>

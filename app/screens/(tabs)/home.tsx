@@ -29,7 +29,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <View className="my-3 flex-row items-center justify-between">
-          <Text className="text-lg font-semibold">NOTAS COMPARTIDAS</Text>
+          <Text className="font-ralewayBold text-lg">Notas compartidas</Text>
           <TouchableOpacity onPress={goToCreateNote}>
             <Icon
               name="shape-square-rounded-plus"
@@ -53,7 +53,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             ))}
           </View>
         ) : (
-          <Text>Cargando...</Text>
+          <Text className="font-sans">Cargando...</Text>
         )}
       </ScrollView>
       <TouchableOpacity

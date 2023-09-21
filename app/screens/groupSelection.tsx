@@ -14,6 +14,11 @@ import { trpc } from "../trpc";
 import GroupCard from "../components/groups/GroupCard";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  useFonts,
+  Raleway_400Regular,
+  Raleway_700Bold,
+} from "@expo-google-fonts/raleway";
 
 type GroupSelectionScreenProps = {
   navigation: NativeStackNavigationProp<AppStackParamList, "GroupSelection">;
@@ -22,6 +27,10 @@ type GroupSelectionScreenProps = {
 const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
   navigation,
 }) => {
+  const [fontsLoaded] = useFonts({
+    Raleway_400Regular,
+    Raleway_700Bold,
+  });
   const { User, updateUser } = useContext(UserContext) as UserContextType;
   const { data: myGroups } = trpc.user.getUserGroups.useQuery({
     userId: User.id,
@@ -74,7 +83,7 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
   }
   useEffect(() => {
     const checkUserData = async () => {
-      if(User.id == "") {
+      if (User.id == "") {
         try {
           const userData = await AsyncStorage.getItem("userData");
           if (userData !== null) {
@@ -83,12 +92,13 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
               groupId: "",
               isAdmin: false,
             };
-            updateUser(user); 
-          
+            updateUser(user);
           }
         } catch (error) {
-          console.error("Error al verificar los datos del usuario en la caché:", error);
-        
+          console.error(
+            "Error al verificar los datos del usuario en la caché:",
+            error
+          );
         }
       }
     };
@@ -96,12 +106,12 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
   }, [User, updateUser]);
   return (
     <View className="h-full bg-light p-6 pb-10 pt-16">
-      <Text className="mb-2 text-lg font-bold text-dark">
+      <Text className="mb-2 font-ralewayBold text-lg text-dark">
         <Text className="text-blue">ÚNETE</Text> A UN GRUPO
       </Text>
       <View className="mb-2 w-full flex-row items-center space-x-3">
         <TextInput
-          className={"flex-1 rounded-lg bg-white px-4 py-3 text-dark"}
+          className={"flex-1 rounded-lg bg-white px-4 py-2 font-sans text-dark"}
           placeholderTextColor="#95999C"
           value={codeGroup}
           onChangeText={(code) => {
@@ -116,7 +126,7 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
         <Text
           className={`${
             enabled ? "text-blue" : "text-darkGray"
-          } text-base font-semibold`}
+          } font-ralewayBold text-base`}
           onPress={joinGroup}
         >
           OK
@@ -124,7 +134,7 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
       </View>
       {error && <Text className="mb-2">{error}</Text>}
       <ScrollView>
-        <Text className="mb-2 mt-4 text-lg font-bold text-dark">
+        <Text className="mb-2 mt-4 font-ralewayBold text-lg text-dark">
           O ELIGE UNO DE TUS GRUPOS
         </Text>
         {myGroups ? (
@@ -137,11 +147,13 @@ const GroupSelectionScreen: React.FC<GroupSelectionScreenProps> = ({
             </TouchableOpacity>
           ))
         ) : (
-          <Text>Cargando...</Text>
+          <Text className="fonts-sans">Cargando...</Text>
         )}
       </ScrollView>
       <View className="flex-row items-center">
-        <Text className="flex-1 text-center">{myGroups?.length} grupos</Text>
+        <Text className="flex-1 text-center font-sans">
+          {myGroups?.length} grupos
+        </Text>
         <TouchableOpacity onPress={() => navigation.navigate("CreateGroup")}>
           <Icon name="shape-square-rounded-plus" size={30} color={"#1E88E5"} />
         </TouchableOpacity>

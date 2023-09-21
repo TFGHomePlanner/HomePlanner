@@ -4,6 +4,12 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ISharedNote } from "../../common/validation/sharedNote";
 import { Divider } from "@ui-kitten/components";
 import format from "date-fns/format";
+import {
+  useFonts,
+  Raleway_400Regular,
+  Raleway_700Bold,
+  Raleway_900Black,
+} from "@expo-google-fonts/raleway";
 
 type NoteCardProps = {
   navigation: NativeStackNavigationProp<any>;
@@ -16,6 +22,12 @@ const NoteCard: React.FC<NoteCardProps> = ({
   note,
   isLastNote,
 }) => {
+  const [fontsLoaded] = useFonts({
+    Raleway_400Regular,
+    Raleway_700Bold,
+    Raleway_900Black,
+  });
+
   function goToNoteDetail() {
     navigation.navigate("NoteDetail", {
       Note: { ...note, createdAt: note.createdAt.toISOString() },
@@ -24,13 +36,13 @@ const NoteCard: React.FC<NoteCardProps> = ({
   const formattedDate = format(note.createdAt, "dd/M/yy");
   return (
     <Pressable onPress={goToNoteDetail}>
-      <Text className="font-semibold">{note.title}</Text>
+      <Text className="font-ralewayBold">{note.title}</Text>
       <View className="mt-1 flex-row items-center space-x-2">
-        <Text className="text-placeholderGray">{formattedDate}</Text>
+        <Text className="font-sans text-placeholderGray">{formattedDate}</Text>
         {note.text && (
           <Text
             numberOfLines={1}
-            className="flex-shrink truncate text-placeholderGray"
+            className="flex-shrink truncate font-sans text-placeholderGray"
           >
             {note.text}
           </Text>

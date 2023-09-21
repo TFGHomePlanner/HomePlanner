@@ -88,7 +88,7 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
     <ScrollView
       keyboardShouldPersistTaps="always"
       keyboardDismissMode="on-drag"
-      className="h-full bg-light px-3 py-14"
+      className="h-full bg-light px-4 py-14"
     >
       <View className="mb-2 flex flex-row justify-between">
         <Pressable
@@ -96,7 +96,7 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
           className="flex-row items-center"
         >
           <Icon name="left" size={16} color={"#1E88E5"} />
-          <Text className="text-base text-blue">Notas</Text>
+          <Text className="font-ralewayMedium text-blue">Notas</Text>
         </Pressable>
         <TouchableOpacity
           className="self-end"
@@ -109,18 +109,18 @@ const CreateSharedNoteScreen: React.FC<CreateSharedNoteScreenProps> = ({
             })
           }
         >
-          <Text className="text-base font-semibold text-blue">OK</Text>
+          <Text className="font-ralewayBold text-base text-blue">OK</Text>
         </TouchableOpacity>
       </View>
       <TextInput
-        className={`${inputStyle} h-12 text-lg font-bold`}
+        className={`${inputStyle} h-12 font-ralewayBold text-lg`}
         placeholder="Título *"
         placeholderTextColor="#95999C"
         value={title}
         onChangeText={setTitle}
       />
       <TextInput
-        className={`${inputStyle}`}
+        className={`${inputStyle} font-sans`}
         placeholder="¿Qué quieres compartir...?"
         placeholderTextColor="#95999C"
         value={text}

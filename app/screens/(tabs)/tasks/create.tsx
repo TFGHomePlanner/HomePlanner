@@ -20,6 +20,11 @@ import { Divider } from "@ui-kitten/components";
 import CreateTaskGroupScreen from "../../../components/tasks/CreateTaskGroup";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { RouteProp } from "@react-navigation/native";
+import {
+  useFonts,
+  Raleway_400Regular,
+  Raleway_500Medium,
+} from "@expo-google-fonts/raleway";
 
 /**
  * Propiedades necesarias para la pantalla de creación de una tarea.
@@ -43,9 +48,14 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
   navigation,
   route,
 }) => {
+  const [fontsLoaded] = useFonts({
+    Raleway_400Regular,
+    Raleway_500Medium,
+  });
+
   // Estilo para los campos de entrada
   const inputStyle =
-    "mb-4 bg-white rounded-lg space-y-3 text-base border-light p-4 text-dark";
+    "mb-4 bg-white rounded-lg space-y-3 border-light py-3 px-4";
 
   /**
    * Contexto del usuario actual.
@@ -229,9 +239,9 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
     <View className="h-full bg-light px-6 py-16">
       <View className="flex flex-row justify-between">
         <Pressable onPress={navigation.goBack}>
-          <Text className="text-purple">Cancelar</Text>
+          <Text className="font-ralewayMedium text-purple">Cancelar</Text>
         </Pressable>
-        <Text className="mr-4 self-center">Nueva tarea</Text>
+        <Text className="mr-3 self-center font-sans">Nueva tarea</Text>
         <TouchableOpacity
           disabled={!enabled}
           className="self-end"
@@ -240,7 +250,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
           <Text
             className={`${
               enabled ? "text-purple" : "text-darkGray"
-            } font-semibold`}
+            } font-ralewayBold`}
           >
             {edit ? "       OK" : "Añadir"}
           </Text>
@@ -253,6 +263,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
       >
         <View className={`my-6 ${inputStyle}`}>
           <TextInput
+            className="font-sans"
             placeholderTextColor="#95999C"
             selectionColor={"#7B61FF"}
             value={name}
@@ -265,6 +276,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
           />
           <Divider />
           <TextInput
+            className="font-sans"
             placeholderTextColor="#95999C"
             selectionColor={"#7B61FF"}
             value={description}
@@ -276,7 +288,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
         </View>
         <CreateTaskGroupScreen />
         <View className="z-40 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
-          <Text>Grupo de tareas</Text>
+          <Text className="font-sans">Grupo de tareas</Text>
           {groupOptions ? (
             <SelectList
               data={groupOptions}
@@ -291,7 +303,10 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
                 width: 180,
                 borderRadius: 12,
               }}
-              dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
+              dropdownTextStyles={{
+                color: "#FFFF",
+                fontFamily: "Raleway_500Medium",
+              }}
               save="key"
               search={false}
               boxStyles={{
@@ -300,20 +315,22 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
                 borderColor: "#FFFF",
                 alignSelf: "flex-end",
               }}
+              fontFamily="Raleway_400Regular"
               placeholder="Seleccionar"
             />
           ) : (
-            <Text>Cargando...</Text>
+            <Text className="font-sans">Cargando...</Text>
           )}
         </View>
         <View className="z-20 mb-4 flex-row items-center justify-between rounded-lg bg-white pl-4">
-          <Text>Repetir tarea</Text>
+          <Text className="font-sans">Repetir tarea</Text>
           <SelectList
             data={frequencyOptions}
             setSelected={setSelectedFrequency}
             save="key"
             defaultOption={{ value: "Nunca", key: Frequency.never }}
             search={false}
+            fontFamily="Raleway_400Regular"
             dropdownStyles={{
               borderColor: "#3A3A3C",
               backgroundColor: "#3A3A3C",
@@ -324,7 +341,10 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
               width: 180,
               borderRadius: 12,
             }}
-            dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
+            dropdownTextStyles={{
+              color: "#FFFF",
+              fontFamily: "Raleway_500Medium",
+            }}
             boxStyles={{
               height: 42,
               width: 140,
@@ -333,15 +353,15 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             }}
           />
         </View>
-        <View className="mb-16 rounded-lg border-light bg-white text-base text-dark">
+        <View className="mb-40 rounded-lg border-light bg-white text-base text-dark">
           <View className="my-2 flex-row items-center justify-between rounded-lg bg-white px-4">
-            <Text>Empieza</Text>
+            <Text className="font-sans">Empieza</Text>
             {Platform.OS === "android" && (
               <Pressable
                 onPress={() => setShow(true)}
                 className="rounded-md bg-lightGray p-2"
               >
-                <Text>{date.toLocaleDateString()}</Text>
+                <Text className="font-sans">{date.toLocaleDateString()}</Text>
               </Pressable>
             )}
             {Platform.OS === "ios" && (
@@ -358,6 +378,7 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             )}
             {Platform.OS === "android" && show && (
               <DateTimePicker
+                className="font-sans"
                 testID="dateTimePicker"
                 value={date}
                 positiveButton={{ label: "OK", textColor: "#7B61FF" }}
@@ -370,14 +391,15 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             )}
           </View>
           <Divider />
-          <View className="z-10 flex-row items-center justify-between rounded-lg bg-white pl-4">
-            <Text>Asignar encargado</Text>
+          <View className="z-10 mb-2 flex-row items-center justify-between rounded-lg bg-white pl-4">
+            <Text className="font-sans">Asignar encargado</Text>
             {userOptions ? (
               <SelectList
                 data={userOptions}
                 setSelected={setSelectedUser}
                 save="key"
                 search={false}
+                fontFamily="Raleway_400Regular"
                 dropdownStyles={{
                   borderColor: "#3A3A3C",
                   backgroundColor: "#3A3A3C",
@@ -388,7 +410,10 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
                   width: 180,
                   borderRadius: 12,
                 }}
-                dropdownTextStyles={{ color: "#FFFF", fontWeight: "500" }}
+                dropdownTextStyles={{
+                  color: "#FFFF",
+                  fontFamily: "Raleway_500Medium",
+                }}
                 boxStyles={{
                   height: 42,
                   width: 140,
@@ -400,16 +425,6 @@ const CreateTaskScreen: React.FC<CreateTaskScreenProps> = ({
             ) : (
               <Text>Cargando...</Text>
             )}
-          </View>
-          <Divider />
-          <View className="my-3 flex-row items-center justify-between rounded-lg bg-white px-4">
-            <Text>Añadir al calendario</Text>
-            <Switch
-              className="-mb-1"
-              trackColor={{ false: "#929193", true: "#7B61FF" }}
-              onValueChange={onCheckedChange}
-              value={checked}
-            />
           </View>
         </View>
       </ScrollView>

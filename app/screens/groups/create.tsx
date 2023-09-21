@@ -9,6 +9,12 @@ import { IUser, UserContextType } from "../../context/types";
 import Icon from "react-native-vector-icons/Feather";
 import * as Clipboard from "expo-clipboard";
 import { Divider } from "@ui-kitten/components";
+import {
+  useFonts,
+  Raleway_400Regular,
+  Raleway_500Medium,
+  Raleway_700Bold,
+} from "@expo-google-fonts/raleway";
 
 /**
  * Propiedades para la pantalla de creación de grupos.
@@ -23,6 +29,11 @@ type CreateGroupScreenProps = {
 const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
   navigation,
 }) => {
+  const [fontsLoaded] = useFonts({
+    Raleway_400Regular,
+    Raleway_500Medium,
+    Raleway_700Bold,
+  });
   /**
    * Contexto del usuario actual.
    */
@@ -103,7 +114,7 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
    * Estilo de los campos de entrada.
    */
   const inputStyle =
-    "mb-4 bg-white rounded-lg space-y-3 text-base border-light p-4 text-dark";
+    "mb-4 bg-white font-sans rounded-lg space-y-3 text-base border-light p-4 text-dark";
 
   return (
     <View className="h-full bg-light">
@@ -111,9 +122,11 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
       <View className="px-6">
         <View className="mb-4 flex flex-row justify-between">
           <TouchableOpacity onPress={navigation.goBack}>
-            <Text className="text-blue">Cancelar</Text>
+            <Text className="font-ralewayMedium text-blue">Cancelar</Text>
           </TouchableOpacity>
-          <Text className="mr-10 self-center text-dark">Nuevo grupo</Text>
+          <Text className="mr-10 self-center font-sans text-dark">
+            Nuevo grupo
+          </Text>
           <TouchableOpacity
             disabled={!enabled}
             className="self-end"
@@ -122,7 +135,7 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
             <Text
               className={`${
                 enabled ? "text-blue" : "text-darkGray"
-              } font-semibold`}
+              } font-ralewayMedium`}
             >
               OK
             </Text>
@@ -152,14 +165,14 @@ const CreateGroupScreen: React.FC<CreateGroupScreenProps> = ({
           className="mb-4 flex-row space-x-2 rounded-lg bg-white p-4"
         >
           <Icon name="codepen" size={20} color={"#1E88E5"} />
-          <Text className="self-center text-base text-blue">
+          <Text className="self-center font-sans text-base text-blue">
             Generar código
           </Text>
         </TouchableOpacity>
         <View className="flex-row items-center space-x-2">
-          <Text className="text-dark">
+          <Text className="font-sans text-dark">
             Código de invitación:{" "}
-            <Text className="text-lg font-semibold tracking-widest text-blue">
+            <Text className="font-ralewayBold text-lg tracking-widest text-blue">
               {codeGroup}
             </Text>
           </Text>

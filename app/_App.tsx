@@ -42,6 +42,7 @@ import CreateReservationScreen from "./screens/calendar/CreateReservation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EventDetailScreen from "./screens/calendar/EventDetail";
 import ReservationDetailScreen from "./screens/calendar/ReservationDetail";
+import { LogBox } from "react-native";
 
 // Define los tipos de las rutas de la aplicación
 export type AppStackParamList = {
@@ -61,8 +62,12 @@ export type AppStackParamList = {
   UnassignedTasks: undefined;
   TaskDetail: { Task: ITask; isAssigned: boolean };
   GroupTasks: { taskGroup: ITaskGroup };
-  CreateEvent: { Event?: IEvent; edit: boolean };
-  CreateReservation: { Reservation?: IReservation; edit: boolean };
+  CreateEvent: { Event?: IEvent; edit: boolean; startsAt?: string };
+  CreateReservation: {
+    Reservation?: IReservation;
+    edit: boolean;
+    startsAt?: string;
+  };
   EventDetail: { Event: IEvent };
   ReservationDetail: { Reservation: IReservation };
   CreateList: { List?: IList; Edit: boolean };
@@ -86,7 +91,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://192.168.1.13:4000/trpc",
+          url: "http://192.168.1.38:4000/trpc",
         }),
       ],
     })
@@ -108,6 +113,8 @@ export function App() {
     };
     checkUserData();
   }, []);
+
+  LogBox.ignoreAllLogs();
 
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>

@@ -21,7 +21,9 @@ const TaskGroupCard: React.FC<TaskGroupCardProps> = ({
       onPress={goToGroupTasks}
       className="mb-4 h-16 w-[48%] justify-center rounded-xl bg-dark"
     >
-      <Text className="text-center text-base text-light">{taskGroup.name}</Text>
+      <Text className="text-center font-sans text-base text-light">
+        {taskGroup.name}
+      </Text>
     </Pressable>
   );
 };
